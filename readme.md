@@ -1,1 +1,1 @@
-this is the readme :3
+no longer reading me ¯\_(ツ)_/¯
