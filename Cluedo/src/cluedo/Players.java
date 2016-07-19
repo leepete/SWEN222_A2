@@ -1,5 +1,5 @@
 package cluedo;
 
-public class Pointer {
+public class Players {
 
 }

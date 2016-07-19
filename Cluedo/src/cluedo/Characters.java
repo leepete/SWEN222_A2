@@ -1,4 +1,4 @@
-package cluedo.renamethislater;
+package cluedo;
 
 public class Characters {
 
