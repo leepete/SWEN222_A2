@@ -23,7 +23,7 @@ public class Room {
 	public Set<Point> getDoors() {
 		return doors;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
