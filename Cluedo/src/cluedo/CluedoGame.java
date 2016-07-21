@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class CluedoGame {
 
-	List<Players> players = new ArrayList<Players>();
+	List<Player> players = new ArrayList<Player>();
 	
 	public static void main(String[] args) {
 		
