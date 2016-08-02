@@ -24,7 +24,7 @@ public class CluedoGame {
 	
 	public static void main(String[] args) throws IOException {
 		title();
-		//Board t = new Board();
+		Board t = new Board();
 		
 	}
 
