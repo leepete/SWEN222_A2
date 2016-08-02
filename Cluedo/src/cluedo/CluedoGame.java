@@ -1,71 +1,30 @@
 package cluedo;
 import java.util.List;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class CluedoGame {
 
-	List<Players> players = new ArrayList<Players>();
-	private int[][] cBoard = new int[25][25]; // 25x25 board
-	
 	
 	/*Just Start title when you run game*/
-	public static void asciiStart(){
-		String draw = "";
-		draw += " â–„â–„â–„â–„â–„â–„â–„â–„â–„â–„â–„  â–„            â–„         â–„  â–„â–„â–„â–„â–„â–„â–„â–„â–„â–„â–„  â–„â–„â–„â–„â–„â–„â–„â–„â–„â–„   â–„â–„â–„â–„â–„â–„â–„â–„â–„â–„â–„ \n";
-		draw += "â–�â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–Œâ–�â–‘â–Œ          â–�â–‘â–Œ       â–�â–‘â–Œâ–�â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–Œâ–�â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–Œ â–�â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–Œ" + "\n";
-		draw += "â–�â–‘â–ˆâ–€â–€â–€â–€â–€â–€â–€â–€â–€ â–�â–‘â–Œ          â–�â–‘â–Œ       â–�â–‘â–Œâ–�â–‘â–ˆâ–€â–€â–€â–€â–€â–€â–€â–€â–€ â–�â–‘â–ˆâ–€â–€â–€â–€â–€â–€â–€â–ˆâ–‘â–Œâ–�â–‘â–ˆâ–€â–€â–€â–€â–€â–€â–€â–ˆâ–‘â–Œ" + "\n";
-		draw += "â–�â–‘â–Œ          â–�â–‘â–Œ          â–�â–‘â–Œ       â–�â–‘â–Œâ–�â–‘â–Œ          â–�â–‘â–Œ       â–�â–‘â–Œâ–�â–‘â–Œ       â–�â–‘â–Œ" + "\n";	
-		draw += "â–�â–‘â–Œ          â–�â–‘â–Œ          â–�â–‘â–Œ       â–�â–‘â–Œâ–�â–‘â–ˆâ–„â–„â–„â–„â–„â–„â–„â–„â–„ â–�â–‘â–Œ       â–�â–‘â–Œâ–�â–‘â–Œ       â–�â–‘â–Œ" + "\n";
-		draw += "â–�â–‘â–Œ          â–�â–‘â–Œ          â–�â–‘â–Œ       â–�â–‘â–Œâ–�â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–Œâ–�â–‘â–Œ       â–�â–‘â–Œâ–�â–‘â–Œ       â–�â–‘â–Œ" + "\n";
-		draw += "â–�â–‘â–Œ          â–�â–‘â–Œ          â–�â–‘â–Œ       â–�â–‘â–Œâ–�â–‘â–ˆâ–€â–€â–€â–€â–€â–€â–€â–€â–€ â–�â–‘â–Œ       â–�â–‘â–Œâ–�â–‘â–Œ       â–�â–‘â–Œ" + "\n";
-		draw += "â–�â–‘â–Œ          â–�â–‘â–Œ          â–�â–‘â–Œ       â–�â–‘â–Œâ–�â–‘â–Œ          â–�â–‘â–Œ       â–�â–‘â–Œâ–�â–‘â–Œ       â–�â–‘â–Œ" + "\n";
-		draw += "â–�â–‘â–ˆâ–„â–„â–„â–„â–„â–„â–„â–„â–„ â–�â–‘â–ˆâ–„â–„â–„â–„â–„â–„â–„â–„â–„ â–�â–‘â–ˆâ–„â–„â–„â–„â–„â–„â–„â–ˆâ–‘â–Œâ–�â–‘â–ˆâ–„â–„â–„â–„â–„â–„â–„â–„â–„ â–�â–‘â–ˆâ–„â–„â–„â–„â–„â–„â–„â–ˆâ–‘â–Œâ–�â–‘â–ˆâ–„â–„â–„â–„â–„â–„â–„â–ˆâ–‘â–Œ" + "\n";
-		draw += "â–�â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–Œâ–�â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–Œâ–�â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–Œâ–�â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–Œâ–�â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–Œ â–�â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–Œ" + "\n";
-		draw += " â–€â–€â–€â–€â–€â–€â–€â–€â–€â–€â–€  â–€â–€â–€â–€â–€â–€â–€â–€â–€â–€â–€  â–€â–€â–€â–€â–€â–€â–€â–€â–€â–€â–€  â–€â–€â–€â–€â–€â–€â–€â–€â–€â–€â–€  â–€â–€â–€â–€â–€â–€â–€â–€â–€â–€   â–€â–€â–€â–€â–€â–€â–€â–€â–€â–€â–€ " + "\n";                               
+	public static void title(){
+		String draw = "Game starting...\n";
 		System.out.println(draw);
-	}
-	
-	public void board(){
-		String board = "|xxxxxxxxxSxxxxxSxxxxxxxxx|\n" //x out of bounds - S for Start 
-					 + "|KKKKKTxâ–‘â–‘â–‘BBBBBâ–‘â–‘â–‘xCCCCCC|\n" // T for Stairs - f for floors
-					 + "|KKKKKKâ–‘â–‘BBBBBBBBBâ–‘â–‘CCCCCC|\n" //B for ballRoom
-					 + "|KKKKKKâ–‘â–‘BBBBBBBBBâ–‘â–‘CCCCCC|\n"
-					 + "|KKKKKKâ–‘â–‘BBBBBBBBBâ–‘â–‘dCCCCC|\n" //d for door
-				   	 + "|KKKKKKâ–‘â–‘dBBBBBBBdâ–‘â–‘â–‘CCCTx|\n" 
-					 + "|xKKKdKâ–‘â–‘BBBBBBBBBâ–‘â–‘â–‘â–‘â–‘â–‘â–‘S|\n"
-					 + "|â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘BdBBBBBdBâ–‘â–‘â–‘â–‘â–‘â–‘â–‘x|\n"
-					 + "|xâ–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘bbbbbb|\n" //b for billiard Room
-					 + "|DDDDDDDDâ–‘â–‘â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–‘â–‘â–‘bbbbbb|\n"
-					 + "|DDDDDDDDâ–‘â–‘â–ˆccccâ–ˆâ–‘â–‘â–‘bbbbbb|\n" //c = cluedo solution
-					 + "|DDDDDDDdâ–‘â–‘â–ˆccccâ–ˆâ–‘â–‘â–‘bbbbdb|\n"
-					 + "|DDDDDDDDâ–‘â–‘â–ˆccccâ–ˆâ–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘x|\n"
-					 + "|DDDDDDDDâ–‘â–‘â–ˆccccâ–ˆâ–‘â–‘â–‘LLdLLx|\n"
-					 + "|DDDDDDdDâ–‘â–‘â–ˆccccâ–ˆâ–‘â–‘LLLLLLL|\n"
-					 + "|xâ–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–‘â–‘dLLLLLL|\n"
-					 + "|Sâ–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘LLLLLLL|\n"
-					 + "|xâ–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘HHHHHHHâ–‘â–‘â–‘LLLLLx|\n"
-				     + "|Tllllldâ–‘â–‘HHHHHHHâ–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘S|\n"
-				     + "|lllllllâ–‘â–‘HHHHHHdâ–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘x|\n"
-				     + "|lllllllâ–‘â–‘HHHHHHHâ–‘â–‘dsssssT|\n"
-				     + "|lllllllâ–‘â–‘HHHHHHHâ–‘â–‘sssssss|\n"
-				     + "|lllllllâ–‘â–‘HHHHHHHâ–‘â–‘sssssss|\n"
-				     + "|llllllxSxHHHHHHHxâ–‘sssssss|\n";
-		
-		
-		for(int i : players){
-			if(charAt(i) == K){
-				
-				
-			}
+		try {
+			Thread.sleep(1200);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		System.out.println(board);
-		
-					 
-		
+		String draw2 = "WELCOME TO CLUEDO! \n";
+		System.out.println(draw2);
 	}
 	
-	public static void main(String[] args) {
-		asciiStart();
+					
+	
+	public static void main(String[] args) throws IOException {
+		title();
+		//Board t = new Board();
 		
 	}
 
