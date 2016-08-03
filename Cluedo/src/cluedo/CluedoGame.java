@@ -6,6 +6,8 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 public class CluedoGame {
+	
+	public CluedoGame(){}
 
 	
 	/*Just Start title when you run game*/
@@ -24,8 +26,13 @@ public class CluedoGame {
 	
 	public static void game() throws IOException{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		String s = br.readLine();
+		System.out.print("How many players (max 6)? ");
+		//String s = br.readLine();
 		int i = Integer.parseInt(br.readLine());
+		if(i < 1 || i >= 7){
+			System.out.print("TOO MANY PLAYERS! "+ "Please re-enter players: ");
+		}
+		
 	}
 					
 	
