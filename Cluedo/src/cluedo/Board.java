@@ -16,43 +16,39 @@ public class Board {
 	private static final int BOARD_HEIGHT = 25;
 	
 	private int[][] cBoard; // = new int[BOARD_WIDTH][BOARD_HEIGHT];
-	List<Players> players = new ArrayList<Players>(); //real players ingame
+	List<Player> players = new ArrayList<Player>(); //real players ingame
 	List<Weapon> weapons = new ArrayList<Weapon>(); 
 	
-	public Board() throws IOException {
-		cBoard  = new int[BOARD_WIDTH][BOARD_HEIGHT];
-		BufferedReader br = null;
-		try{
-			br = new BufferedReader(new FileReader(new File("cluemap.txt")));
-			String line;
-			
-			//int row = Integer.parseInt(br.readLine());
-			//int col = Integer.parseInt(br.readLine());
-			
-			
-			while((line = br.readLine()) != null){
-				//System.out.println(line);
-				
-				String[] c = line.split("");
-				//int[] c = line.toCharArray();
-				
-				for(int j = 0; j < cBoard.length; j++){
-					for(int i = 0; i < cBoard[i].length-1; i++){
-						//for(int j = 0; j < cBoard[i].length; j++){
-						cBoard[j][i] = Integer.parseInt(c[i]);
-						//cBoard[j++] = line.toCharArray();
-						System.out.println(Arrays.toString(c));
-					}
-					System.out.println();
-				}
-			}
+	public Board(){
+		String board = "---------------------------\n" +
+					   "|#########S#####S#########|\n" +
+					   "|     T#+++     +++#      |\n" +
+					   "|      ++         ++  C   |\n" +
+					   "|  K   ++    B    ++      |\n" +
+					   "|      ++         ++d     |\n" +
+					   "|      ++d       d+++   T#|\n" +
+					   "|#   d ++         +++++++S|\n" +
+					   "|++++++++ d     d +++++++#|\n" +
+					   "|#++++++++++++++++++      |\n" +
+					   "|        ++~~~~~~+++d  b  |\n" +
+					   "|        ++~    ~+++      |\n" +
+					   "|   D   d++~    ~+++    d |\n" +
+					   "|        ++~  I ~++++++++#|\n" +
+					   "|        ++~    ~+++  d  #|\n" +
+					   "|      d ++~    ~++       |\n" +
+					   "|#+++++++++~~~~~~++d  L   |\n" +
+					   "|S+++++++++++++++++       |\n" +
+					   "|#++++++++       +++     #|\n" +
+					   "|T     d++       ++++++++S|\n" +
+					   "|       ++      d++++++++#|\n" +
+					   "|       ++   H   ++d     T|\n" +
+					   "|   l   ++       ++       |\n" +
+					   "|       ++       ++   s   |\n" +
+					   "|      #S#       #+       |\n" +
+					   "---------------------------\n";
+		System.out.println(board);
 
-		} catch(FileNotFoundException e){
-			e.printStackTrace();
-		} 
-		finally{
-			br.close();
-		}	
+		
 		
 		
 	}
