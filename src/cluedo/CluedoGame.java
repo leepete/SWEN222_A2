@@ -157,12 +157,13 @@ public class CluedoGame {
 		weaponSet.add(new Weapon("Spanner"));
 		
 		characterSet = new HashSet<Character>();
-		characterSet.add(new Character("Miss Scarlet"));
-		characterSet.add(new Character("Colonel Mustard"));
-		characterSet.add(new Character("Mrs. White"));
-		characterSet.add(new Character("The Reverend Green"));
-		characterSet.add(new Character("Mrs. Peacock"));
-		characterSet.add(new Character("Proffesor Plum"));
+		//Change the start locations for the players when peter fixes the board
+		characterSet.add(new Character("Miss Scarlet", new Position(0,0)));
+		characterSet.add(new Character("Colonel Mustard", new Position(0, 0)));
+		characterSet.add(new Character("Mrs. White", new Position(0,0)));
+		characterSet.add(new Character("The Reverend Green", new Position(0,0)));
+		characterSet.add(new Character("Mrs. Peacock", new Position(0,0)));
+		characterSet.add(new Character("Proffesor Plum", new Position(0,0)));
 		
 		roomSet = new HashSet<Room>();
 		roomSet.add(new Room("Kitchen"));
@@ -183,12 +184,12 @@ public class CluedoGame {
 		//Reset the Map
 		availableChars = new HashMap<String, Character>();
 		//Populate the map with all the options
-		availableChars.put("Miss Scarlet", new Character("Miss Scarlet"));
-		availableChars.put("Colonel Mustard", new Character("Colonel Mustard"));
-		availableChars.put("Mrs. White", new Character("Mrs. White"));
-		availableChars.put("The Reverend Green", new Character("The Reverend Green"));
-		availableChars.put("Mrs. Peacock", new Character("Mrs. Peacock"));
-		availableChars.put("Professor Plum", new Character("Professor Plum"));
+		availableChars.put("Miss Scarlet", new Character("Miss Scarlet", new Position(0, 0)));
+		availableChars.put("Colonel Mustard", new Character("Colonel Mustard", new Position(0, 0)));
+		availableChars.put("Mrs. White", new Character("Mrs. White", new Position(0, 0)));
+		availableChars.put("The Reverend Green", new Character("The Reverend Green", new Position(0,0)));
+		availableChars.put("Mrs. Peacock", new Character("Mrs. Peacock", new Position(0,0)));
+		availableChars.put("Professor Plum", new Character("Professor Plum", new Position(0,0)));
 	}
 	
 	

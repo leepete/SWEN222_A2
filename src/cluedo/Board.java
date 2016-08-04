@@ -17,7 +17,8 @@ public class Board {
 	private static final int BOARD_HEIGHT = 27;
 	
 	//Fix me please
-	private char[][] board = { "---------------------------".toCharArray(),
+	private char[][] board = { "------ - - ----------------".toCharArray(),
+							   "----  ◀ ▶ ▼ ▲     ---------".toCharArray(),
 							   "|---------S----S----------|".toCharArray(),
 							   "|     T#+++     +++#      |".toCharArray(),
 							   "|      ++         ++  Con |".toCharArray(),

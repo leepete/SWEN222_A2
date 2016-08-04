@@ -1,0 +1,18 @@
+Fix board,
+set start locations for characters
+stop players walking through walls/other player
+make suggestions/accusations
+win/lose game
+duduce the answer after suggestions
+refute other players suggestion
+entering rooms
+leaving rooms
+using stairs
+
+junit tests
+comments/java doc
+
+CRC cards
+class diagram
+sequence diagrams
+one page report
