@@ -67,7 +67,24 @@ public class CluedoGame {
 		
 		System.out.println("All players successfully allocated");
 		makeSolution();
-		System.out.println(String.format("DEBUG: This is the answer to the game: %s", solution.toString())); 
+		System.out.println(String.format("DEBUG: This is the answer to the game: %s", solution.toString()));
+		shuffleNDeal();
+	}
+	
+	/**
+	 * Merges the weapon room and character sets into the card set, 
+	 * which then iterates over the players array adding a random card
+	 * to their hands until there are no more cards (some players will have more cards)
+	 */
+	private void shuffleNDeal() {
+		cardSet.addAll(weaponSet);
+		cardSet.addAll(roomSet);
+		cardSet.addAll(characterSet);
+		
+		//While there are cards in the set, keep dealing them to the players
+		while(!cardSet.isEmpty()) {
+			
+		}
 	}
 	
 	/**
