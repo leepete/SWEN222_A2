@@ -10,8 +10,7 @@ public class Player {
 	private boolean playing = true;
 	public Position position;
 	
-	public Player(Position position, Character token) {
-		this.position = position;
+	public Player(Character token) {
 		this.player= token;
 	}
 	
