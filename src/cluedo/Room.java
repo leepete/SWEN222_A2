@@ -7,12 +7,12 @@ import java.util.Set;
 public class Room {
 	
 	private String name;
-	private List<Point> vertices;
+	private List<Position> vertices;
 	private boolean hasPassage;
 	private Room passageWay;
-	private Set<Point> doors;
+	private Set<Position> doors;
 	
-	public Room(String name, boolean hasPassage, Room passageWay, Set<Point> doors, List<Point> vertices) {
+	public Room(String name, boolean hasPassage, Room passageWay, Set<Position> doors, List<Position> vertices) {
 		this.name = name;
 		this.hasPassage = hasPassage;
 		this.passageWay = passageWay;
@@ -20,7 +20,7 @@ public class Room {
 		this.doors = doors;
 	}
 	
-	public Set<Point> getDoors() {
+	public Set<Position> getDoors() {
 		return doors;
 	}
 
