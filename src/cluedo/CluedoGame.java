@@ -16,6 +16,15 @@ public class CluedoGame {
 	//Mapping character to their name
 	Map<String, Character> availableChars = new HashMap<String, Character>();
 	
+	//Sets to emulate the deck of cards
+	Set<Card> cardSet = new HashSet<Card>();
+	Set<Weapon> weaponSet = new HashSet<Weapon>();
+	Set<Room> roomSet = new HashSet<Room>();
+	Set<Character> characterSet = new HashSet<Character>();
+	
+	//The answer to ~~life the universe and everything~~ the game of cluedo
+	Suggestion solution;
+	
 	public CluedoGame() {
 		Board b = new Board();
 		Scanner s = new Scanner(System.in);
@@ -34,28 +43,50 @@ public class CluedoGame {
 		resetGame();
 		
 		//Get number of players
-		
-		
-		
-		int i = 0;
-		while(i < numPlayers) {
+		getNumPlayers(s);
+		int i = 1;
+		while(i <= numPlayers) {
 		
 			System.out.println(String.format("Player %d, please enter the character you wish to play as:", i));
-			//Switch find the player they entered and assign that from the set to their player object
 			for(Character c : availableChars.values()) {
 				System.out.println(c.toString());
-			} 
+			}
 			String plCharChoice = s.nextLine();
+			System.out.println("DEBUG: plcharchoice: " + plCharChoice);
 			if(isValidCharName(plCharChoice)) {
-				switch(plCharChoice) {
-				case "Miss Scarlet": 
-				};
+				//Add a player with this character to the array
+				players.add(new Player(availableChars.get(plCharChoice)));
+				//Remove this character from the available characters
+				availableChars.remove(plCharChoice);
+				//A player has been successfully added
+				i++;
 			} else {
-				System.out.println("That was an invalid player, please enter again:");
+				System.out.println("That was an invalid player, please enter again");
 			}
 		}
+		
+		System.out.println("All players successfully allocated");
+		makeSolution();
+		System.out.println(String.format("DEBUG: This is the answer to the game: %s", solution.toString())); 
 	}
 	
+	/**
+	 * Draws a Card from the weapon, character and room sets to make up the solution to the game
+	 */
+	private void makeSolution() {
+		Weapon w = weaponSet.iterator().next();
+		Room r = roomSet.iterator().next();
+		Character c = characterSet.iterator().next();
+		solution = new Suggestion(w, c , r);
+		
+	}
+	
+	
+	/**
+	 * Returns true if the passed string is a valid name of a character
+	 * @param name
+	 * @return
+	 */
 	private boolean isValidCharName(String name) {
 		return availableChars.keySet().contains(name);
 	}
@@ -68,7 +99,8 @@ public class CluedoGame {
 	private int getNumPlayers(Scanner s) {
 		System.out.println("Welcome to cluedo, please enter the number of people who will be playing (2-6):");
 		// === Check here that the input from the user is actually an integer ===
-		int numPlayers = s.nextInt();
+		numPlayers = s.nextInt();
+		s.nextLine();// consume the end of the line
 		while(numPlayers > 6 || numPlayers < 2) {
 			System.out.println("That was an invalid number of players, ensure the number of players is between 2 and 6");
 			numPlayers = s.nextInt();
@@ -76,12 +108,48 @@ public class CluedoGame {
 		System.out.println(String.format("Awesome, there will be %d players this game.", numPlayers));
 		return numPlayers;
 	}
+	
 	/**
 	 * Resets all the fields for a new game
 	 */
 	private void resetGame() {
 		resetCharacters();
 		numPlayers = 0;
+		
+		resetDeck();
+	}
+	
+	/**
+	 * Resets the sets for weapons, rooms and characters
+	 */
+	private void resetDeck() {
+		//Reset the sets for weapons, rooms and characters
+		weaponSet = new HashSet<Weapon>();
+		weaponSet.add(new Weapon("Candlestick"));
+		weaponSet.add(new Weapon("Dagger"));
+		weaponSet.add(new Weapon("Lead Pipe"));
+		weaponSet.add(new Weapon("Revolver"));
+		weaponSet.add(new Weapon("Rope"));
+		weaponSet.add(new Weapon("Spanner"));
+		
+		characterSet = new HashSet<Character>();
+		characterSet.add(new Character("Miss Scarlet"));
+		characterSet.add(new Character("Colonel Mustard"));
+		characterSet.add(new Character("Mrs. White"));
+		characterSet.add(new Character("The Reverend Green"));
+		characterSet.add(new Character("Mrs. Peacock"));
+		characterSet.add(new Character("Proffesor Plum"));
+		
+		roomSet = new HashSet<Room>();
+		roomSet.add(new Room("Kitchen"));
+		roomSet.add(new Room("Ball Room"));
+		roomSet.add(new Room("Conservatory"));
+		roomSet.add(new Room("Billiard Room"));
+		roomSet.add(new Room("Library"));
+		roomSet.add(new Room("Study"));
+		roomSet.add(new Room("Hall"));
+		roomSet.add(new Room("Lounge"));
+		roomSet.add(new Room("Dining Room"));
 	}
 	
 	/**

@@ -13,6 +13,6 @@ public class Suggestion {
 	}
 	
 	public String toString() {
-		return "W: " + weapon + " C:" + character + " R:" + room;
+		return String.format("W: %s C: %s R: %s", weapon.toString(), character.toString(), room.toString() );
 	}
 }

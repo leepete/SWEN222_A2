@@ -16,6 +16,7 @@ public class Board {
 	private static final int BOARD_WIDTH = 26;
 	private static final int BOARD_HEIGHT = 27;
 	
+	//Fix me please
 	private char[][] board = { "---------------------------".toCharArray(),
 							   "|---------S----S----------|".toCharArray(),
 							   "|     T#+++     +++#      |".toCharArray(),
