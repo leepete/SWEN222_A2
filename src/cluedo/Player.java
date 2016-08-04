@@ -10,36 +10,39 @@ public class Player {
 	private boolean playing = true;
 	public Position position;
 	
-	public Player(Position position, Character token) {
-		this.position = position;
-		this.player= token;
+	public Player(Character player) {
+		this.player = player;
 	}
 	
 	/**
-	 * Moves the player based on their dice roll to a position on the board and returns this
-	 * @return
+	 * Moves the player based on their dice roll to a position on the board
 	 */
 	public void move(Scanner s) {
 		String key = s.nextLine().toUpperCase(); 
-		while(true){ //fix loop later
-		switch(key){
-			case "w":
-				goUp();
-				break;
-			case "a":
-				goLeft();
-				break;
-			case "s":
-				goDown();
-				break;
-			case "d":
-				goRight();
-				break;
-		default: {
-			System.out.println("Incorrect move, please try again");
+		int move = rollDice(); //rolldice temp holder
+		while(move != 0){ 
+			switch(key){
+				case "W":
+					goUp();
+					move--;
+					break;
+				case "A":
+					goLeft();
+					move--;
+					break;
+				case "S":
+					goDown();
+					move--;
+					break;
+				case "D":
+					goRight();
+					move--;
+					break;
+			default: {
+				System.out.println("Incorrect move, please try again");
+			}
+			}
 		}
-		}
-	}
 	}
 	
 	/**
