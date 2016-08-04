@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class CluedoGame {
 
 	public CluedoGame() {
-		System.out.println("New Game!");
+		System.out.println("New Game!?");
 	}
 	List<Player> players = new ArrayList<Player>();
 	
