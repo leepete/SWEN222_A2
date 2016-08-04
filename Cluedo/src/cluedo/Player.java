@@ -40,6 +40,6 @@ public class Player {
 	public String toString() {
 		return token.toString();
 	}
-}
 	
-	//Some sort of move
+	//Some sort of move 
+}
