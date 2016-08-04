@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 
 public class CluedoGame {
 
@@ -82,8 +83,14 @@ public class CluedoGame {
 		cardSet.addAll(characterSet);
 		
 		//While there are cards in the set, keep dealing them to the players
-		while(!cardSet.isEmpty()) {
-			
+		int i = 0;
+		Iterator<Card> cardSetItr = cardSet.iterator();
+		while(cardSetItr.hasNext()) {
+			players.get(i % players.size()).addCard(cardSetItr.next());
+			i++;
+		}
+		for(Player p : players) {
+			System.out.println(p.handToString());
 		}
 	}
 	

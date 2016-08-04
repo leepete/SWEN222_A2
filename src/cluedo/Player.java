@@ -2,6 +2,8 @@ package cluedo;
 
 import java.util.Random;
 import java.util.Scanner;
+import java.util.Set;
+import java.util.HashSet;
 
 
 public class Player {
@@ -9,6 +11,8 @@ public class Player {
 	private Character player;
 	private boolean playing = true;
 	public Position position;
+	
+	private Set<Card> hand = new HashSet<Card>();
 	
 	public Player(Character token) {
 		this.player= token;
@@ -21,22 +25,22 @@ public class Player {
 	public void move(Scanner s) {
 		String key = s.nextLine().toUpperCase(); 
 		while(true){ //fix loop later
-		switch(key){
-			case "w":
-				goUp();
-				break;
-			case "a":
-				goLeft();
-				break;
-			case "s":
-				goDown();
-				break;
-			case "d":
-				goRight();
-				break;
-		default: {
-			System.out.println("Incorrect move, please try again");
-		}
+			switch(key){
+				case "W":
+					goUp();
+					break;
+				case "A":
+					goLeft();
+					break;
+				case "S":
+					goDown();
+					break;
+				case "D":
+					goRight();
+					break;
+			default: {
+				System.out.println("Incorrect move, please try again");
+			}
 		}
 	}
 	}
@@ -48,6 +52,27 @@ public class Player {
 	private int rollDice() {
 		Random rand = new Random();
 		return rand.nextInt(6) + 1;
+	}
+	
+	/**
+	 * Sets the players hand
+	 * @param hand
+	 */
+	public void addCard(Card card) {
+		hand.add(card);
+	}
+	
+	
+	/**
+	 * Returns the players hand as a string
+	 * @return
+	 */
+	public String handToString() {
+		String s = "";
+		for(Card c : hand) {
+			s += c.toString() + ", ";
+		}
+		return s;
 	}
 	
 	/**
