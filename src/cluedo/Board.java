@@ -21,7 +21,7 @@ public class Board {
 							   "##########+####+##########".toCharArray(),
 							   "#=====T#+++====+++#======#".toCharArray(),
 							   "#=KITC=++===  ===++=CONS=#".toCharArray(),
-							   "#=    =++=      =++=   =#".toCharArray(),
+							   "#=    =++=      =++=    =#".toCharArray(),
 							   "#=    =++= BALL =++v=   =#".toCharArray(),
 							   "#==  =++<1ROOM4>+++===T##".toCharArray(),
 							   "##===v=++=2    3=++++++++#".toCharArray(),
