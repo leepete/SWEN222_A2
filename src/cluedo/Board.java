@@ -23,7 +23,7 @@ public class Board {
 							   "#=KITC=++===  ===++=CONS=#".toCharArray(),
 							   "#=    =++=      =++=    =#".toCharArray(),
 							   "#=    =++= BALL =++v=   =#".toCharArray(),
-							   "#==  =++<1ROOM4>+++===T##".toCharArray(),
+							   "#==   =++<1    4>+++===T##".toCharArray(),
 							   "##===v=++=2    3=++++++++#".toCharArray(),
 							   "#++++++++=v====v=+++++++##".toCharArray(),
 							   "##+++++++++++++++++======#".toCharArray(),
