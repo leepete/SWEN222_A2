@@ -14,7 +14,8 @@ public class CluedoGame {
 	
 	//Array of all the possible inputs from the player during their turn for easy error checking
 	private List<String> turnOptions = new ArrayList<String>();
-	
+	private int minPlayers = 3;
+	private int maxPlayers = 6;
 	//List of the players in the game
 	public List<Player> players = new ArrayList<Player>();
 	//Number of players in the game
@@ -36,7 +37,7 @@ public class CluedoGame {
 	private final Character[] charactersArray = {
 			new Character("MISS SCARLET", new Position(8, 25)),
 			new Character("COLONEL MUSTARD", new Position(1, 18)),
-			new Character("MRS. WHITE", new Position(10, 1)),
+			new Character("MRS WHITE", new Position(10, 1)),
 			new Character("THE REVEREND GREEN", new Position(15, 1)),
 			new Character("MRS PEACOCK", new Position(24, 7)),
 			new Character("PROFFESOR PLUM", new Position(24, 20)) };
@@ -75,7 +76,7 @@ public class CluedoGame {
 			for(Character c : availableChars.values()) {
 				System.out.println(c.toString());
 			}
-			String plCharChoice = s.nextLine();
+			String plCharChoice = s.nextLine().toUpperCase();
 			System.out.println("DEBUG: plcharchoice: " + plCharChoice);
 			if(isValidCharName(plCharChoice)) {
 				//Add a player with this character to the array
@@ -109,10 +110,11 @@ public class CluedoGame {
 		int iP = 0; //index of the current player from the players array list
 		//'playing' is a boolean toggled when someone wins the game or when only 1 player remains
 		while(playing) {
+			turnOptions.clear();
 			Player player = players.get(iP); //Sets the current player so we only have to .get once
 			 //If the current player is not playing then move to the next player
 			if(!player.isPlaying()) {
-				iP = (iP+1) % players.size();
+				iP = (iP%numPlayers)+1;
 				continue;
 			}
 			//Add the options to the turnOptions set that are available to the player..
@@ -135,7 +137,7 @@ public class CluedoGame {
 			//Loop until the player gives a valid input
 			while(!validInput) {
 				
-				//
+				System.out.println(String.format("DEBUG: PC: %s player# %d", player.toString(), iP));
 				
 				System.out.println(String.format("Player %d, it is your turn! What would you like to do?", iP+1));
 				for(int i = 0; i < turnOptions.size()-1; i++) {
@@ -152,15 +154,19 @@ public class CluedoGame {
 					switch(input) {
 					case "MOVE":
 						player.move(s);
+						validInput = true;
 						break;
 					case "STAIRS":
 						player.useStairs();
+						validInput = true;
 						break;
 					case "EXIT":
 						player.exitRoom();
+						validInput = true;
 						break;
 					case "ACCUSE":
 						player.accuse();
+						validInput = true;
 						break;
 					}
 				}
@@ -170,10 +176,7 @@ public class CluedoGame {
 			}
 			validInput = false;
 			
-			//Use the 
-			
-			
-			iP = (iP+1)%players.size(); //Increment the current player, always keeping it within the bounds of the array
+			iP = (iP%numPlayers)+1; //Increment the current player, always keeping it within the bounds of the array
 		}
 		System.out.println("DEBUG: No longer playing, doing end of game roundup");
 	}
@@ -231,7 +234,7 @@ public class CluedoGame {
 		// === Check here that the input from the user is actually an integer ===
 		numPlayers = s.nextInt();
 		s.nextLine();// consume the end of the line
-		while(numPlayers > 6 || numPlayers < 2) {
+		while(numPlayers > maxPlayers || numPlayers < minPlayers) {
 			System.out.println("That was an invalid number of players, ensure the number of players is between 2 and 6");
 			numPlayers = s.nextInt();
 		}

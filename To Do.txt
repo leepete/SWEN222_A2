@@ -1,5 +1,3 @@
-Fix board,
-set start locations for characters
 stop players walking through walls/other player
 make suggestions/accusations
 win/lose game

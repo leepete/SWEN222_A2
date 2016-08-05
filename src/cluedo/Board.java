@@ -13,8 +13,8 @@ import java.util.List;
 
 public class Board {
 		
-	public final int BOARD_WIDTH = 26;
-	public final int BOARD_HEIGHT = 27;
+	public static final int BOARD_WIDTH = 26;
+	public static final int BOARD_HEIGHT = 27;
 	
 	
 	private char[][] board = { "##########################".toCharArray(),
@@ -52,6 +52,19 @@ public class Board {
 			}
 			System.out.println();
 		}	
+	}
+	
+	/**
+	 * Returns true if the move is valid, ie the new position is clear of debris
+	 * @param oldPos
+	 * @param newPos
+	 * @return
+	 */
+	public boolean validMove(Position newPos) {
+		if(board[newPos.getRow()][newPos.getColumn()] == '+') {
+			return true;
+		}
+		return false;
 	}
 	
 	

@@ -17,6 +17,7 @@ public class Player {
 	
 	public Player(Character character) {
 		this.character = character;
+		position = this.character.getStart();
 	}
 	
 	
@@ -41,36 +42,37 @@ public class Player {
 	 * @return
 	 */
 	public void move(Scanner s) {
-		boolean validChar = true;
-		String key = s.next().toUpperCase(); //Take the first string from the user
-		// check that the key is actually a character
-		s.nextLine();//End the line
-		do{ 
+		int remainingSteps = rollDice();
+		
+		
+		
+		while(remainingSteps > 0){
+			System.out.println("Input a direction: 'W' 'A' 'S' 'D'");
+			
+			String key = s.next().toUpperCase(); //Take the first string from the user
+			s.nextLine();//End the line
 			switch(key){
 				case "W":
-					goUp();
-					validChar = true;
+					if(goUp())
+						remainingSteps--;
 					break;
 				case "A":
-					goLeft();
-					validChar = true;
+					if(goLeft())
+						remainingSteps--;
 					break;
 				case "S":
-					goDown();
-					validChar = true;
+					if(goDown())
+						remainingSteps--;
 					break;
 				case "D":
-					goRight();
-					validChar = true;
+					if(goRight())
+						remainingSteps--;	
 					break;
 				default: {
-					validChar = false;
-					System.out.println("Incorrect move, please try again");
+					System.out.println("Invalid character, please try again");
 				}
 			}
-			
-			
-		}while(!validChar);
+		}
 	}
 	
 	/**
@@ -136,20 +138,61 @@ public class Player {
 		return playing;
 	}
 	
-	private void goUp(){
-		position.setRow(position.getRow()-1);		
+	/**
+	 * Attempts to move the player up 1 space
+	 * Returns true if was successful
+	 * @return
+	 */
+	private boolean goUp(){
+		//Can't move off the board
+		if(position.getRow() == 0) {
+			return false;
+		}
+		position.setRow(position.getRow()-1);
+		System.out.println(position.toString());
+		return true;
 	}
-	
-	private void goLeft(){
+	/**
+	 * Attempts to move the player left 1 space
+	 * Returns true if was successful
+	 * @return
+	 */
+	private boolean goLeft(){
+		//Can't move off the board
+		if(position.getColumn() == 0) {
+			return false;
+		}
 		position.setColumn(position.getColumn()-1);
+		System.out.println(position.toString());
+		return true;
 	}
-	
-	private void goRight(){
+	/**
+	 * Attempts to move the player right 1 space
+	 * Returns true if was successful
+	 * @return
+	 */
+	private boolean goRight(){
+		//Can't move off the board
+		if(position.getColumn() == Board.BOARD_WIDTH-1) {
+			return false;
+		}
 		position.setColumn(position.getColumn()+1);
+		System.out.println(position.toString());
+		return true;
 	}
-	
-	private void goDown(){
+	/**
+	 * Attempts to move the player down 1 space
+	 * Returns true if was successful
+	 * @return
+	 */
+	private boolean goDown(){
+		//Can't move off the board
+		if(position.getRow() == Board.BOARD_HEIGHT-1) {
+			return false;
+		}
 		position.setRow(position.getRow()+1);
+		System.out.println(position.toString());
+		return true;
 	}
 
 	
