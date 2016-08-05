@@ -8,22 +8,42 @@ import java.util.HashSet;
 
 public class Player {
 	
-	private Character player;
+	private Character character;
 	private boolean playing = true;
 	public Position position;
+	private Room room = null;
 	
 	private Set<Card> hand = new HashSet<Card>();
 	
-	public Player(Character token) {
-		this.player= token;
+	public Player(Character character) {
+		this.character = character;
+	}
+	
+	
+	/**
+	 * Returns the room that the player is in and null if they aren't in one
+	 * @return
+	 */
+	public Room inRoom() {
+		return room;
 	}
 	
 	/**
-	 * Moves the player based on their dice roll to a position on the board and returns this
+	 * Returns the players position on the board
+	 * @return
+	 */
+	public Position getPosition() {
+		return position;
+	}
+	
+	/**
+	 * Takes an input key from the user and attempts to move in that direction
 	 * @return
 	 */
 	public void move(Scanner s) {
-		String key = s.nextLine().toUpperCase(); 
+		String key = s.next().toUpperCase(); //Take the first string from the user
+		// check that the key is actually a character
+		s.nextLine();//End the line
 		while(true){ //fix loop later
 			switch(key){
 				case "W":
@@ -100,7 +120,7 @@ public class Player {
 
 	
 	public String toString() {
-		return player.toString();
+		return character.toString();
 	}
 	
 	//Some sort of move 

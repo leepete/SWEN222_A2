@@ -46,8 +46,8 @@ public class Board {
 							   "##########################".toCharArray()};
 	
 	public Board(){
-		for(int i = 0; i < BOARD_WIDTH; i++) {
-			for(int j = 0; j < BOARD_HEIGHT; j++) {
+		for(int i = 0; i < BOARD_HEIGHT; i++) {
+			for(int j = 0; j < BOARD_WIDTH; j++) {
 				System.out.print(board[i][j]);
 			}
 			System.out.println();

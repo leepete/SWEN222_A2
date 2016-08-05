@@ -4,12 +4,17 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 
 public class CluedoGame {
 
+	
+	//Array of all the possible inputs from the player during their turn for easy error checking
+	private static final String[] turnOptions = {"MOVE", "STAIRS","ACCUSE", "YES", "NO"};
+	
 	//List of the players in the game
 	List<Player> players = new ArrayList<Player>();
 	//Number of players in the game
@@ -25,6 +30,7 @@ public class CluedoGame {
 	
 	//The answer to ~~life the universe and everything~~ the game of cluedo
 	Suggestion solution;
+	boolean playing = true;
 	
 	public CluedoGame() {
 		Board b = new Board();
@@ -70,6 +76,51 @@ public class CluedoGame {
 		makeSolution();
 		System.out.println(String.format("DEBUG: This is the answer to the game: %s", solution.toString()));
 		shuffleNDeal();
+		turnCycle(s);
+	}
+	
+	/**
+	 * Player turn cycle,
+	 * While there are still players in the game and someone hasn't won,
+	 * 	iterate over the players in the game
+	 * 	 print: the player who's turn it is, their hand, and what room they're in (if applic)
+	 *   print: Options available to the player; Roll dice/use stairs/make accusation
+	 *    delegate to other methods for each of the options above
+	 */
+	public void turnCycle(Scanner s) {
+		boolean validInput = false;
+		int iP = 0; //index of the current player from the players array list
+		//'playing' is a boolean toggled when someone wins the game or when only 1 player remains
+		while(playing) {
+			Player player = players.get(iP); //Sets the current player so we only have to .get once
+			 //If the current player is not playing then move to the next player
+			if(!player.isPlaying()) {
+				iP = (iP+1) % players.size();
+				continue;
+			}
+			while(!validInput) {
+				System.out.println(String.format("Player %d, it is your turn! What would you like to do?", iP));
+				System.out.print(String.format("MOVE, "));
+				//If player is in a room, allow them the option of using the stairs
+				if(player.inRoom() != null) {
+					System.out.print("STAIRS, ");
+					//if room player is in has stairs
+						//ask if they want to use stairs
+				}
+				System.out.println("ACCUSE");
+				
+				String input = s.next().toUpperCase(); //Get the input from the user and make it uppercase
+				s.nextLine(); //Consume the end of the line
+				System.out.println(String.format("DEBUG: \'%s\' provided", input));
+				if(Arrays.asList(turnOptions).contains(input)) {
+					validInput = true;
+				}
+				else {
+					System.out.println(String.format("\'%s\' is an invalid input, please use an option provided.", input));
+				}
+			}
+			iP = (iP+1)%players.size(); //Increment the current player, always keeping it within the bounds of the array
+		}
 	}
 	
 	/**
