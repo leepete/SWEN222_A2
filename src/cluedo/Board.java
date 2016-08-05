@@ -13,10 +13,10 @@ import java.util.List;
 
 public class Board {
 		
-	private static final int BOARD_WIDTH = 26;
-	private static final int BOARD_HEIGHT = 27;
+	public final int BOARD_WIDTH = 26;
+	public final int BOARD_HEIGHT = 27;
 	
-	//Fix me please
+	
 	private char[][] board = { "##########################".toCharArray(),
 							   "##########+####+##########".toCharArray(),
 							   "#=====T#+++====+++#======#".toCharArray(),

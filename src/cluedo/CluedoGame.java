@@ -13,24 +13,41 @@ public class CluedoGame {
 
 	
 	//Array of all the possible inputs from the player during their turn for easy error checking
-	private static final String[] turnOptions = {"MOVE", "STAIRS","ACCUSE", "YES", "NO"};
+	private List<String> turnOptions = new ArrayList<String>();
 	
 	//List of the players in the game
-	List<Player> players = new ArrayList<Player>();
+	public List<Player> players = new ArrayList<Player>();
 	//Number of players in the game
-	int numPlayers;
+	public int numPlayers;
 	//Mapping character to their name
-	Map<String, Character> availableChars = new HashMap<String, Character>();
+	public Map<String, Character> availableChars = new HashMap<String, Character>();
 	
 	//Sets to emulate the deck of cards
-	Set<Card> cardSet = new HashSet<Card>();
-	Set<Weapon> weaponSet = new HashSet<Weapon>();
-	Set<Room> roomSet = new HashSet<Room>();
-	Set<Character> characterSet = new HashSet<Character>();
+	public Set<Card> cardSet = new HashSet<Card>();
+	public Set<Weapon> weaponSet = new HashSet<Weapon>();
+	public Set<Room> roomSet = new HashSet<Room>();
+	public Set<Character> characterSet = new HashSet<Character>();
 	
 	//The answer to ~~life the universe and everything~~ the game of cluedo
-	Suggestion solution;
-	boolean playing = true;
+	public Suggestion solution;
+	public boolean playing = true;
+	
+	//Array holding all the players 
+	private final Character[] charactersArray = {
+			new Character("MISS SCARLET", new Position(8, 25)),
+			new Character("COLONEL MUSTARD", new Position(1, 18)),
+			new Character("MRS. WHITE", new Position(10, 1)),
+			new Character("THE REVEREND GREEN", new Position(15, 1)),
+			new Character("MRS PEACOCK", new Position(24, 7)),
+			new Character("PROFFESOR PLUM", new Position(24, 20)) };
+	
+	private final Weapon[] weaponsArray = {
+			new Weapon("CANDLESTICK"),
+			new Weapon("DAGGER"),
+			new Weapon("LEAD PIPE"),
+			new Weapon("REVOLVER"),
+			new Weapon("ROPE"),
+			new Weapon("SPANNER")};
 	
 	public CluedoGame() {
 		Board b = new Board();
@@ -98,29 +115,67 @@ public class CluedoGame {
 				iP = (iP+1) % players.size();
 				continue;
 			}
-			while(!validInput) {
-				System.out.println(String.format("Player %d, it is your turn! What would you like to do?", iP));
-				System.out.print(String.format("MOVE, "));
-				//If player is in a room, allow them the option of using the stairs
-				if(player.inRoom() != null) {
-					System.out.print("STAIRS, ");
-					//if room player is in has stairs
-						//ask if they want to use stairs
+			//Add the options to the turnOptions set that are available to the player..
+			//Check if the player is in a room
+			Room playerRoom = player.inRoom();
+			if(playerRoom != null) {
+				if(playerRoom.getStairRoom() != null) {
+					//Make using the stairs an option
+					turnOptions.add("STAIRS");
 				}
-				System.out.println("ACCUSE");
+				//Make exiting the room and option
+				turnOptions.add("EXIT"); //NOTE will ask the player what door they wish to exit out of if there is more than one door
+			}
+			else { //Moving is only an option if the player is not in a room
+				turnOptions.add("MOVE");
+			}
+			//Make making an accusation an option
+			turnOptions.add("ACCUSE");
+			
+			//Loop until the player gives a valid input
+			while(!validInput) {
+				
+				//
+				
+				System.out.println(String.format("Player %d, it is your turn! What would you like to do?", iP+1));
+				for(int i = 0; i < turnOptions.size()-1; i++) {
+					System.out.print(turnOptions.get(i) + ", ");
+				}
+				//Print the last option separately so it doesnt have a comma after it and prints the newline
+				System.out.println(turnOptions.get(turnOptions.size()-1));
 				
 				String input = s.next().toUpperCase(); //Get the input from the user and make it uppercase
 				s.nextLine(); //Consume the end of the line
 				System.out.println(String.format("DEBUG: \'%s\' provided", input));
-				if(Arrays.asList(turnOptions).contains(input)) {
-					validInput = true;
+				//If the input was valid, find what the input was
+				if(turnOptions.contains(input)) {
+					switch(input) {
+					case "MOVE":
+						player.move(s);
+						break;
+					case "STAIRS":
+						player.useStairs();
+						break;
+					case "EXIT":
+						player.exitRoom();
+						break;
+					case "ACCUSE":
+						player.accuse();
+						break;
+					}
 				}
-				else {
+				else { //Else ask again
 					System.out.println(String.format("\'%s\' is an invalid input, please use an option provided.", input));
 				}
 			}
+			validInput = false;
+			
+			//Use the 
+			
+			
 			iP = (iP+1)%players.size(); //Increment the current player, always keeping it within the bounds of the array
 		}
+		System.out.println("DEBUG: No longer playing, doing end of game roundup");
 	}
 	
 	/**
@@ -200,32 +255,39 @@ public class CluedoGame {
 	private void resetDeck() {
 		//Reset the sets for weapons, rooms and characters
 		weaponSet = new HashSet<Weapon>();
-		weaponSet.add(new Weapon("Candlestick"));
-		weaponSet.add(new Weapon("Dagger"));
-		weaponSet.add(new Weapon("Lead Pipe"));
-		weaponSet.add(new Weapon("Revolver"));
-		weaponSet.add(new Weapon("Rope"));
-		weaponSet.add(new Weapon("Spanner"));
+		for(Weapon w : weaponsArray) {
+			weaponSet.add(w);
+		}
 		
 		characterSet = new HashSet<Character>();
-		//Change the start locations for the players when peter fixes the board
-		characterSet.add(new Character("Miss Scarlet", new Position(0,0)));
-		characterSet.add(new Character("Colonel Mustard", new Position(0, 0)));
-		characterSet.add(new Character("Mrs. White", new Position(0,0)));
-		characterSet.add(new Character("The Reverend Green", new Position(0,0)));
-		characterSet.add(new Character("Mrs. Peacock", new Position(0,0)));
-		characterSet.add(new Character("Proffesor Plum", new Position(0,0)));
-		
+		for(Character c : charactersArray) {
+			characterSet.add(c);
+		}
+			
 		roomSet = new HashSet<Room>();
-		roomSet.add(new Room("Kitchen"));
-		roomSet.add(new Room("Ball Room"));
-		roomSet.add(new Room("Conservatory"));
-		roomSet.add(new Room("Billiard Room"));
-		roomSet.add(new Room("Library"));
-		roomSet.add(new Room("Study"));
-		roomSet.add(new Room("Hall"));
-		roomSet.add(new Room("Lounge"));
-		roomSet.add(new Room("Dining Room"));
+		//Make the rooms that have stairs
+		Room kitchen = new Room("KITCHEN");
+		Room conservatory = new Room("CONSERVATORY");
+		Room study = new Room("STUDY");
+		Room lounge = new Room("LOUNGE");
+		
+		//Set their stairs
+		kitchen.setStairRoom(study);
+		study.setStairRoom(kitchen);
+		conservatory.setStairRoom(lounge);
+		lounge.setStairRoom(conservatory);
+		
+		//Add the rooms to the set containing all the rooms
+		roomSet.add(kitchen);
+		roomSet.add(conservatory);
+		roomSet.add(study);
+		roomSet.add(lounge);
+		
+		roomSet.add(new Room("BALL ROOM"));
+		roomSet.add(new Room("BILLIARD ROOM"));
+		roomSet.add(new Room("LIBRARY"));
+		roomSet.add(new Room("HALL"));
+		roomSet.add(new Room("DINING ROOM"));
 	}
 	
 	/**
@@ -235,12 +297,12 @@ public class CluedoGame {
 		//Reset the Map
 		availableChars = new HashMap<String, Character>();
 		//Populate the map with all the options
-		availableChars.put("Miss Scarlet", new Character("Miss Scarlet", new Position(0, 0)));
-		availableChars.put("Colonel Mustard", new Character("Colonel Mustard", new Position(0, 0)));
-		availableChars.put("Mrs. White", new Character("Mrs. White", new Position(0, 0)));
-		availableChars.put("The Reverend Green", new Character("The Reverend Green", new Position(0,0)));
-		availableChars.put("Mrs. Peacock", new Character("Mrs. Peacock", new Position(0,0)));
-		availableChars.put("Professor Plum", new Character("Professor Plum", new Position(0,0)));
+		availableChars.put("MISS SCARLET", charactersArray[0]);
+		availableChars.put("COLONEL MUSTARD", charactersArray[1]);
+		availableChars.put("MRS WHITE", charactersArray[2]);
+		availableChars.put("THE REVEREND GREEN", charactersArray[3]);
+		availableChars.put("MRS PEACOCK", charactersArray[4]);
+		availableChars.put("PROFESSOR PLUM", charactersArray[5]);
 	}
 	
 	

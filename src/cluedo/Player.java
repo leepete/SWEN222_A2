@@ -41,28 +41,36 @@ public class Player {
 	 * @return
 	 */
 	public void move(Scanner s) {
+		boolean validChar = true;
 		String key = s.next().toUpperCase(); //Take the first string from the user
 		// check that the key is actually a character
 		s.nextLine();//End the line
-		while(true){ //fix loop later
+		do{ 
 			switch(key){
 				case "W":
 					goUp();
+					validChar = true;
 					break;
 				case "A":
 					goLeft();
+					validChar = true;
 					break;
 				case "S":
 					goDown();
+					validChar = true;
 					break;
 				case "D":
 					goRight();
+					validChar = true;
 					break;
-			default: {
-				System.out.println("Incorrect move, please try again");
+				default: {
+					validChar = false;
+					System.out.println("Incorrect move, please try again");
+				}
 			}
-		}
-	}
+			
+			
+		}while(!validChar);
 	}
 	
 	/**
@@ -71,7 +79,33 @@ public class Player {
 	 */
 	private int rollDice() {
 		Random rand = new Random();
-		return rand.nextInt(6) + 1;
+		int roll = rand.nextInt(6) + 1;
+		System.out.println(String.format("DEBUG: dice rolled and was: %d", roll));
+		return roll;
+	}
+	
+	/**
+	 * Moves the player by using the stairs, this should end the players turn
+	 */
+	public void useStairs() {
+		Room oldRoom = room;
+		room = room.getStairRoom();
+		//Some sort of update on the board, nvm this should be done from the cluedoGame class
+		System.out.println(String.format("DEBUG: player used stairs from %s and is now in %s", oldRoom, room));
+	}
+	
+	/**
+	 * Gets the door the player wishes to exit the room from and then calls move
+	 */
+	public void exitRoom() {
+		System.out.println("DEBUG: exit room called");
+	}
+	
+	/**
+	 * Make a game ending accusation
+	 */
+	public void accuse() {
+		System.out.println("DEBUG: accuse called");
 	}
 	
 	/**

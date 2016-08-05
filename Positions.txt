@@ -1,0 +1,18 @@
+Characters:
+Col 1 -> 10 Mrs White
+Col 1 -> 15 Reverend Green
+Col 7 -> 24 Mrs Peacock
+Col 18 -> 1 Colonel Mustard
+Col 20 -> 24 Professor Plum
+Col 25 -> 8 Miss Scarlett
+
+Door Positions [row][col]:
+Kitchen - [5,8]
+Ball Room - [8,6] west [10,9] southwest [15,9] southwest [17,16] east
+Conservatory - [19,6]
+Billiard - [18,10] [23,14]
+Dining Room - [9, 13] East  [6,17] South
+Library - [21,14] north [17,17] west
+Hall - [12, 18] [13,18] [16,21]
+Lounge - [7,19]
+Study - [18,21]
