@@ -5,21 +5,23 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.HashSet;
 
-
 public class Player {
 	
 	private Character character;
 	private boolean playing = true;
-	public Position position;
 	private Room room = null;
+	private int id;
+	private Position position;
+	Board board;
 	
 	private Set<Card> hand = new HashSet<Card>();
 	
-	public Player(Character character) {
+	public Player(Character character, Board board, int id) {
 		this.character = character;
+		this.id = id;
+		this.board = board;
 		position = this.character.getStart();
 	}
-	
 	
 	/**
 	 * Returns the room that the player is in and null if they aren't in one
@@ -44,11 +46,9 @@ public class Player {
 	public void move(Scanner s) {
 		int remainingSteps = rollDice();
 		
-		
-		
 		while(remainingSteps > 0){
-			System.out.println("Input a direction: 'W' 'A' 'S' 'D'");
-			
+			System.out.println(String.format("Moves remaining: %d. Input a direction: 'W' 'A' 'S' 'D'", remainingSteps));
+			System.out.println(position.toString());
 			String key = s.next().toUpperCase(); //Take the first string from the user
 			s.nextLine();//End the line
 			switch(key){
@@ -92,7 +92,7 @@ public class Player {
 	public void useStairs() {
 		Room oldRoom = room;
 		room = room.getStairRoom();
-		//Some sort of update on the board, nvm this should be done from the cluedoGame class
+		
 		System.out.println(String.format("DEBUG: player used stairs from %s and is now in %s", oldRoom, room));
 	}
 	
@@ -117,7 +117,6 @@ public class Player {
 	public void addCard(Card card) {
 		hand.add(card);
 	}
-	
 	
 	/**
 	 * Returns the players hand as a string
@@ -145,11 +144,12 @@ public class Player {
 	 */
 	private boolean goUp(){
 		//Can't move off the board
-		if(position.getRow() == 0) {
+		if(position.y == 0) {
 			return false;
 		}
-		position.setRow(position.getRow()-1);
-		System.out.println(position.toString());
+		Position newP = new Position(position.x,position.y-1);
+		board.movePlayer(position, newP, toChar());
+		position = newP;
 		return true;
 	}
 	/**
@@ -159,11 +159,12 @@ public class Player {
 	 */
 	private boolean goLeft(){
 		//Can't move off the board
-		if(position.getColumn() == 0) {
+		if(position.x == 0) {
 			return false;
 		}
-		position.setColumn(position.getColumn()-1);
-		System.out.println(position.toString());
+		Position newP = new Position(position.x-1, position.y);
+		board.movePlayer(position, newP, toChar());
+		position = newP;
 		return true;
 	}
 	/**
@@ -173,11 +174,12 @@ public class Player {
 	 */
 	private boolean goRight(){
 		//Can't move off the board
-		if(position.getColumn() == Board.BOARD_WIDTH-1) {
+		if(position.x == Board.BOARD_WIDTH-1) {
 			return false;
 		}
-		position.setColumn(position.getColumn()+1);
-		System.out.println(position.toString());
+		Position newP = new Position(position.x+1, position.y);
+		board.movePlayer(position, newP, toChar());
+		position = newP;
 		return true;
 	}
 	/**
@@ -187,12 +189,17 @@ public class Player {
 	 */
 	private boolean goDown(){
 		//Can't move off the board
-		if(position.getRow() == Board.BOARD_HEIGHT-1) {
+		if(position.y == Board.BOARD_HEIGHT-1) {
 			return false;
 		}
-		position.setRow(position.getRow()+1);
-		System.out.println(position.toString());
+		Position newP = new Position(position.x, position.y+1);
+		board.movePlayer(position, newP, toChar());
+		position = newP;
 		return true;
+	}
+	
+	public char toChar() {
+		return Integer.toString(id).charAt(0);
 	}
 
 	

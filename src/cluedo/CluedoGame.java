@@ -4,7 +4,6 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -14,7 +13,7 @@ public class CluedoGame {
 	
 	//Array of all the possible inputs from the player during their turn for easy error checking
 	private List<String> turnOptions = new ArrayList<String>();
-	private int minPlayers = 3;
+	private int minPlayers = 1; //DEBUGGING +++++++++++++++++++++++++++++++++++++++++++
 	private int maxPlayers = 6;
 	//List of the players in the game
 	public List<Player> players = new ArrayList<Player>();
@@ -32,6 +31,7 @@ public class CluedoGame {
 	//The answer to ~~life the universe and everything~~ the game of cluedo
 	public Suggestion solution;
 	public boolean playing = true;
+	public Board b;
 	
 	//Array holding all the players 
 	private final Character[] charactersArray = {
@@ -40,7 +40,7 @@ public class CluedoGame {
 			new Character("MRS WHITE", new Position(10, 1)),
 			new Character("THE REVEREND GREEN", new Position(15, 1)),
 			new Character("MRS PEACOCK", new Position(24, 7)),
-			new Character("PROFFESOR PLUM", new Position(24, 20)) };
+			new Character("PROFESSOR PLUM", new Position(24, 20)) };
 	
 	private final Weapon[] weaponsArray = {
 			new Weapon("CANDLESTICK"),
@@ -51,7 +51,7 @@ public class CluedoGame {
 			new Weapon("SPANNER")};
 	
 	public CluedoGame() {
-		Board b = new Board();
+		this.b = new Board();
 		Scanner s = new Scanner(System.in);
 		startGame(s);
 	}
@@ -80,7 +80,7 @@ public class CluedoGame {
 			System.out.println("DEBUG: plcharchoice: " + plCharChoice);
 			if(isValidCharName(plCharChoice)) {
 				//Add a player with this character to the array
-				players.add(new Player(availableChars.get(plCharChoice)));
+				players.add(new Player(availableChars.get(plCharChoice), b, i));
 				//Remove this character from the available characters
 				availableChars.remove(plCharChoice);
 				//A player has been successfully added
@@ -94,6 +94,13 @@ public class CluedoGame {
 		makeSolution();
 		System.out.println(String.format("DEBUG: This is the answer to the game: %s", solution.toString()));
 		shuffleNDeal();
+		
+		//Print the board with all the players in their starting positions here
+		for(Player p : players) {
+			b.activeBoard[p.getPosition().y][p.getPosition().x] = p.toChar();
+		}
+		b.printBoard();
+		
 		turnCycle(s);
 	}
 	
@@ -210,6 +217,9 @@ public class CluedoGame {
 		Weapon w = weaponSet.iterator().next();
 		Room r = roomSet.iterator().next();
 		Character c = characterSet.iterator().next();
+		weaponSet.remove(w);
+		roomSet.remove(r);
+		characterSet.remove(c);
 		solution = new Suggestion(w, c , r);
 		
 	}
@@ -230,12 +240,12 @@ public class CluedoGame {
 	 * @return number of players in this game
 	 */
 	private int getNumPlayers(Scanner s) {
-		System.out.println("Welcome to cluedo, please enter the number of people who will be playing (2-6):");
+		System.out.println("Welcome to cluedo, please enter the number of people who will be playing (3-6):");
 		// === Check here that the input from the user is actually an integer ===
 		numPlayers = s.nextInt();
 		s.nextLine();// consume the end of the line
 		while(numPlayers > maxPlayers || numPlayers < minPlayers) {
-			System.out.println("That was an invalid number of players, ensure the number of players is between 2 and 6");
+			System.out.println("That was an invalid number of players, ensure the number of players is between 3 and 6");
 			numPlayers = s.nextInt();
 		}
 		System.out.println(String.format("Awesome, there will be %d players this game.", numPlayers));
@@ -247,6 +257,7 @@ public class CluedoGame {
 	 */
 	private void resetGame() {
 		resetCharacters();
+		b.resetBoard();
 		numPlayers = 0;
 		
 		resetDeck();
