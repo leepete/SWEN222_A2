@@ -3,7 +3,11 @@ package cluedo;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 
 public class Player {
 	
@@ -11,9 +15,10 @@ public class Player {
 	private boolean playing = true;
 	private Room room = null;
 	private int id;
+	private int remainingSteps;
 	private Position position;
-	Board board;
-	
+	private Board board;
+	private Map<String, Position> placeMap;
 	private Set<Card> hand = new HashSet<Card>();
 	
 	public Player(Character character, Board board, int id) {
@@ -44,7 +49,7 @@ public class Player {
 	 * @return
 	 */
 	public void move(Scanner s) {
-		int remainingSteps = rollDice();
+		remainingSteps = rollDice();
 		
 		while(remainingSteps > 0){
 			System.out.println(String.format("Moves remaining: %d. Input a direction: 'W' 'A' 'S' 'D'", remainingSteps));
@@ -97,17 +102,79 @@ public class Player {
 	}
 	
 	/**
-	 * Checks which placemat the player is on 
+	 * Moves the player into the room
+	 * @param room
 	 */
-	public void enterRoom() {
-		
+	public void enterRoom(Room room) {
+		System.out.println("DEBUG: entering room: " + room.toString());
+		this.room = room;
+		remainingSteps = 0;//Stop moving when we enter a room
 	}
 
 	/**
 	 * Gets the door the player wishes to exit the room from and then calls move
 	 */
-	public void exitRoom() {
-		System.out.println("DEBUG: exit room called");
+	public void exitRoom(Scanner s) {
+		Position exitMat = room.placemats[0]; //Initialise to make compiler happy 
+		
+		//Get all the possible doors from the room and map these to the letter shown on the map (determined from index)
+		placeMap = new HashMap<String, Position>();
+		for(int i = 0; i < room.placemats.length; i++) {
+			placeMap.put(String.valueOf(('A'+i)), room.placemats[i]);
+		}
+		
+		List<Position> blockMats = board.getFreeMats(room);
+		//Remove all the blocked placemats from the map of the available mats 
+		for(Position p : blockMats) {
+			if(placeMap.containsValue(p)) {
+				placeMap.values().remove(p);
+			}
+		}
+		
+		
+		//if there is no unblocked mats then END TURN
+		if(placeMap.isEmpty()) {
+			//END TURN
+			System.out.println("Other players are blocking your exits, you will have to spend the turn here");
+			return;
+		} //else if there is more than one free mat then ASK WHERE TO LEAVE FROM
+		else if (placeMap.size() > 1) {
+			exitMat = whichExit(s);
+		} //else there is only one free mat so poop the player onto that one
+		else {
+			//board move me to the placemat please
+			exitMat = placeMap.get("A");
+		}
+		System.out.println(String.format("DB: Exitign from %s into pos %d, %d", room.toString(), exitMat.x, exitMat.y));
+		this.room = null; //No longer in a room
+		//
+	}
+	
+	/**
+	 * Asks the player which exit they would like to leave the room from, from the available options
+	 * and returns the position of the placemat
+	 * @param s
+	 * @return
+	 */
+	public Position whichExit(Scanner s) {
+		
+		Position mat = placeMap.values().iterator().next(); //Initialise to a random valid option
+		boolean valid = false;
+		while(!valid) {
+			System.out.println("Which door would you like to go out? (a-d)");
+			
+			String input = s.next().toUpperCase(); //Get the input from the user
+			s.nextLine(); //Consume the line
+			if(placeMap.containsKey(input)) {
+				mat = placeMap.get(input);
+				valid = true;
+			}
+			
+			System.out.println("Invalid input please try again");
+			
+		}
+		return mat;
+		
 	}
 	
 	/**
@@ -154,7 +221,7 @@ public class Player {
 	 */
 	private boolean goUp(){
 		Position newP = new Position(position.x,position.y-1);
-		board.movePlayer(position, newP, toChar());
+		board.movePlayer(position, newP, this);
 		position = newP;
 		return true;
 	}
@@ -166,7 +233,7 @@ public class Player {
 	private boolean goLeft(){
 		//Note - Move validity is determined from the board class
 		Position newP = new Position(position.x-1, position.y);
-		board.movePlayer(position, newP, toChar());
+		board.movePlayer(position, newP, this);
 		position = newP;
 		return true;
 	}
@@ -177,7 +244,7 @@ public class Player {
 	 */
 	private boolean goRight(){
 		Position newP = new Position(position.x+1, position.y);
-		board.movePlayer(position, newP, toChar());
+		board.movePlayer(position, newP, this);
 		position = newP;
 		return true;
 	}
@@ -188,7 +255,7 @@ public class Player {
 	 */
 	private boolean goDown(){
 		Position newP = new Position(position.x, position.y+1);
-		board.movePlayer(position, newP, toChar());
+		board.movePlayer(position, newP, this);
 		position = newP;
 		return true;
 	}

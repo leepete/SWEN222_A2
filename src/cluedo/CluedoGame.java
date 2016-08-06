@@ -13,8 +13,10 @@ public class CluedoGame {
 	
 	//Array of all the possible inputs from the player during their turn for easy error checking
 	private List<String> turnOptions = new ArrayList<String>();
-	private int minPlayers = 1; //DEBUGGING +++++++++++++++++++++++++++++++++++++++++++
-	private int maxPlayers = 6;
+	private final int minPlayers = 1; //DEBUGGING +++++++++++++++++++++++++++++++++++++++++++
+	private final int maxPlayers = 6;
+	private final int numRooms = 9;
+	
 	//List of the players in the game
 	public List<Player> players = new ArrayList<Player>();
 	//Number of players in the game
@@ -34,7 +36,7 @@ public class CluedoGame {
 	public Board b;
 	
 	//Array holding all the players 
-	private final Character[] charactersArray = {
+	public static final Character[] charactersArray = {
 			new Character("MISS SCARLET", new Position(8, 25)),
 			new Character("COLONEL MUSTARD", new Position(1, 18)),
 			new Character("MRS WHITE", new Position(10, 1)),
@@ -42,13 +44,17 @@ public class CluedoGame {
 			new Character("MRS PEACOCK", new Position(24, 7)),
 			new Character("PROFESSOR PLUM", new Position(24, 20)) };
 	
-	private final Weapon[] weaponsArray = {
+	public static final Weapon[] weaponsArray = {
 			new Weapon("CANDLESTICK"),
 			new Weapon("DAGGER"),
 			new Weapon("LEAD PIPE"),
 			new Weapon("REVOLVER"),
 			new Weapon("ROPE"),
 			new Weapon("SPANNER")};
+	
+	public Room[] roomsArray = new Room[numRooms];
+	
+	public static Map<Position, Room> placemats = new HashMap<Position, Room>();
 	
 	private final Position[] kitchenPlacemats = {
 			new Position(5,8)};
@@ -78,9 +84,70 @@ public class CluedoGame {
 			new Position(18, 21)};
 	
 	public CluedoGame() {
+		populateRooms();
 		this.b = new Board();
 		Scanner s = new Scanner(System.in);
 		startGame(s);
+	}
+	
+	/**
+	 * Initialises the rooms so that the stairs and placemats are linked to the correct rooms
+	 */
+	private void populateRooms() {
+		Room kitchen = new Room("KITCHEN", kitchenPlacemats);
+		Room conservatory = new Room("CONSERVATORY", conservatoryPlacemats);
+		Room study = new Room("STUDY", studyPlacemats);
+		Room lounge = new Room("LOUNGE", loungePlacemats);
+		Room ballroom = new Room("BALL ROOM", ballroomPlacemats);
+		Room billiardroom = new Room("BILLIARD ROOM", billiardroomPlacemats);
+		Room library = new Room("LIBRARY", libraryPlacemats);
+		Room hall = new Room("HALL", hallPlacemats);
+		Room diningroom = new Room("DINING ROOM", diningroomPlacemats);
+		
+		//Set their stairs
+		kitchen.setStairRoom(study);
+		study.setStairRoom(kitchen);
+		conservatory.setStairRoom(lounge);
+		lounge.setStairRoom(conservatory);
+		
+		int i = 0;
+		//Put the rooms in the array
+		roomsArray[i] = kitchen;
+		mapPlacemats(roomsArray[i++]);
+		
+		roomsArray[i] = conservatory;
+		mapPlacemats(roomsArray[i++]);
+		
+		roomsArray[i] = study;
+		mapPlacemats(roomsArray[i++]);
+		
+		roomsArray[i] = lounge;
+		mapPlacemats(roomsArray[i++]);
+		
+		roomsArray[i] = ballroom;
+		mapPlacemats(roomsArray[i++]);
+		
+		roomsArray[i] = billiardroom;
+		mapPlacemats(roomsArray[i++]);
+		
+		roomsArray[i] = library;
+		mapPlacemats(roomsArray[i++]);
+		
+		roomsArray[i] = hall;
+		mapPlacemats(roomsArray[i++]);
+		
+		roomsArray[i] = diningroom;
+		mapPlacemats(roomsArray[i++]);
+	}
+	
+	/**
+	 * Maps the position of the placemats to the room
+	 * @param r
+	 */
+	private void mapPlacemats(Room r) {
+		for(Position p : r.placemats) {
+			placemats.put(p, r);
+		}
 	}
 	
 	/**
@@ -195,7 +262,7 @@ public class CluedoGame {
 						validInput = true;
 						break;
 					case "EXIT":
-						player.exitRoom();
+						player.exitRoom(s);
 						validInput = true;
 						break;
 					case "ACCUSE":
@@ -304,31 +371,11 @@ public class CluedoGame {
 		for(Character c : charactersArray) {
 			characterSet.add(c);
 		}
-			
+		
 		roomSet = new HashSet<Room>();
-		//Make the rooms that have stairs
-		Room kitchen = new Room("KITCHEN", kitchenPlacemats);
-		Room conservatory = new Room("CONSERVATORY", conservatoryPlacemats);
-		Room study = new Room("STUDY", studyPlacemats);
-		Room lounge = new Room("LOUNGE", loungePlacemats);
-		
-		//Set their stairs
-		kitchen.setStairRoom(study);
-		study.setStairRoom(kitchen);
-		conservatory.setStairRoom(lounge);
-		lounge.setStairRoom(conservatory);
-		
-		//Add the rooms to the set containing all the rooms
-		roomSet.add(kitchen);
-		roomSet.add(conservatory);
-		roomSet.add(study);
-		roomSet.add(lounge);
-		
-		roomSet.add(new Room("BALL ROOM", ballroomPlacemats));
-		roomSet.add(new Room("BILLIARD ROOM", billiardroomPlacemats));
-		roomSet.add(new Room("LIBRARY", libraryPlacemats));
-		roomSet.add(new Room("HALL", hallPlacemats));
-		roomSet.add(new Room("DINING ROOM", diningroomPlacemats));
+		for(int i = 0; i < roomsArray.length; i++) {
+			roomSet.add(roomsArray[i]);
+		}
 	}
 	
 	/**
@@ -338,12 +385,15 @@ public class CluedoGame {
 		//Reset the Map
 		availableChars = new HashMap<String, Character>();
 		//Populate the map with all the options
-		availableChars.put("MISS SCARLET", charactersArray[0]);
+		for(Character c : charactersArray) {
+			availableChars.put(c.toString(), c);
+		}
+		/*availableChars.put("MISS SCARLET", charactersArray[0]);
 		availableChars.put("COLONEL MUSTARD", charactersArray[1]);
 		availableChars.put("MRS WHITE", charactersArray[2]);
 		availableChars.put("THE REVEREND GREEN", charactersArray[3]);
 		availableChars.put("MRS PEACOCK", charactersArray[4]);
-		availableChars.put("PROFESSOR PLUM", charactersArray[5]);
+		availableChars.put("PROFESSOR PLUM", charactersArray[5]); */
 	}
 	
 	

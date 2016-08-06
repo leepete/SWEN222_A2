@@ -1,6 +1,8 @@
 package cluedo;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class Board {
 		
@@ -13,6 +15,8 @@ public class Board {
 	private char placemat = 'x';
 	private char[] doors = {'^', '<', '>', 'v'};
 	private char[] players = {'1', '2', '3', '4', '5', '6'};
+	
+	
 	
 	private final char[][] board = {   
 		   "##########################".toCharArray(),
@@ -60,42 +64,92 @@ public class Board {
 		}
 	}
 	
-	public boolean movePlayer(Position oldP, Position newP, char c) {
+	public boolean movePlayer(Position oldP, Position newP, Player p) {
+		char c = p.toChar();
 		int oldX = oldP.x;
 		int oldY = oldP.y;
 		int newX = newP.x;
 		int newY = newP.y;
-		if(validMove(oldP, newP)) {
+		//Check if we are doing a valid move
+		if(validCorridorMove(oldP, newP)) {
 			activeBoard[newY][newX] = c; //draw the player at the new position
 			activeBoard[oldY][oldX] = board[oldY][oldX]; //put the tile back to what it was without the player
 			printBoard();
+			return true;
+		} else if(validRoomEntry(oldP, newP)) { //Might be trying to enter a room
+			Room r = CluedoGame.placemats.get(oldP);
+			p.enterRoom(r);
+		}
+		return false;
+	}
+	
+	/**
+	 * Returns an array of the unblocked placemats that a player can exit their current room from
+	 * @return
+	 */
+	public List<Position> getFreeMats(Room r) {
+		List<Position> freeMats = new ArrayList<Position>();
+		for(Position p : r.placemats) {
+			if(walkable(p)) {
+				freeMats.add(p);
+			}
+		}
+		return freeMats;
+	}
+	
+	private boolean arrayContains(char[] array, char c) {
+		for(int i = 0; i < array.length; i++) {
+			if(array[i] == c) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * Returns true if the position on the active board is available for a player to move onto
+	 * @param pos
+	 * @return
+	 */
+	private boolean walkable(Position pos) {
+		if(activeBoard[pos.y][pos.x] == placemat || activeBoard[pos.y][pos.x] == corridor) {
 			return true;
 		}
 		return false;
 	}
 	
+	public boolean validRoomEntry(Position oldP, Position newP) {
+		int curX = oldP.x;
+		int curY = oldP.y;
+		int newX = newP.x;
+		int newY = newP.y;
+		if(board[curY][curX] == placemat && arrayContains(doors, activeBoard[newY][newX])) {
+			//Else if we're on a placemat and moving into a door
+			System.out.println("DEBUG: on a placemat and going into a room!");
+			return true;
+		}
+		return false;
+	}
+
 	/**
 	 * Returns true if the move is valid, ie the new position is clear of debris
 	 * @param oldPos
 	 * @param newPos
 	 * @return
 	 */
-	public boolean validMove(Position currPos, Position newP) {
-		int curX = currPos.x;
-		int curY = currPos.y;
+	public boolean validCorridorMove(Position oldP, Position newP) {
+		int curX = oldP.x;
+		int curY = oldP.y;
 		int newX = newP.x;
 		int newY = newP.y;
+		System.out.println(String.format("DEBUG: trying to move to %d, %d: \'%c\'",newX, newY, activeBoard[newY][newX]));
 		//If attempting to move off the board, fail
-		if(newX < 0 || newX > BOARD_WIDTH || newY < 0 || newY > BOARD_HEIGHT) {
+		if(newX < 0 || newX > BOARD_HEIGHT || newY < 0 || newY > BOARD_WIDTH) {
 			System.out.println("DEBUG: move failed due to attempted move off board");
 			return false;
 		}
-		//May move freely onto a CORRIDOR tile 
-		if(activeBoard[newX][newY] == corridor || activeBoard[newX][newY] == placemat) {
-			return true;
-		}
-		System.out.println("DEBUG: move failed due to attempted move onto non free space");
-		return false;
+		
+		return walkable(newP);
 	}
 	
 	public void resetBoard() {
