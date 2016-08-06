@@ -97,6 +97,13 @@ public class Player {
 	}
 	
 	/**
+	 * Checks which placemat the player is on 
+	 */
+	public void enterRoom() {
+		
+	}
+
+	/**
 	 * Gets the door the player wishes to exit the room from and then calls move
 	 */
 	public void exitRoom() {
@@ -108,7 +115,10 @@ public class Player {
 	 */
 	public void accuse() {
 		System.out.println("DEBUG: accuse called");
+		System.out.println("Something about asking for a room/weapon/character");
 	}
+	
+	
 	
 	/**
 	 * Sets the players hand
@@ -143,10 +153,6 @@ public class Player {
 	 * @return
 	 */
 	private boolean goUp(){
-		//Can't move off the board
-		if(position.y == 0) {
-			return false;
-		}
 		Position newP = new Position(position.x,position.y-1);
 		board.movePlayer(position, newP, toChar());
 		position = newP;
@@ -158,10 +164,7 @@ public class Player {
 	 * @return
 	 */
 	private boolean goLeft(){
-		//Can't move off the board
-		if(position.x == 0) {
-			return false;
-		}
+		//Note - Move validity is determined from the board class
 		Position newP = new Position(position.x-1, position.y);
 		board.movePlayer(position, newP, toChar());
 		position = newP;
@@ -173,10 +176,6 @@ public class Player {
 	 * @return
 	 */
 	private boolean goRight(){
-		//Can't move off the board
-		if(position.x == Board.BOARD_WIDTH-1) {
-			return false;
-		}
 		Position newP = new Position(position.x+1, position.y);
 		board.movePlayer(position, newP, toChar());
 		position = newP;
@@ -188,10 +187,6 @@ public class Player {
 	 * @return
 	 */
 	private boolean goDown(){
-		//Can't move off the board
-		if(position.y == Board.BOARD_HEIGHT-1) {
-			return false;
-		}
 		Position newP = new Position(position.x, position.y+1);
 		board.movePlayer(position, newP, toChar());
 		position = newP;

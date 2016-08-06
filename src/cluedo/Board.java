@@ -1,5 +1,7 @@
 package cluedo;
 
+import java.util.HashMap;
+
 public class Board {
 		
 	public static final int BOARD_WIDTH = 26;
@@ -11,8 +13,6 @@ public class Board {
 	private char placemat = 'x';
 	private char[] doors = {'^', '<', '>', 'v'};
 	private char[] players = {'1', '2', '3', '4', '5', '6'};
-	
-	
 	
 	private final char[][] board = {   
 		   "##########################".toCharArray(),
@@ -60,15 +60,18 @@ public class Board {
 		}
 	}
 	
-	public void movePlayer(Position oldP, Position newP, char c) {
+	public boolean movePlayer(Position oldP, Position newP, char c) {
 		int oldX = oldP.x;
 		int oldY = oldP.y;
 		int newX = newP.x;
 		int newY = newP.y;
-		
-		activeBoard[newY][newX] = c; //draw the player at the new position
-		activeBoard[oldY][oldX] = board[oldY][oldX]; //put the tile back to what it was without the player
-		printBoard();
+		if(validMove(oldP, newP)) {
+			activeBoard[newY][newX] = c; //draw the player at the new position
+			activeBoard[oldY][oldX] = board[oldY][oldX]; //put the tile back to what it was without the player
+			printBoard();
+			return true;
+		}
+		return false;
 	}
 	
 	/**
@@ -82,10 +85,16 @@ public class Board {
 		int curY = currPos.y;
 		int newX = newP.x;
 		int newY = newP.y;
+		//If attempting to move off the board, fail
+		if(newX < 0 || newX > BOARD_WIDTH || newY < 0 || newY > BOARD_HEIGHT) {
+			System.out.println("DEBUG: move failed due to attempted move off board");
+			return false;
+		}
 		//May move freely onto a CORRIDOR tile 
 		if(activeBoard[newX][newY] == corridor || activeBoard[newX][newY] == placemat) {
 			return true;
 		}
+		System.out.println("DEBUG: move failed due to attempted move onto non free space");
 		return false;
 	}
 	
@@ -94,7 +103,6 @@ public class Board {
 			for(int y = 0; y < BOARD_WIDTH; y++) {
 				activeBoard[x][y] = board[x][y];
 			}
-			
 		}
 	}
 	

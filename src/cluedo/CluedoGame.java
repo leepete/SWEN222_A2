@@ -50,6 +50,33 @@ public class CluedoGame {
 			new Weapon("ROPE"),
 			new Weapon("SPANNER")};
 	
+	private final Position[] kitchenPlacemats = {
+			new Position(5,8)};
+	private final Position[] ballroomPlacemats = {
+			new Position(8, 6),
+			new Position(10, 9),
+			new Position(15, 9),
+			new Position(17, 16)};
+	private final Position[] conservatoryPlacemats = {
+			new Position(19,6)};
+	private final Position[] billiardroomPlacemats = {
+			new Position(18, 10),
+			new Position(23, 14)};
+	private final Position[] diningroomPlacemats = {
+			new Position(9, 13),
+			new Position(6, 17)};
+	private final Position[] libraryPlacemats = {
+			new Position(21, 14),
+			new Position(17, 17)};
+	private final Position[] hallPlacemats = {
+			new Position(12, 18),
+			new Position(13, 18),
+			new Position(16, 21)};
+	private final Position[] loungePlacemats = {
+			new Position(7, 19)};
+	private final Position[] studyPlacemats = {
+			new Position(18, 21)};
+	
 	public CluedoGame() {
 		this.b = new Board();
 		Scanner s = new Scanner(System.in);
@@ -121,7 +148,7 @@ public class CluedoGame {
 			Player player = players.get(iP); //Sets the current player so we only have to .get once
 			 //If the current player is not playing then move to the next player
 			if(!player.isPlaying()) {
-				iP = (iP%numPlayers)+1;
+				iP = (iP+1)%numPlayers;
 				continue;
 			}
 			//Add the options to the turnOptions set that are available to the player..
@@ -145,7 +172,7 @@ public class CluedoGame {
 			while(!validInput) {
 				
 				System.out.println(String.format("DEBUG: PC: %s player# %d", player.toString(), iP));
-				
+				b.printBoard();
 				System.out.println(String.format("Player %d, it is your turn! What would you like to do?", iP+1));
 				for(int i = 0; i < turnOptions.size()-1; i++) {
 					System.out.print(turnOptions.get(i) + ", ");
@@ -183,7 +210,7 @@ public class CluedoGame {
 			}
 			validInput = false;
 			
-			iP = (iP%numPlayers)+1; //Increment the current player, always keeping it within the bounds of the array
+			iP = (iP+1)%numPlayers; //Increment the current player, always keeping it within the bounds of the array
 		}
 		System.out.println("DEBUG: No longer playing, doing end of game roundup");
 	}
@@ -280,10 +307,10 @@ public class CluedoGame {
 			
 		roomSet = new HashSet<Room>();
 		//Make the rooms that have stairs
-		Room kitchen = new Room("KITCHEN");
-		Room conservatory = new Room("CONSERVATORY");
-		Room study = new Room("STUDY");
-		Room lounge = new Room("LOUNGE");
+		Room kitchen = new Room("KITCHEN", kitchenPlacemats);
+		Room conservatory = new Room("CONSERVATORY", conservatoryPlacemats);
+		Room study = new Room("STUDY", studyPlacemats);
+		Room lounge = new Room("LOUNGE", loungePlacemats);
 		
 		//Set their stairs
 		kitchen.setStairRoom(study);
@@ -297,11 +324,11 @@ public class CluedoGame {
 		roomSet.add(study);
 		roomSet.add(lounge);
 		
-		roomSet.add(new Room("BALL ROOM"));
-		roomSet.add(new Room("BILLIARD ROOM"));
-		roomSet.add(new Room("LIBRARY"));
-		roomSet.add(new Room("HALL"));
-		roomSet.add(new Room("DINING ROOM"));
+		roomSet.add(new Room("BALL ROOM", ballroomPlacemats));
+		roomSet.add(new Room("BILLIARD ROOM", billiardroomPlacemats));
+		roomSet.add(new Room("LIBRARY", libraryPlacemats));
+		roomSet.add(new Room("HALL", hallPlacemats));
+		roomSet.add(new Room("DINING ROOM", diningroomPlacemats));
 	}
 	
 	/**
