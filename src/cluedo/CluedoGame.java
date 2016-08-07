@@ -231,17 +231,17 @@ public class CluedoGame {
 		numPlayers = getNumPlayers(s);
 		int i = 1;
 		while(i <= numPlayers) {
-		
+			Player p;
 			System.out.println(String.format("Player %d, please enter the character you wish to play as:", i));
 			for(Character c : availableChars.values()) {
 				System.out.println(c.toString());
 			}
 			String plCharChoice = s.nextLine().toUpperCase();
-			System.out.println("DEBUG: plcharchoice: " + plCharChoice);
 			if(isValidCharName(plCharChoice)) {
 				//Add a player with this character to the array
-				players.add(new Player(availableChars.get(plCharChoice), b, this, i));
-
+				p = new Player(availableChars.get(plCharChoice), b, this, i);
+				players.add(p);
+				System.out.println(String.format("Player %d will be playing as: %s", p.getID(), plCharChoice));
 				//Remove this character from the available characters
 				availableChars.remove(plCharChoice);
 				//A player has been successfully added
@@ -286,7 +286,6 @@ public class CluedoGame {
 				continue;
 			}
 			//Beginning of turn
-			
 			player.sameRoom = player.inRoom(); //For ensuring they dont reenter the same room for another guess on the same turn
 			turnInput(s, player);
 			//If the player is in a different room to what they started their turn in they can make a guess
@@ -341,6 +340,7 @@ public class CluedoGame {
 			weapon = suggest.getWeapon();
 			character = suggest.getCharacter();
 			if(p.getHand().contains(room)) {
+				
 				options.add(room);
 			}
 			if(p.getHand().contains(weapon)) {
@@ -396,12 +396,15 @@ public class CluedoGame {
 		
 		//Loop until the player gives a valid input
 		while(!validInput) {
-			System.out.println(String.format("DEBUG: PC: %s player# %d", p.toString(), p.getID()));
-			
 			b.printBoard();
 			
 			//Prompts
-			System.out.print(String.format("Player %d, it is your turn! ",p.getID()));
+			System.out.print(String.format("Player %d, it is your turn! Hand: ",p.getID()));
+			//Print hand
+			for(String str : p.getHand()) {
+				System.out.print(str + ", ");
+			}System.out.println();
+			
 			if(playerRoom != null)System.out.print(String.format("You are currently in the %s ", playerRoom.toString()));
 			System.out.println("What would you like to do?");
 			
@@ -416,7 +419,6 @@ public class CluedoGame {
 			
 			String input = s.next().toUpperCase(); //Get the input from the user and make it uppercase
 			s.nextLine(); //Consume the end of the line
-			System.out.println(String.format("DEBUG: \'%s\' provided", input));
 			//If the input was valid, find what the input was
 			if(turnOptions.contains(input)) {
 				switch(input) {
@@ -459,11 +461,8 @@ public class CluedoGame {
 		int i = 0;
 		Iterator<Card> cardSetItr = cardSet.iterator();
 		while(cardSetItr.hasNext()) {
-			players.get(i % players.size()).addCard(cardSetItr.next());
+			players.get(i % players.size()).addCard(cardSetItr.next().toString());
 			i++;
-		}
-		for(Player p : players) {
-			System.out.println(p.handToString());
 		}
 	}
 	

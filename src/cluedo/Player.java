@@ -23,7 +23,7 @@ public class Player {
 
 	private CluedoGame game;
 	//private Map<String, Position> placeMap;
-	private List<Card> hand = new ArrayList<Card>();
+	private List<String> hand = new ArrayList<String>();
 	
 	public Player(Character character, Board board, CluedoGame game, int id) {
 		this.character = character;
@@ -44,7 +44,7 @@ public class Player {
 	 * Returns the players hand
 	 * @return
 	 */
-	public List<Card> getHand() {
+	public List<String> getHand() {
 		return hand;
 	}
 	
@@ -120,7 +120,6 @@ public class Player {
 	private int rollDice() {
 		Random rand = new Random();
 		int roll = rand.nextInt(6) + 1;
-		System.out.println(String.format("DEBUG: dice rolled and was: %d", roll));
 		return roll;
 	}
 
@@ -131,9 +130,11 @@ public class Player {
 		Room oldRoom = room;
 		room = room.getStairRoom();
 
-		//Visually move to the new room===================================
-
-		System.out.println(String.format("DEBUG: player used stairs from %s and is now in %s", oldRoom, room));
+		
+		Position space = room.getSpaces()[id-1];
+		board.teleport(this, position, space);
+		board.printBoard();
+		System.out.println(String.format("Used stairs from %s, and is now in %s", oldRoom, room));
 		//Make suggestion
 	}
 
@@ -143,9 +144,9 @@ public class Player {
 	 */
 	public void enterRoom(Room entRoom) {
 		if(entRoom == null) {
-			System.out.println("DB: ERROR attempt to enter room failed");
+			return;
 		}
-		System.out.println("DEBUG: entering room: " + entRoom.toString());
+		System.out.println("Entering room: " + entRoom.toString());
 		this.room = entRoom;
 		remainingSteps = 0;//Stop moving when we enter a room
 		//Make suggestion
@@ -293,7 +294,7 @@ public class Player {
 			System.out.println("No one was able to refute your guess! Could be time to solve the case?");
 			return;
 		}
-		System.out.println(String.format("Player %d refutes your guess by reveiling %s from their hand.", refuter[0], refuter[1]));
+		System.out.println(String.format("Player %d refutes your guess by reveiling %s from their hand.", Integer.parseInt(refuter[0]), refuter[1]));
 		
 	}
 
@@ -315,20 +316,8 @@ public class Player {
 	 * Sets the players hand
 	 * @param hand
 	 */
-	public void addCard(Card card) {
+	public void addCard(String card) {
 		hand.add(card);
-	}
-
-	/**
-	 * Returns the players hand as a string
-	 * @return
-	 */
-	public String handToString() {
-		String s = "";
-		for(Card c : hand) {
-			s += c.toString() + ", ";
-		}
-		return s;
 	}
 
 	/**
