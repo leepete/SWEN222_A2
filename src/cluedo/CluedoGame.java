@@ -57,7 +57,8 @@ public class CluedoGame {
 			new Weapon("ROPE"),
 			new Weapon("SPANNER")};
 	
-	public static  Room[] roomsArray = new Room[numRooms];
+	public static Room[] roomsArray = new Room[numRooms];
+	public static Room cellar = new Room("CELLAR", new Position[0]);
 
 	public static Map<Position, Room> placemats = new HashMap<Position, Room>();
 	
@@ -152,6 +153,14 @@ public class CluedoGame {
 			new Position(21,24),
 			new Position(22,24),
 			new Position(23,24)};
+	private final Position[] cellarSpaces = {
+			new Position(12,13),
+			new Position(12,14),
+			new Position(12,15),
+			new Position(14,13),
+			new Position(14,14),
+			new Position(14,15)};
+	
 	
 	public CluedoGame() {
 		populateRooms();
@@ -204,6 +213,11 @@ public class CluedoGame {
 			mapPlacemats(roomsArray[i]);
 			roomsArray[i].generateDoorLabels();
 		}
+		
+		
+		//Cellar is a special room where the dead people go
+		
+		cellar.setSpaces(cellarSpaces);
 	}
 	
 	/**
@@ -226,7 +240,12 @@ public class CluedoGame {
 	 */
 	public void startGame(Scanner s) {
 		resetGame();
-		
+		System.out.println("Welcome to Cluedo, in this game you must solve the murder by correctly deducing the CHARACTER the WEAPON and the ROOM");
+		System.out.println("Your player number will be displayed on the board so don't forget it!");
+		System.out.println("Any inputs you give are case insensitive but very strict on spelling!");
+		System.out.println("The '+' tiles on the board represent walkable corridoors while the 'x' tiles are placemats which are located outside each door indicated by an arrow");
+		System.out.println("To enter a room you must walk into the arrow while standing on its placemat. '#' and '=' and other players cannot be walked over so don't try!");
+		System.out.println("Finially, in the corner rooms you will find a letter 'Z' or 'Y', these are secret(ish) stairways leading to the room in the opposite corner");
 		//Get number of players
 		numPlayers = getNumPlayers(s);
 		int i = 1;
@@ -253,14 +272,12 @@ public class CluedoGame {
 		
 		System.out.println("All players successfully allocated");
 		makeSolution();
-		System.out.println(String.format("DEBUG: This is the answer to the game: %s", solution.toString()));
 		shuffleNDeal();
 		
 		//Print the board with all the players in their starting positions here
 		for(Player p : players) {
 			b.activeBoard[p.getPosition().y][p.getPosition().x] = p.toChar();
 		}
-		b.printBoard();
 		
 		turnCycle(s);
 	}
@@ -289,19 +306,19 @@ public class CluedoGame {
 			player.sameRoom = player.inRoom(); //For ensuring they dont reenter the same room for another guess on the same turn
 			turnInput(s, player);
 			//If the player is in a different room to what they started their turn in they can make a guess
-			if(player.inRoom() != player.sameRoom) {
+			if(player.inRoom() != player.sameRoom && player.isPlaying()) {
 				askGuess(s, player);
 				
 			}
 			iP = (iP+1)%numPlayers; //Increment the current player, always keeping it within the bounds of the array
 		}
-		System.out.println("DEBUG: No longer playing, doing end of game roundup");
 	}
 	
 	public void askGuess(Scanner s, Player p) {
 		boolean validInput = false;
 		
 		while(!validInput) {
+			
 			System.out.println(String.format("You are in the %s, would you like to make a suggestion? 'YES' 'NO'", p.inRoom()));
 			String input = s.next().toUpperCase();
 			s.nextLine();
@@ -478,17 +495,9 @@ public class CluedoGame {
 		String c = characterSet.toArray()[rand.nextInt(characterSet.size())].toString();
 
 		weaponSet.remove(new Weapon(w));
-		for(Weapon we: weaponSet){
-			System.out.println("DEBUG weapon: "+we );
-		}
-		roomSet.remove(new Room(r));
-		for(Room ro: roomSet){
-			System.out.println("DEBUG room: "+ro);
-		}	
+		roomSet.remove(new Room(r));	
 		characterSet.remove(new Character(c));
-		for(Character cr: characterSet){
-			System.out.println("DEBUG character: "+cr);
-		}
+		
 		solution = new Suggestion(r,w,c);
 	}
 	
@@ -512,6 +521,13 @@ public class CluedoGame {
 		}
 		if(i <= 1){
 			playing = false;
+			for(Player p : players) {
+				if(p.isPlaying()) {
+					System.out.println(String.format("CONGRATULATIONS! Player %d as %s, has won the game by default...", p.getID(), p.toString()));
+					break;
+				}
+			}
+			
 		}
 
 	}
@@ -531,7 +547,7 @@ public class CluedoGame {
 	 * @return number of players in this game
 	 */
 	private int getNumPlayers(Scanner s) {
-		System.out.println("Welcome to cluedo, please enter the number of people who will be playing (3-6):");
+		System.out.println("Please enter the number of people who will be playing (3-6):");
 		// === Check here that the input from the user is actually an integer ===
 		int num = s.nextInt();
 		s.nextLine();// consume the end of the line
@@ -586,12 +602,6 @@ public class CluedoGame {
 		for(Character c : charactersArray) {
 			availableChars.put(c.toString(), c);
 		}
-		/*availableChars.put("MISS SCARLET", charactersArray[0]);
-		availableChars.put("COLONEL MUSTARD", charactersArray[1]);
-		availableChars.put("MRS WHITE", charactersArray[2]);
-		availableChars.put("THE REVEREND GREEN", charactersArray[3]);
-		availableChars.put("MRS PEACOCK", charactersArray[4]);
-		availableChars.put("PROFESSOR PLUM", charactersArray[5]); */
 	}
 	
 	

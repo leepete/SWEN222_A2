@@ -119,7 +119,7 @@ public class Player {
 	 */
 	private int rollDice() {
 		Random rand = new Random();
-		int roll = rand.nextInt(6) + 12;
+		int roll = rand.nextInt(6) + 1;
 		return roll;
 	}
 
@@ -230,8 +230,6 @@ public class Player {
 	public Suggestion makeSuggestion(Scanner s, boolean guess) {
 		boolean valid = false;
 
-		System.out.println("DEBUG: make suggestion called answer: " + game.solution.toString());
-
 		String input;
 		Character c = null;
 		Weapon w= null;
@@ -308,6 +306,9 @@ public class Player {
 		} else{
 			//check if the game is over because there is only one player remaining
 			playing = false;
+			room = game.cellar;
+			Position space = room.getSpaces()[id-1];
+			board.teleport(this, position, space);
 			game.gameOver(this);
 		}
 	}

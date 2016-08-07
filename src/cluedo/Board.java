@@ -79,7 +79,7 @@ public class Board {
 				printBoard();
 				return true;
 			}
-		}
+		} System.out.println("You cannot go there! Try walking on a '+' or 'x' tile instead");
 		return false;
 	}
 	
