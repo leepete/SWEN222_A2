@@ -1,17 +1,13 @@
 package cluedo;
 
-public class Weapon {
+public class Weapon extends Card{
 	private String name;
 	
 	public Weapon(String name) {
 		this.name = name;
 	}
 	
-	public String getName() {
-		return name;
-	}
-	
 	public String toString() {
-		return "";
+		return name;
 	}
 }

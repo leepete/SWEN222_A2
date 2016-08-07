@@ -13,9 +13,10 @@ import java.util.List;
 
 public class Board {
 		
-	private static final int BOARD_WIDTH = 26;
-	private static final int BOARD_HEIGHT = 27;
+	public static final int BOARD_WIDTH = 26;
+	public static final int BOARD_HEIGHT = 27;
 	
+<<<<<<< HEAD
 	private char[][] board = { "---------------------------".toCharArray(),
 							   "|---------S----S----------|".toCharArray(),
 							   "|     T#+++     +++#      |".toCharArray(),
@@ -42,14 +43,57 @@ public class Board {
 							   "|       ++       ++  sdy  |".toCharArray(),
 							   "|      #S#       #+       |".toCharArray(),
 							   "---------------------------".toCharArray()};
+=======
+	
+	private char[][] board = { "##########################".toCharArray(),
+							   "##########+####+##########".toCharArray(),
+							   "#=====T#+++====+++#======#".toCharArray(),
+							   "#=KITC=++===  ===++=CONS=#".toCharArray(),
+							   "#=    =++=      =++=    =#".toCharArray(),
+							   "#=    =++= BALL =++v=   =#".toCharArray(),
+							   "#==   =++<1    4>+++===T##".toCharArray(),
+							   "##===v=++=2    3=++++++++#".toCharArray(),
+							   "#++++++++=v====v=+++++++##".toCharArray(),
+							   "##+++++++++++++++++======#".toCharArray(),
+							   "#=====+++++++++++++<1   =#".toCharArray(),
+							   "#=   ====++=====+++=BILL=#".toCharArray(),
+							   "#= DINE =++= C =+++=   2=#".toCharArray(),
+							   "#=     1>++= E =+++====v=#".toCharArray(),
+							   "#=      =++= L =++++++++##".toCharArray(),
+							   "#=    2 =++= L =+++==^==##".toCharArray(),
+							   "#=====v==++= R =++== 1 ==#".toCharArray(),
+							   "##+++++++++=====++<2LIBR=#".toCharArray(),
+							   "#+++++++++++++++++==   ==#".toCharArray(),
+							   "##++++++++==^^==+++=====##".toCharArray(),
+							   "#T=====^++= 12 =+++++++++#".toCharArray(),
+							   "#=     =++=   3>++++++++##".toCharArray(),
+							   "#=LOUNG=++=HALL=++^=====T#".toCharArray(),
+							   "#=     =++=    =++= STY =#".toCharArray(),
+							   "#=    ==++=    =++==    =#".toCharArray(),
+							   "#======#+#======#+#======#".toCharArray(),
+							   "##########################".toCharArray()};
+>>>>>>> 3758f1d6e895fec6fe8437e96776d7062322eedf
 	
 	public Board(){
-		for(int i = 0; i < BOARD_WIDTH; i++) {
-			for(int j = 0; j < BOARD_HEIGHT; j++) {
+		for(int i = 0; i < BOARD_HEIGHT; i++) {
+			for(int j = 0; j < BOARD_WIDTH; j++) {
 				System.out.print(board[i][j]);
 			}
 			System.out.println();
 		}	
+	}
+	
+	/**
+	 * Returns true if the move is valid, ie the new position is clear of debris
+	 * @param oldPos
+	 * @param newPos
+	 * @return
+	 */
+	public boolean validMove(Position newPos) {
+		if(board[newPos.getRow()][newPos.getColumn()] == '+') {
+			return true;
+		}
+		return false;
 	}
 	
 	

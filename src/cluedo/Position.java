@@ -34,7 +34,11 @@ public class Position {
 	}
 	
 	public String toString(){
+<<<<<<< HEAD
 		return (row + " " + col);
+=======
+		return "X: " + col + " Y: " + row;
+>>>>>>> 3758f1d6e895fec6fe8437e96776d7062322eedf
 	}
 	
 	public int hashCode(){

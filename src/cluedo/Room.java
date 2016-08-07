@@ -1,34 +1,30 @@
 package cluedo;
-import java.util.List;
-//import java.util.ArrayList;
-import java.util.Set;
-//import java.util.HashSet;
 
-public class Room {
-	
+public class Room extends Card {
 	private String name;
-	private List<Position> vertices;
-	private boolean hasPassage;
-	private Room passageWay;
-	private Set<Position> doors;
+	private Room stairs;
 	
-	public Room(String name, boolean hasPassage, Room passageWay, Set<Position> doors, List<Position> vertices) {
+	public Room(String name) {
 		this.name = name;
-		this.hasPassage = hasPassage;
-		this.passageWay = passageWay;
-		this.vertices = vertices;
-		this.doors = doors;
 	}
 	
-	public Set<Position> getDoors() {
-		return doors;
+	/**
+	 * Sets the room that the stairs from this room will take you to
+	 * @param stairs
+	 */
+	public void setStairRoom(Room stairs) {
+		this.stairs = stairs;
 	}
-
-	public String getName() {
-		return name;
+	
+	/**
+	 * Returns the room that using the stairs from this room will take you to
+	 * @return
+	 */
+	public Room getStairRoom() {
+		return stairs;
 	}
 	
 	public String toString() {
-		return "";
+		return name;
 	}
 }
