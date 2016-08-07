@@ -72,8 +72,7 @@ public class Board {
 		int newY = newP.y;
 		//Check if we are doing a valid move
 		if(validCorridorMove(newP)) {
-			activeBoard[newY][newX] = c; //draw the player at the new position
-			activeBoard[oldY][oldX] = board[oldY][oldX]; //put the tile back to what it was without the player
+			teleport(p, oldP, newP);
 			printBoard();
 			return newP;
 		} else if(validRoomEntry(oldP, newP)) { //Might be trying to enter a room
@@ -86,6 +85,17 @@ public class Board {
 			}
 		}
 		return null;
+	}
+	
+	/**
+	 * Teleports the player to the given position
+	 * @param p
+	 * @param oldP
+	 * @param newP
+	 */
+	private void teleport(Player p, Position oldP, Position newP) {
+		activeBoard[newP.y][newP.x] = p.toChar(); //move the player to the new position
+		activeBoard[oldP.y][oldP.x] = board[oldP.y][oldP.x]; //return the old position back to its original state
 	}
 	
 	/**

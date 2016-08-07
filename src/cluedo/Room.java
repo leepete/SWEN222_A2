@@ -11,10 +11,15 @@ public class Room extends Card {
 	
 	private String name;
 	private Room stairs;
+	private Position[] spaces;
 	
 	public Room(String name, Position[] placemats) {
 		this.name = name;
 		this.placemats = placemats;
+	}
+	
+	public Room(String name) {
+		this.name = name;
 	}
 	
 	/**
@@ -30,6 +35,18 @@ public class Room extends Card {
 	 */
 	public void setStairRoom(Room stairs) {
 		this.stairs = stairs;
+	}
+	
+	/**
+	 * Sets the waiting spaces for players while they are in the room
+	 * @param spaces
+	 */
+	public void setSpaces(Position[] spaces) {
+		this.spaces = spaces;
+	}
+	
+	public Position[] getSpaces() {
+		return spaces;
 	}
 	
 	/**
@@ -53,5 +70,30 @@ public class Room extends Card {
 	
 	public String toString() {
 		return name;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Room other = (Room) obj;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		return true;
 	}
 }

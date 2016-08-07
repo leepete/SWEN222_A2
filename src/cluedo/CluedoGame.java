@@ -83,6 +83,72 @@ public class CluedoGame {
 	private final Position[] studyPlacemats = {
 			new Position(18, 21)};
 	
+	//Arrays holding the positions of where the player characters will be shown while they are in the rooms
+	private final Position[] kitchenSpaces = {
+			new Position(2,3),
+			new Position(3,3),
+			new Position(4,3),
+			new Position(2,5),
+			new Position(3,5),
+			new Position(4,5)};
+	private final Position[] ballSpaces = {
+			new Position(10,4),
+			new Position(11,4),
+			new Position(12,4),
+			new Position(13,4),
+			new Position(12,6),
+			new Position(13,6)};
+	private final Position[] conservatorySpaces = {
+			new Position(21,4),
+			new Position(22,4),
+			new Position(23,4),
+			new Position(21,5),
+			new Position(22,5),
+			new Position(23,5)};
+	private final Position[] diningSpaces = {
+			new Position(3,13),
+			new Position(4,13),
+			new Position(5,13),
+			new Position(3,14),
+			new Position(4,14),
+			new Position(5,14)};
+	private final Position[] billiardSpaces = {
+			new Position(21,10),
+			new Position(22,10),
+			new Position(23,10),
+			new Position(20,12),
+			new Position(21,12),
+			new Position(22,12)};
+	private final Position[] librarySpaces = {
+			new Position(20,16),
+			new Position(22,16),
+			new Position(20,17),
+			new Position(20,18),
+			new Position(21,18),
+			new Position(22,18)};
+	private final Position[] loungeSpaces = {
+			new Position(3,21),
+			new Position(4,21),
+			new Position(5,21),
+			new Position(3,23),
+			new Position(4,23),
+			new Position(5,23)};
+	private final Position[] hallSpaces = {
+			new Position(12,23),
+			new Position(13,23),
+			new Position(14,23),
+			new Position(12,24),
+			new Position(13,24),
+			new Position(14,24)};
+	private final Position[] studySpaces = {
+			new Position(19,23),
+			new Position(23,23),
+			new Position(20,24),
+			new Position(21,24),
+			new Position(22,24),
+			new Position(23,24)};
+	
+	
 	public CluedoGame() {
 		populateRooms();
 		this.b = new Board();
@@ -110,43 +176,29 @@ public class CluedoGame {
 		conservatory.setStairRoom(lounge);
 		lounge.setStairRoom(conservatory);
 		
-		int i = 0;
-		//Put the rooms in the array
-		mapPlacemats(kitchen);
-		kitchen.generateDoorLabels();
-		roomsArray[i++] = kitchen;
+		kitchen.setSpaces(kitchenSpaces);
+		study.setSpaces(studySpaces);
+		conservatory.setSpaces(conservatorySpaces);
+		lounge.setSpaces(loungeSpaces);
+		ballroom.setSpaces(ballSpaces);
+		billiardroom.setSpaces(billiardSpaces);
+		library.setSpaces(librarySpaces);
+		hall.setSpaces(hallSpaces);
+		diningroom.setSpaces(diningSpaces);
 		
-		roomsArray[i] = conservatory;
-		mapPlacemats(roomsArray[i]);
-		roomsArray[i++].generateDoorLabels();
-		
-		roomsArray[i] = study;
-		mapPlacemats(roomsArray[i]);
-		roomsArray[i++].generateDoorLabels();
-		
-		roomsArray[i] = lounge;
-		mapPlacemats(roomsArray[i]);
-		roomsArray[i++].generateDoorLabels();
-		
-		roomsArray[i] = ballroom;
-		mapPlacemats(roomsArray[i]);
-		roomsArray[i++].generateDoorLabels();
-		
-		roomsArray[i] = billiardroom;
-		mapPlacemats(roomsArray[i]);
-		roomsArray[i++].generateDoorLabels();
-		
-		roomsArray[i] = library;
-		mapPlacemats(roomsArray[i]);
-		roomsArray[i++].generateDoorLabels();
-		
-		roomsArray[i] = hall;
-		mapPlacemats(roomsArray[i]);
-		roomsArray[i++].generateDoorLabels();
-		
-		roomsArray[i] = diningroom;
-		mapPlacemats(roomsArray[i]);
-		roomsArray[i++].generateDoorLabels();
+		roomsArray[0] = kitchen;
+		roomsArray[1] = conservatory;
+		roomsArray[2] = study;
+		roomsArray[3] = lounge;
+		roomsArray[4] = ballroom;
+		roomsArray[5] = billiardroom;
+		roomsArray[6] = library;
+		roomsArray[7] = hall;
+		roomsArray[8] = diningroom;
+		for(int i = 0; i < roomsArray.length; i++) {
+			mapPlacemats(roomsArray[i]);
+			roomsArray[i].generateDoorLabels();
+		}
 	}
 	
 	/**
