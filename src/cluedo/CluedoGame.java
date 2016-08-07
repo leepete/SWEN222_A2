@@ -112,9 +112,9 @@ public class CluedoGame {
 		
 		int i = 0;
 		//Put the rooms in the array
-		roomsArray[i] = kitchen;
-		mapPlacemats(roomsArray[i]);
-		roomsArray[i++].generateDoorLabels();
+		mapPlacemats(kitchen);
+		kitchen.generateDoorLabels();
+		roomsArray[i++] = kitchen;
 		
 		roomsArray[i] = conservatory;
 		mapPlacemats(roomsArray[i]);

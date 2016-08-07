@@ -100,8 +100,9 @@ public class Player {
 	public void useStairs() {
 		Room oldRoom = room;
 		room = room.getStairRoom();
-		
+		//Visually move to the new room
 		System.out.println(String.format("DEBUG: player used stairs from %s and is now in %s", oldRoom, room));
+		//Make suggestion
 	}
 	
 	/**
@@ -115,6 +116,7 @@ public class Player {
 		System.out.println("DEBUG: entering room: " + entRoom.toString());
 		this.room = entRoom;
 		remainingSteps = 0;//Stop moving when we enter a room
+		//Make suggestion
 	}
 
 	/**
