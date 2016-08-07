@@ -89,6 +89,7 @@ public class Board {
 	 * @param oldP
 	 * @param newP
 	 */
+
 	public void teleport(Player p, Position oldP, Position newP) {
 		activeBoard[newP.y][newP.x] = p.toChar(); //move the player to the new position
 		activeBoard[oldP.y][oldP.x] = board[oldP.y][oldP.x]; //return the old position back to its original state

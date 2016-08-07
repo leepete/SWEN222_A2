@@ -15,7 +15,8 @@ public class CluedoGame {
 	private List<String> turnOptions = new ArrayList<String>();
 	private final int minPlayers = 1; //DEBUGGING +++++++++++++++++++++++++++++++++++++++++++
 	private final int maxPlayers = 6;
-	private final int numRooms = 9;
+
+	private static final int numRooms = 9;
 	
 	//List of the players in the game
 	public List<Player> players = new ArrayList<Player>();
@@ -31,7 +32,7 @@ public class CluedoGame {
 	public Set<Character> characterSet = new HashSet<Character>();
 	
 	//The answer to ~~life the universe and everything~~ the game of cluedo
-	public Suggestion solution;
+	public static Suggestion solution;
 	public boolean playing = true;
 	public Board b;
 	
@@ -52,8 +53,8 @@ public class CluedoGame {
 			new Weapon("ROPE"),
 			new Weapon("SPANNER")};
 	
-	public Room[] roomsArray = new Room[numRooms];
-	
+	public static  Room[] roomsArray = new Room[numRooms];
+
 	public static Map<Position, Room> placemats = new HashMap<Position, Room>();
 	
 	private final Position[] kitchenPlacemats = {
@@ -148,7 +149,6 @@ public class CluedoGame {
 			new Position(22,24),
 			new Position(23,24)};
 	
-	
 	public CluedoGame() {
 		populateRooms();
 		this.b = new Board();
@@ -176,6 +176,7 @@ public class CluedoGame {
 		conservatory.setStairRoom(lounge);
 		lounge.setStairRoom(conservatory);
 		
+
 		kitchen.setSpaces(kitchenSpaces);
 		study.setSpaces(studySpaces);
 		conservatory.setSpaces(conservatorySpaces);
@@ -236,6 +237,7 @@ public class CluedoGame {
 			if(isValidCharName(plCharChoice)) {
 				//Add a player with this character to the array
 				players.add(new Player(availableChars.get(plCharChoice), b, this, i));
+
 				//Remove this character from the available characters
 				availableChars.remove(plCharChoice);
 				//A player has been successfully added
@@ -327,6 +329,7 @@ public class CluedoGame {
 			//Print the last option separately so it doesnt have a comma after it and prints the newline
 			System.out.println(turnOptions.get(turnOptions.size()-1));
 			
+
 			
 			String input = s.next().toUpperCase(); //Get the input from the user and make it uppercase
 			s.nextLine(); //Consume the end of the line
@@ -347,13 +350,14 @@ public class CluedoGame {
 					validInput = true;
 					break;
 				case "ACCUSE":
-					p.accuse();
+					p.accuse(s);
 					validInput = true;
 					break;
 				}
 			}
 			else { //Else ask again
 				System.out.println(String.format("\'%s\' is an invalid input, please use an option provided.", input));
+				gameOver();
 			}
 		}
 	}
@@ -385,13 +389,37 @@ public class CluedoGame {
 	 * Draws a Card from the weapon, character and room sets to make up the solution to the game
 	 */
 	private void makeSolution() {
-		Weapon w = weaponSet.iterator().next();
-		Room r = roomSet.iterator().next();
-		Character c = characterSet.iterator().next();
-		weaponSet.remove(w);
-		roomSet.remove(r);
-		characterSet.remove(c);
-		solution = new Suggestion(w, c , r);
+		String w = weaponSet.iterator().next().toString();
+		String r = roomSet.iterator().next().toString();
+		String c = characterSet.iterator().next().toString();
+
+		weaponSet.remove(new Weapon(w));
+		for(Weapon we: weaponSet){
+			System.out.println("DEBUG weapon: "+we );
+		}
+		roomSet.remove(new Room(r));
+		for(Room ro: roomSet){
+			System.out.println("DEBUG room: "+ro);
+		}	
+		characterSet.remove(new Character(c));
+		for(Character cr: characterSet){
+			System.out.println("DEBUG character: "+cr);
+		}
+		solution = new Suggestion(r,w,c);
+	}
+	
+	public void gameOver() {
+		int i = 0;
+		for(Player p : players){
+			if(p.isPlaying()){
+				i++;
+			}
+		}
+		if(i <= 1){
+			playing = false;
+			resetGame();
+		}
+
 	}
 	
 	
@@ -414,6 +442,7 @@ public class CluedoGame {
 		// === Check here that the input from the user is actually an integer ===
 		int num = s.nextInt();
 		s.nextLine();// consume the end of the line
+
 		while(num > maxPlayers || num < minPlayers) {
 			System.out.println("That was an invalid number of players, ensure the number of players is between 3 and 6");
 			num = s.nextInt();

@@ -49,6 +49,4 @@ public class Character extends Card{
 			return false;
 		return true;
 	}
-	
-	
 }
