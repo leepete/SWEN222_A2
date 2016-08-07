@@ -62,7 +62,7 @@ public class CluedoGame {
 			new Position(8, 6),
 			new Position(10, 9),
 			new Position(15, 9),
-			new Position(17, 16)};
+			new Position(17, 6)};
 	private final Position[] conservatoryPlacemats = {
 			new Position(19,6)};
 	private final Position[] billiardroomPlacemats = {
@@ -113,31 +113,40 @@ public class CluedoGame {
 		int i = 0;
 		//Put the rooms in the array
 		roomsArray[i] = kitchen;
-		mapPlacemats(roomsArray[i++]);
+		mapPlacemats(roomsArray[i]);
+		roomsArray[i++].generateDoorLabels();
 		
 		roomsArray[i] = conservatory;
-		mapPlacemats(roomsArray[i++]);
+		mapPlacemats(roomsArray[i]);
+		roomsArray[i++].generateDoorLabels();
 		
 		roomsArray[i] = study;
-		mapPlacemats(roomsArray[i++]);
+		mapPlacemats(roomsArray[i]);
+		roomsArray[i++].generateDoorLabels();
 		
 		roomsArray[i] = lounge;
-		mapPlacemats(roomsArray[i++]);
+		mapPlacemats(roomsArray[i]);
+		roomsArray[i++].generateDoorLabels();
 		
 		roomsArray[i] = ballroom;
-		mapPlacemats(roomsArray[i++]);
+		mapPlacemats(roomsArray[i]);
+		roomsArray[i++].generateDoorLabels();
 		
 		roomsArray[i] = billiardroom;
-		mapPlacemats(roomsArray[i++]);
+		mapPlacemats(roomsArray[i]);
+		roomsArray[i++].generateDoorLabels();
 		
 		roomsArray[i] = library;
-		mapPlacemats(roomsArray[i++]);
+		mapPlacemats(roomsArray[i]);
+		roomsArray[i++].generateDoorLabels();
 		
 		roomsArray[i] = hall;
-		mapPlacemats(roomsArray[i++]);
+		mapPlacemats(roomsArray[i]);
+		roomsArray[i++].generateDoorLabels();
 		
 		roomsArray[i] = diningroom;
-		mapPlacemats(roomsArray[i++]);
+		mapPlacemats(roomsArray[i]);
+		roomsArray[i++].generateDoorLabels();
 	}
 	
 	/**
@@ -240,7 +249,9 @@ public class CluedoGame {
 				
 				System.out.println(String.format("DEBUG: PC: %s player# %d", player.toString(), iP));
 				b.printBoard();
-				System.out.println(String.format("Player %d, it is your turn! What would you like to do?", iP+1));
+				System.out.print(String.format("Player %d, it is your turn! ",iP+1));
+				if(playerRoom != null)System.out.print(String.format("You are currently in the %s ", playerRoom.toString()));
+				System.out.println("What would you like to do?");
 				for(int i = 0; i < turnOptions.size()-1; i++) {
 					System.out.print(turnOptions.get(i) + ", ");
 				}

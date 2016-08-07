@@ -1,11 +1,14 @@
 package cluedo;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class Room extends Card {
 	
 	public Position[] placemats;
+	public Map<String, Position> placeMap;
+	
 	private String name;
 	private Room stairs;
 	
@@ -27,6 +30,17 @@ public class Room extends Card {
 	 */
 	public void setStairRoom(Room stairs) {
 		this.stairs = stairs;
+	}
+	
+	/**
+	 * Generates a map of labels to positions of the placemats for the doors in this room,
+	 * used to decide which door to exit from.
+	 */
+	public void generateDoorLabels() {
+		placeMap = new HashMap<String, Position>();
+		for(int i = 0; i < placemats.length; i++) {
+			placeMap.put(String.valueOf((char)('A'+i)), placemats[i]);
+		}
 	}
 	
 	/**

@@ -64,37 +64,42 @@ public class Board {
 		}
 	}
 	
-	public boolean movePlayer(Position oldP, Position newP, Player p) {
+	public Position movePlayer(Position oldP, Position newP, Player p) {
 		char c = p.toChar();
 		int oldX = oldP.x;
 		int oldY = oldP.y;
 		int newX = newP.x;
 		int newY = newP.y;
 		//Check if we are doing a valid move
-		if(validCorridorMove(oldP, newP)) {
+		if(validCorridorMove(newP)) {
 			activeBoard[newY][newX] = c; //draw the player at the new position
 			activeBoard[oldY][oldX] = board[oldY][oldX]; //put the tile back to what it was without the player
 			printBoard();
-			return true;
+			return newP;
 		} else if(validRoomEntry(oldP, newP)) { //Might be trying to enter a room
 			Room r = CluedoGame.placemats.get(oldP);
-			p.enterRoom(r);
+			if(r != null) {
+				p.enterRoom(r);
+				activeBoard[oldY][oldX] = board[oldY][oldX]; //remove the players icon from the placemat
+				printBoard();
+				return newP;
+			}
 		}
-		return false;
+		return null;
 	}
 	
 	/**
 	 * Returns an array of the unblocked placemats that a player can exit their current room from
 	 * @return
 	 */
-	public List<Position> getFreeMats(Room r) {
-		List<Position> freeMats = new ArrayList<Position>();
+	public List<Position> getBlockedMats(Room r) {
+		List<Position> blockedMats = new ArrayList<Position>();
 		for(Position p : r.placemats) {
-			if(walkable(p)) {
-				freeMats.add(p);
+			if(!walkable(p)) {
+				blockedMats.add(p);
 			}
 		}
-		return freeMats;
+		return blockedMats;
 	}
 	
 	private boolean arrayContains(char[] array, char c) {
@@ -137,9 +142,7 @@ public class Board {
 	 * @param newPos
 	 * @return
 	 */
-	public boolean validCorridorMove(Position oldP, Position newP) {
-		int curX = oldP.x;
-		int curY = oldP.y;
+	public boolean validCorridorMove(Position newP) {
 		int newX = newP.x;
 		int newY = newP.y;
 		System.out.println(String.format("DEBUG: trying to move to %d, %d: \'%c\'",newX, newY, activeBoard[newY][newX]));

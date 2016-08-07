@@ -18,7 +18,7 @@ public class Player {
 	private int remainingSteps;
 	private Position position;
 	private Board board;
-	private Map<String, Position> placeMap;
+	//private Map<String, Position> placeMap;
 	private Set<Card> hand = new HashSet<Card>();
 	
 	public Player(Character character, Board board, int id) {
@@ -52,7 +52,7 @@ public class Player {
 		remainingSteps = rollDice();
 		
 		while(remainingSteps > 0){
-			System.out.println(String.format("Moves remaining: %d. Input a direction: 'W' 'A' 'S' 'D'", remainingSteps));
+			System.out.println(String.format("Moves remaining: %d. Input a direction: 'W' 'A' 'S' 'D' or 'STOP'", remainingSteps));
 			System.out.println(position.toString());
 			String key = s.next().toUpperCase(); //Take the first string from the user
 			s.nextLine();//End the line
@@ -73,8 +73,11 @@ public class Player {
 					if(goRight())
 						remainingSteps--;	
 					break;
+				case "STOP":
+					remainingSteps = 0;
+					break;
 				default: {
-					System.out.println("Invalid character, please try again");
+					System.out.println("Invalid move input please try again");
 				}
 			}
 		}
@@ -86,7 +89,7 @@ public class Player {
 	 */
 	private int rollDice() {
 		Random rand = new Random();
-		int roll = rand.nextInt(6) + 1;
+		int roll = rand.nextInt(6) + 6; // _+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		System.out.println(String.format("DEBUG: dice rolled and was: %d", roll));
 		return roll;
 	}
@@ -105,9 +108,12 @@ public class Player {
 	 * Moves the player into the room
 	 * @param room
 	 */
-	public void enterRoom(Room room) {
-		System.out.println("DEBUG: entering room: " + room.toString());
-		this.room = room;
+	public void enterRoom(Room entRoom) {
+		if(entRoom == null) {
+			System.out.println("DB: ERROR attempt to enter room failed");
+		}
+		System.out.println("DEBUG: entering room: " + entRoom.toString());
+		this.room = entRoom;
 		remainingSteps = 0;//Stop moving when we enter a room
 	}
 
@@ -116,38 +122,39 @@ public class Player {
 	 */
 	public void exitRoom(Scanner s) {
 		Position exitMat = room.placemats[0]; //Initialise to make compiler happy 
+		Map<String, Position> pM = room.placeMap;
 		
 		//Get all the possible doors from the room and map these to the letter shown on the map (determined from index)
-		placeMap = new HashMap<String, Position>();
+		/*placeMap = new HashMap<String, Position>();
 		for(int i = 0; i < room.placemats.length; i++) {
 			placeMap.put(String.valueOf(('A'+i)), room.placemats[i]);
-		}
+		}*/
 		
-		List<Position> blockMats = board.getFreeMats(room);
+		List<Position> blockMats = board.getBlockedMats(room);
 		//Remove all the blocked placemats from the map of the available mats 
 		for(Position p : blockMats) {
-			if(placeMap.containsValue(p)) {
-				placeMap.values().remove(p);
+			if(pM.containsValue(p)) {
+				pM.values().remove(p);
 			}
 		}
 		
 		
 		//if there is no unblocked mats then END TURN
-		if(placeMap.isEmpty()) {
+		if(pM.isEmpty()) {
 			//END TURN
 			System.out.println("Other players are blocking your exits, you will have to spend the turn here");
 			return;
 		} //else if there is more than one free mat then ASK WHERE TO LEAVE FROM
-		else if (placeMap.size() > 1) {
+		else if (pM.size() > 1) {
 			exitMat = whichExit(s);
 		} //else there is only one free mat so poop the player onto that one
 		else {
 			//board move me to the placemat please
-			exitMat = placeMap.get("A");
+			exitMat = pM.get("A");
 		}
 		System.out.println(String.format("DB: Exitign from %s into pos %d, %d", room.toString(), exitMat.x, exitMat.y));
-		this.room = null; //No longer in a room
-		//
+		room = null; //No longer in a room
+		//use the exitmat probably like board.moveplayer or seomthign
 	}
 	
 	/**
@@ -157,20 +164,21 @@ public class Player {
 	 * @return
 	 */
 	public Position whichExit(Scanner s) {
-		
-		Position mat = placeMap.values().iterator().next(); //Initialise to a random valid option
+		Map<String, Position> pM = room.placeMap;
+		Position mat = pM.values().iterator().next(); //Initialise to a random valid option
 		boolean valid = false;
 		while(!valid) {
-			System.out.println("Which door would you like to go out? (a-d)");
-			
+			System.out.println("Which door would you like to go out? ");
+			for(String label : pM.keySet())
+				System.out.print(label + " ");
 			String input = s.next().toUpperCase(); //Get the input from the user
 			s.nextLine(); //Consume the line
-			if(placeMap.containsKey(input)) {
-				mat = placeMap.get(input);
+			if(pM.containsKey(input)) {
+				mat = pM.get(input);
 				valid = true;
 			}
 			
-			System.out.println("Invalid input please try again");
+			System.out.println("Invalid exit input please try again");
 			
 		}
 		return mat;
@@ -220,10 +228,12 @@ public class Player {
 	 * @return
 	 */
 	private boolean goUp(){
-		Position newP = new Position(position.x,position.y-1);
-		board.movePlayer(position, newP, this);
-		position = newP;
-		return true;
+		Position newP;
+		if((newP = board.movePlayer(position, new Position(position.x,position.y-1), this)) != null) {
+			position = newP;
+			return true;
+		}
+		return false;
 	}
 	/**
 	 * Attempts to move the player left 1 space
@@ -232,10 +242,12 @@ public class Player {
 	 */
 	private boolean goLeft(){
 		//Note - Move validity is determined from the board class
-		Position newP = new Position(position.x-1, position.y);
-		board.movePlayer(position, newP, this);
-		position = newP;
-		return true;
+		Position newP;
+		if((newP = board.movePlayer(position, new Position(position.x-1, position.y), this)) != null) {
+			position = newP;
+			return true;
+		}
+		return false;
 	}
 	/**
 	 * Attempts to move the player right 1 space
@@ -243,10 +255,12 @@ public class Player {
 	 * @return
 	 */
 	private boolean goRight(){
-		Position newP = new Position(position.x+1, position.y);
-		board.movePlayer(position, newP, this);
-		position = newP;
-		return true;
+		Position newP;
+		if((newP = board.movePlayer(position, new Position(position.x+1, position.y), this)) != null) {
+			position = newP;
+			return true;
+		}
+		return false;
 	}
 	/**
 	 * Attempts to move the player down 1 space
@@ -254,10 +268,12 @@ public class Player {
 	 * @return
 	 */
 	private boolean goDown(){
-		Position newP = new Position(position.x, position.y+1);
-		board.movePlayer(position, newP, this);
-		position = newP;
-		return true;
+		Position newP;
+		if((newP = board.movePlayer(position, new Position(position.x, position.y+1), this)) != null) {
+			position = newP;
+			return true;
+		}
+		return false;
 	}
 	
 	public char toChar() {
