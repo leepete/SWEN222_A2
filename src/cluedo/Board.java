@@ -79,7 +79,8 @@ public class Board {
 			Room r = CluedoGame.placemats.get(oldP);
 			if(r != null) {
 				p.enterRoom(r);
-				activeBoard[oldY][oldX] = board[oldY][oldX]; //remove the players icon from the placemat
+				Position space = r.getSpaces()[p.getID()-1];
+				teleport(p, oldP, space);
 				printBoard();
 				return newP;
 			}
@@ -93,9 +94,10 @@ public class Board {
 	 * @param oldP
 	 * @param newP
 	 */
-	private void teleport(Player p, Position oldP, Position newP) {
+	public void teleport(Player p, Position oldP, Position newP) {
 		activeBoard[newP.y][newP.x] = p.toChar(); //move the player to the new position
 		activeBoard[oldP.y][oldP.x] = board[oldP.y][oldP.x]; //return the old position back to its original state
+		p.setPosition(newP); //Update the players position
 	}
 	
 	/**

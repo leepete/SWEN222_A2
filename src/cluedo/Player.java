@@ -18,13 +18,15 @@ public class Player {
 	private int remainingSteps;
 	private Position position;
 	private Board board;
+	private CluedoGame game;
 	//private Map<String, Position> placeMap;
 	private Set<Card> hand = new HashSet<Card>();
 	
-	public Player(Character character, Board board, int id) {
+	public Player(Character character, Board board, CluedoGame game, int id) {
 		this.character = character;
 		this.id = id;
 		this.board = board;
+		this.game = game;
 		position = this.character.getStart();
 	}
 	
@@ -37,11 +39,29 @@ public class Player {
 	}
 	
 	/**
+	 * Gets the id of this player (their turn order)
+	 * @return
+	 */
+	public int getID() {
+		return id;
+	}
+	/**
 	 * Returns the players position on the board
 	 * @return
 	 */
 	public Position getPosition() {
 		return position;
+	}
+	
+	
+	/**
+	 * Sets the position of the player
+	 * @param newP
+	 */
+	public void setPosition(Position newP) {
+		if(newP != null) {
+			position = newP;			
+		}
 	}
 	
 	/**
@@ -140,7 +160,6 @@ public class Player {
 			}
 		}
 		
-		
 		//if there is no unblocked mats then END TURN
 		if(pM.isEmpty()) {
 			//END TURN
@@ -156,7 +175,10 @@ public class Player {
 		}
 		System.out.println(String.format("DB: Exitign from %s into pos %d, %d", room.toString(), exitMat.x, exitMat.y));
 		room = null; //No longer in a room
-		//use the exitmat probably like board.moveplayer or seomthign
+		//Leave the room
+		board.teleport(this, position, exitMat);
+		position = exitMat;
+		game.turnInput(s, this);
 	}
 	
 	/**
@@ -232,7 +254,7 @@ public class Player {
 	private boolean goUp(){
 		Position newP;
 		if((newP = board.movePlayer(position, new Position(position.x,position.y-1), this)) != null) {
-			position = newP;
+			//position = newP;
 			return true;
 		}
 		return false;
@@ -246,7 +268,7 @@ public class Player {
 		//Note - Move validity is determined from the board class
 		Position newP;
 		if((newP = board.movePlayer(position, new Position(position.x-1, position.y), this)) != null) {
-			position = newP;
+			//position = newP;
 			return true;
 		}
 		return false;
@@ -259,7 +281,7 @@ public class Player {
 	private boolean goRight(){
 		Position newP;
 		if((newP = board.movePlayer(position, new Position(position.x+1, position.y), this)) != null) {
-			position = newP;
+			//position = newP;
 			return true;
 		}
 		return false;
@@ -272,7 +294,7 @@ public class Player {
 	private boolean goDown(){
 		Position newP;
 		if((newP = board.movePlayer(position, new Position(position.x, position.y+1), this)) != null) {
-			position = newP;
+			//position = newP;
 			return true;
 		}
 		return false;
