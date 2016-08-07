@@ -29,7 +29,7 @@ public class Board {
 		   "##===v=++=b    c=++++++++#".toCharArray(),
 		   "#++++x+++=v====v=+++++++##".toCharArray(),
 		   "##++++++++x++++x+++======#".toCharArray(),
-		   "#=====+++++++++++++<a   =#".toCharArray(),
+		   "#=====++++++++++++x<a   =#".toCharArray(),
 		   "#=   ====++=====+++=BILL=#".toCharArray(),
 		   "#= DINE =++= C =+++=   b=#".toCharArray(),
 		   "#=     a>x+= E =+++====v=#".toCharArray(),
@@ -64,12 +64,12 @@ public class Board {
 		}
 	}
 	
-	public Position movePlayer(Position oldP, Position newP, Player p) {
+	public boolean movePlayer(Position oldP, Position newP, Player p) {
 		//Check if we are doing a valid move
 		if(validCorridorMove(newP)) {
 			teleport(p, oldP, newP);
 			printBoard();
-			return newP;
+			return true;
 		} else if(validRoomEntry(oldP, newP)) { //Might be trying to enter a room
 			Room r = CluedoGame.placemats.get(oldP);
 			if(r != null) {
@@ -77,10 +77,10 @@ public class Board {
 				Position space = r.getSpaces()[p.getID()-1];
 				teleport(p, oldP, space);
 				printBoard();
-				return newP;
+				return true;
 			}
 		}
-		return null;
+		return false;
 	}
 	
 	/**

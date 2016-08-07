@@ -19,10 +19,11 @@ public class Player {
 	private int remainingSteps;
 	private Position position;
 	private Board board;
+	public Room sameRoom;
 
 	private CluedoGame game;
 	//private Map<String, Position> placeMap;
-	private Set<Card> hand = new HashSet<Card>();
+	private List<Card> hand = new ArrayList<Card>();
 	
 	public Player(Character character, Board board, CluedoGame game, int id) {
 		this.character = character;
@@ -39,6 +40,14 @@ public class Player {
 		return room;
 	}
 
+	/**
+	 * Returns the players hand
+	 * @return
+	 */
+	public List<Card> getHand() {
+		return hand;
+	}
+	
 	/**
 	 * Gets the id of this player (their turn order)
 	 * @return
@@ -101,6 +110,7 @@ public class Player {
 				}
 			}
 		}
+		
 	}
 
 	/**
@@ -109,7 +119,7 @@ public class Player {
 	 */
 	private int rollDice() {
 		Random rand = new Random();
-		int roll = rand.nextInt(6) + 6; // _+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+		int roll = rand.nextInt(6) + 1;
 		System.out.println(String.format("DEBUG: dice rolled and was: %d", roll));
 		return roll;
 	}
@@ -208,65 +218,96 @@ public class Player {
 		}
 		return mat;
 	}
-
+	
 	/**
-	 * Make a game ending accusation
+	 * Makes a guess at the solution without risking end of game.
+	 * Other players (whether or not they are still playing) refute your guess.
+	 * @param s
+	 * @param guess
+	 * @return
 	 */
-	public void accuse(Scanner s) {
-		boolean isValid = false;
+	public Suggestion makeSuggestion(Scanner s, boolean guess) {
+		boolean valid = false;
 
-		System.out.println("DEBUG: accuse called");
+		System.out.println("DEBUG: make suggestion called answer: " + game.solution.toString());
 
 		String input;
 		Character c = null;
 		Weapon w= null;
 		Room r= null;
-
-		while(!isValid){
-			System.out.println("You are accusing. Please enter a room:");
-			input = s.nextLine().toUpperCase();
-			r = new Room(input);
-			if(Arrays.asList(CluedoGame.roomsArray).contains(r)){
-				isValid = true;
-			} else{
-				System.out.println("Invalid Room!");
-			}
-
+		
+		//Players cannot guess for a room other than the one they are in
+		if(guess) {
+			r = room;
 		}
-		isValid = false;
+		else {
+			while(!valid){
+				System.out.println("Please enter a room:");
+				input = s.nextLine().toUpperCase();
+				r = new Room(input);
+				if(Arrays.asList(CluedoGame.roomsArray).contains(r)){
+					valid = true;
+				} else{
+					System.out.println("Invalid Room!");
+				}
+			}
+			valid = false;
+		}
+		
 
-		while(!isValid){
+		while(!valid){
 			System.out.println("Please enter a weapon:");
 			input = s.nextLine().toUpperCase();
 			w = new Weapon(input);
 			if(Arrays.asList(CluedoGame.weaponsArray).contains(w)){
-				isValid = true;
+				valid = true;
 			} else{
-				System.out.println("Invalid Weapon!");
+				System.out.println("Invalid Weapon, please try again");
 			}
 		}
-		isValid = false;
+		valid = false;
 
-		while(!isValid){
+		while(!valid){
 			System.out.println("Please enter a character:");
 			input = s.nextLine().toUpperCase();
 			c = new Character(input);
 			if(Arrays.asList(CluedoGame.charactersArray).contains(c)){
-				isValid = true;
+				valid = true;
 			} else{
-				System.out.println("Invalid Character!");
+				System.out.println("Invalid Character, please try again");
 			}
 		}
-		isValid = false;
+		valid = false;
 
-		Suggestion guess = new Suggestion(r.toString(),w.toString(), c.toString());
+		return new Suggestion(r.toString(),w.toString(), c.toString());
+	}
+	
+	/**
+	 * Make a guess with the provided suggestion
+	 */
+	public void guess(Scanner s) {
+		Suggestion suggest = makeSuggestion(s, true);
+		 //Iterates over the other players, if they have one of the suggestion items in their hand they choose which to show this player and the guess is over
+		String[] refuter = game.refuteGuess(s, suggest, this);
+		if(refuter[0] == null) {
+			System.out.println("No one was able to refute your guess! Could be time to solve the case?");
+			return;
+		}
+		System.out.println(String.format("Player %d refutes your guess by reveiling %s from their hand.", refuter[0], refuter[1]));
+		
+	}
 
-		System.out.println("DEBUG: "+ CluedoGame.solution.toString());
-		if(CluedoGame.solution.equals(guess)){ //STOP GAME
-			System.out.println("***YOU WIN***");
-		} else{ //CONTINUE GAME A PLAYER DOWN
-			System.out.println("***YOU LOSE***");
+	/**
+	 * Make a game ending accusation
+	 */
+	public void accuse(Scanner s) {
+		Suggestion suggest = makeSuggestion(s, false);
+		if(CluedoGame.solution.equals(suggest)){
+			game.gameOver(this);
+		} else{
+			//check if the game is over because there is only one player remaining
 			playing = false;
+			game.gameOver(this);
 		}
 	}
 
@@ -302,27 +343,17 @@ public class Player {
 	 * Returns true if was successful
 	 * @return
 	 */
-
 	private boolean goUp(){
-		Position newP;
-		if((newP = board.movePlayer(position, new Position(position.x,position.y-1), this)) != null) {
-			return true;
-		}
-		return false;
+		 return board.movePlayer(position, new Position(position.x,position.y-1), this);
 	}
+	
 	/**
 	 * Attempts to move the player left 1 space
 	 * Returns true if was successful
 	 * @return
 	 */
-
 	private boolean goLeft(){
-		//Note - Move validity is determined from the board class
-		Position newP;
-		if((newP = board.movePlayer(position, new Position(position.x-1, position.y), this)) != null) {
-			return true;
-		}
-		return false;
+		return board.movePlayer(position, new Position(position.x-1, position.y), this);
 	}
 	/**
 	 * Attempts to move the player right 1 space
@@ -330,32 +361,30 @@ public class Player {
 	 * @return
 	 */
 	private boolean goRight(){
-		Position newP;
-		if((newP = board.movePlayer(position, new Position(position.x+1, position.y), this)) != null) {
-			return true;
-		}
-		return false;
+		return board.movePlayer(position, new Position(position.x+1, position.y), this);
 	}
+	
 	/**
 	 * Attempts to move the player down 1 space
 	 * Returns true if was successful
 	 * @return
 	 */
-
 	private boolean goDown(){
-		Position newP;
-		if((newP = board.movePlayer(position, new Position(position.x, position.y+1), this)) != null) {
-			//position = newP;
-			return true;
-		}
-		return false;
+		return board.movePlayer(position, new Position(position.x, position.y+1), this);
 	}
 	
+	/**
+	 * Returns the player number of this player as a character
+	 * @return
+	 */
 	public char toChar() {
 		return Integer.toString(id).charAt(0);
 	}
 
-
+	
+	/**
+	 * Returns the character that this player is playing as
+	 */
 	public String toString() {
 		return character.toString();
 	}

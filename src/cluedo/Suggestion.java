@@ -2,14 +2,18 @@ package cluedo;
 
 public class Suggestion {
 
-	String weapon;
-	String character;
-	String room;
+	private String weapon;
+	private String character;
+	private String room;
+	private String[] cards = new String[3];
 
 	public Suggestion(String room, String weapon, String character) {
-		this.weapon = weapon;
 		this.room = room;
+		this.weapon = weapon;
 		this.character = character;
+		cards[0] = room;
+		cards[1] = weapon;
+		cards[2] = character;
 	}
 
 	public boolean isValid() {
@@ -23,8 +27,19 @@ public class Suggestion {
 		return (this.weapon.equals(s.weapon) && this.character.equals(s.character) && this.room.equals(s.room));
 			
 	}
-
+	
+	//Returns the names of the cards in the suggestion
+	public String getWeapon() {
+		return weapon;
+	}
+	public String getRoom() {
+		return room;
+	}
+	public String getCharacter() {
+		return character;
+	}
+	
 	public String toString() {
-		return String.format("W: %s C: %s R: %s", weapon.toString(), character.toString(), room.toString() );
+		return String.format("R: %s W: %s C: %s", room.toString(), weapon.toString(), character.toString() );
 	}
 }

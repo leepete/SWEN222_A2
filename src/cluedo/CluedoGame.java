@@ -1,8 +1,12 @@
 package cluedo;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
+
+import jdk.nashorn.internal.runtime.options.Options;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -281,12 +285,91 @@ public class CluedoGame {
 				iP = (iP+1)%numPlayers;
 				continue;
 			}
-			//Get and do the input for this player
-			turnInput(s, player);
+			//Beginning of turn
 			
+			player.sameRoom = player.inRoom(); //For ensuring they dont reenter the same room for another guess on the same turn
+			turnInput(s, player);
+			//If the player is in a different room to what they started their turn in they can make a guess
+			if(player.inRoom() != player.sameRoom) {
+				askGuess(s, player);
+				
+			}
 			iP = (iP+1)%numPlayers; //Increment the current player, always keeping it within the bounds of the array
 		}
 		System.out.println("DEBUG: No longer playing, doing end of game roundup");
+	}
+	
+	public void askGuess(Scanner s, Player p) {
+		boolean validInput = false;
+		
+		while(!validInput) {
+			System.out.println(String.format("You are in the %s, would you like to make a suggestion? 'YES' 'NO'", p.inRoom()));
+			String input = s.next().toUpperCase();
+			s.nextLine();
+			switch(input) {
+			case "YES":
+				p.guess(s);
+				validInput = true;
+				break;
+			case "NO":
+				validInput = true;
+				break;
+			default:
+				System.out.println("Invalid input, please try again");
+			}
+		}
+	}
+	
+	/**
+	 * Returns true if the suggestion presented was refuted by a player
+	 * Iterates through all the players even if they are out of the game,
+	 * if a player has a card for one of the pieces from the suggestion they
+	 * must show one (their choice) to the player guessing, thus refuting the guess.
+	 * @param suggest
+	 * @return
+	 */
+	public String[] refuteGuess(Scanner s, Suggestion suggest, Player guesser) {
+		boolean valid = false;
+		String input, weapon, room, character;
+		String[] refuter = new String[2];
+		List<String> options = new ArrayList<String>(); //Array holding strings of cards that the player had in their hand
+		int i = 0;
+		//For each player in the game (playing or not)
+		for(Player p : players) {
+			//Find if they have a card from the suggestion
+			room = suggest.getRoom();
+			weapon = suggest.getWeapon();
+			character = suggest.getCharacter();
+			if(p.getHand().contains(room)) {
+				options.add(room);
+			}
+			if(p.getHand().contains(weapon)) {
+				options.add(weapon);
+			}
+			if(p.getHand().contains(character)) {
+				options.add(character);
+			}
+			//If options is not empty ask which card they want to refute
+			if(!options.isEmpty()) {
+				while(!valid ) {
+					System.out.println(String.format("Player %d, which card would you like to refute player %d's guess with?", p.getID(), guesser.getID()));
+					//Print all options
+					for(String o : options) {
+						System.out.print(String.format("\'%s\' ", o));
+					}
+					input = s.nextLine().toUpperCase();
+					//If options contains input its valid
+					if(options.contains(input)) {
+						valid = true;
+						refuter[0] = Integer.toString(p.getID());
+						refuter[1] = input;
+						return refuter;
+					}
+				}
+			}
+			
+		}
+		return refuter;
 	}
 	
 	/**
@@ -357,7 +440,6 @@ public class CluedoGame {
 			}
 			else { //Else ask again
 				System.out.println(String.format("\'%s\' is an invalid input, please use an option provided.", input));
-				gameOver();
 			}
 		}
 	}
@@ -389,9 +471,12 @@ public class CluedoGame {
 	 * Draws a Card from the weapon, character and room sets to make up the solution to the game
 	 */
 	private void makeSolution() {
-		String w = weaponSet.iterator().next().toString();
-		String r = roomSet.iterator().next().toString();
-		String c = characterSet.iterator().next().toString();
+		Random rand = new Random();
+		
+		//Randomly pulls a card of each type to make the solution
+		String w = weaponSet.toArray()[rand.nextInt(weaponSet.size())].toString();
+		String r = roomSet.toArray()[rand.nextInt(roomSet.size())].toString();
+		String c = characterSet.toArray()[rand.nextInt(characterSet.size())].toString();
 
 		weaponSet.remove(new Weapon(w));
 		for(Weapon we: weaponSet){
@@ -408,8 +493,19 @@ public class CluedoGame {
 		solution = new Suggestion(r,w,c);
 	}
 	
-	public void gameOver() {
+	/**
+	 * Takes the player being updated, their playing field will be true if they won or false if not.
+	 * @param p
+	 */
+	public void gameOver(Player player) {
 		int i = 0;
+		//If the player is playing they won
+		if(player.isPlaying()) {
+			System.out.println(String.format("CONGRATULATIONS! Player %d as %s has won the game!", player.getID(), player.toString()));
+			System.out.println("The Solution was: " + solution.toString());
+			return;
+		}
+		System.out.println(String.format("Sorry player %d, your accusation was incorrect", player.getID()));
 		for(Player p : players){
 			if(p.isPlaying()){
 				i++;
@@ -417,11 +513,9 @@ public class CluedoGame {
 		}
 		if(i <= 1){
 			playing = false;
-			resetGame();
 		}
 
 	}
-	
 	
 	/**
 	 * Returns true if the passed string is a valid name of a character
