@@ -291,7 +291,7 @@ public class CluedoGame {
 			iP = (iP+1)%numPlayers; //Increment the current player, always keeping it within the bounds of the array
 		}
 		System.out.println("DEBUG: No longer playing, doing end of game roundup");
-		
+		gameOver();
 	}
 	
 	/**
@@ -320,28 +320,26 @@ public class CluedoGame {
 	 * Draws a Card from the weapon, character and room sets to make up the solution to the game
 	 */
 	private void makeSolution() {
-//		String w = weaponSet.iterator().next().toString();
-//		String r = roomSet.iterator().next().toString();
-//		String c = characterSet.iterator().next().toString();
-		String w = "SPANNER";
-		String r = "STUDY";
-		String c = "COLONEL MUSTARD";
+		String w = weaponSet.iterator().next().toString();
+		String r = roomSet.iterator().next().toString();
+		String c = characterSet.iterator().next().toString();
 
-		weaponSet.remove(w);
+		weaponSet.remove(new Weapon(w));
 		for(Weapon we: weaponSet){
-			System.out.println("DEBUG: "+we );
+			System.out.println("DEBUG weapon: "+we );
 		}
-		roomSet.remove(r);
+		roomSet.remove(new Room(r));
 		for(Room ro: roomSet){
-		System.out.println("DEBUG: "+ro);
-		}	characterSet.remove(c);
+			System.out.println("DEBUG room: "+ro);
+		}	
+		characterSet.remove(new Character(c));
 		for(Character cr: characterSet){
-		System.out.println("DEBUG: "+cr);
-		}solution = new Suggestion(w, c , r);
-		
+			System.out.println("DEBUG character: "+cr);
+		}solution = new Suggestion(r,w,c);
+
 	}
 	
-	public void gameOver(){
+	public void gameOver() {
 		int i = 0;
 		for(Player p : players){
 			if(p.isPlaying()){
@@ -350,6 +348,7 @@ public class CluedoGame {
 		}
 		if(i <= 1){
 			playing = false;
+			resetGame();
 		}
 	}
 	

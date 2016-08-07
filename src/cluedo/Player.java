@@ -206,7 +206,7 @@ public class Player {
 			if(Arrays.asList(CluedoGame.roomsArray).contains(r)){
 				isValid = true;
 			} else{
-				System.out.println("Invalid Weapon");
+				System.out.println("Invalid Room!");
 			}
 
 		}
@@ -219,7 +219,7 @@ public class Player {
 			if(Arrays.asList(CluedoGame.weaponsArray).contains(w)){
 				isValid = true;
 			} else{
-				System.out.println("Invalid Weapon");
+				System.out.println("Invalid Weapon!");
 			}
 		}
 		isValid = false;
@@ -231,21 +231,19 @@ public class Player {
 			if(Arrays.asList(CluedoGame.charactersArray).contains(c)){
 				isValid = true;
 			} else{
-				System.out.println("Invalid Weapon");
+				System.out.println("Invalid Character!");
 			}
 		}
 		isValid = false;
 
 		Suggestion guess = new Suggestion(r.toString(),w.toString(), c.toString());
 
-
 		System.out.println("DEBUG: "+ CluedoGame.solution.toString());
 		if(CluedoGame.solution.equals(guess)){ //STOP GAME
-			System.out.println("YOU WIN");
+			System.out.println("***YOU WIN***");
 		} else{ //CONTINUE GAME A PLAYER DOWN
-			System.out.println("YOU LOSE");
+			System.out.println("***YOU LOSE***");
 			playing = false;
-
 		}
 	}
 
@@ -283,7 +281,7 @@ public class Player {
 	 * Returns true if was successful
 	 * @return
 	 */
-	private boolean goUp(){
+	private boolean goUp() {
 		Position newP;
 		if((newP = board.movePlayer(position, new Position(position.x,position.y-1), this)) != null) {
 			position = newP;
@@ -296,7 +294,7 @@ public class Player {
 	 * Returns true if was successful
 	 * @return
 	 */
-	private boolean goLeft(){
+	private boolean goLeft() {
 		//Note - Move validity is determined from the board class
 		Position newP;
 		if((newP = board.movePlayer(position, new Position(position.x-1, position.y), this)) != null) {
@@ -310,7 +308,7 @@ public class Player {
 	 * Returns true if was successful
 	 * @return
 	 */
-	private boolean goRight(){
+	private boolean goRight() {
 		Position newP;
 		if((newP = board.movePlayer(position, new Position(position.x+1, position.y), this)) != null) {
 			position = newP;
@@ -323,7 +321,7 @@ public class Player {
 	 * Returns true if was successful
 	 * @return
 	 */
-	private boolean goDown(){
+	private boolean goDown() {
 		Position newP;
 		if((newP = board.movePlayer(position, new Position(position.x, position.y+1), this)) != null) {
 			position = newP;
