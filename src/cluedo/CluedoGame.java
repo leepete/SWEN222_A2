@@ -4,7 +4,6 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -14,8 +13,10 @@ public class CluedoGame {
 	
 	//Array of all the possible inputs from the player during their turn for easy error checking
 	private List<String> turnOptions = new ArrayList<String>();
-	private int minPlayers = 3;
-	private int maxPlayers = 6;
+	private final int minPlayers = 1; //DEBUGGING +++++++++++++++++++++++++++++++++++++++++++
+	private final int maxPlayers = 6;
+	private static final int numRooms = 9;
+	
 	//List of the players in the game
 	public List<Player> players = new ArrayList<Player>();
 	//Number of players in the game
@@ -30,19 +31,20 @@ public class CluedoGame {
 	public Set<Character> characterSet = new HashSet<Character>();
 	
 	//The answer to ~~life the universe and everything~~ the game of cluedo
-	public Suggestion solution;
+	public static Suggestion solution;
 	public boolean playing = true;
+	public Board b;
 	
 	//Array holding all the players 
-	private final Character[] charactersArray = {
+	public static final Character[] charactersArray = {
 			new Character("MISS SCARLET", new Position(8, 25)),
 			new Character("COLONEL MUSTARD", new Position(1, 18)),
 			new Character("MRS WHITE", new Position(10, 1)),
 			new Character("THE REVEREND GREEN", new Position(15, 1)),
 			new Character("MRS PEACOCK", new Position(24, 7)),
-			new Character("PROFFESOR PLUM", new Position(24, 20)) };
+			new Character("PROFESSOR PLUM", new Position(24, 20)) };
 	
-	private final Weapon[] weaponsArray = {
+	public static final Weapon[] weaponsArray = {
 			new Weapon("CANDLESTICK"),
 			new Weapon("DAGGER"),
 			new Weapon("LEAD PIPE"),
@@ -50,10 +52,111 @@ public class CluedoGame {
 			new Weapon("ROPE"),
 			new Weapon("SPANNER")};
 	
+	public static  Room[] roomsArray = new Room[numRooms];
+	
+	public static Map<Position, Room> placemats = new HashMap<Position, Room>();
+	
+	private final Position[] kitchenPlacemats = {
+			new Position(5,8)};
+	private final Position[] ballroomPlacemats = {
+			new Position(8, 6),
+			new Position(10, 9),
+			new Position(15, 9),
+			new Position(17, 6)};
+	private final Position[] conservatoryPlacemats = {
+			new Position(19,6)};
+	private final Position[] billiardroomPlacemats = {
+			new Position(18, 10),
+			new Position(23, 14)};
+	private final Position[] diningroomPlacemats = {
+			new Position(9, 13),
+			new Position(6, 17)};
+	private final Position[] libraryPlacemats = {
+			new Position(21, 14),
+			new Position(17, 17)};
+	private final Position[] hallPlacemats = {
+			new Position(12, 18),
+			new Position(13, 18),
+			new Position(16, 21)};
+	private final Position[] loungePlacemats = {
+			new Position(7, 19)};
+	private final Position[] studyPlacemats = {
+			new Position(18, 21)};
+	
 	public CluedoGame() {
-		Board b = new Board();
+		populateRooms();
+		this.b = new Board();
 		Scanner s = new Scanner(System.in);
 		startGame(s);
+	}
+	
+	/**
+	 * Initialises the rooms so that the stairs and placemats are linked to the correct rooms
+	 */
+	private void populateRooms() {
+		Room kitchen = new Room("KITCHEN", kitchenPlacemats);
+		Room conservatory = new Room("CONSERVATORY", conservatoryPlacemats);
+		Room study = new Room("STUDY", studyPlacemats);
+		Room lounge = new Room("LOUNGE", loungePlacemats);
+		Room ballroom = new Room("BALL ROOM", ballroomPlacemats);
+		Room billiardroom = new Room("BILLIARD ROOM", billiardroomPlacemats);
+		Room library = new Room("LIBRARY", libraryPlacemats);
+		Room hall = new Room("HALL", hallPlacemats);
+		Room diningroom = new Room("DINING ROOM", diningroomPlacemats);
+		
+		//Set their stairs
+		kitchen.setStairRoom(study);
+		study.setStairRoom(kitchen);
+		conservatory.setStairRoom(lounge);
+		lounge.setStairRoom(conservatory);
+		
+		int i = 0;
+		//Put the rooms in the array
+		roomsArray[i] = kitchen;
+		mapPlacemats(roomsArray[i]);
+		roomsArray[i++].generateDoorLabels();
+		
+		roomsArray[i] = conservatory;
+		mapPlacemats(roomsArray[i]);
+		roomsArray[i++].generateDoorLabels();
+		
+		roomsArray[i] = study;
+		mapPlacemats(roomsArray[i]);
+		roomsArray[i++].generateDoorLabels();
+		
+		roomsArray[i] = lounge;
+		mapPlacemats(roomsArray[i]);
+		roomsArray[i++].generateDoorLabels();
+		
+		roomsArray[i] = ballroom;
+		mapPlacemats(roomsArray[i]);
+		roomsArray[i++].generateDoorLabels();
+		
+		roomsArray[i] = billiardroom;
+		mapPlacemats(roomsArray[i]);
+		roomsArray[i++].generateDoorLabels();
+		
+		roomsArray[i] = library;
+		mapPlacemats(roomsArray[i]);
+		roomsArray[i++].generateDoorLabels();
+		
+		roomsArray[i] = hall;
+		mapPlacemats(roomsArray[i]);
+		roomsArray[i++].generateDoorLabels();
+		
+		roomsArray[i] = diningroom;
+		mapPlacemats(roomsArray[i]);
+		roomsArray[i++].generateDoorLabels();
+	}
+	
+	/**
+	 * Maps the position of the placemats to the room
+	 * @param r
+	 */
+	private void mapPlacemats(Room r) {
+		for(Position p : r.placemats) {
+			placemats.put(p, r);
+		}
 	}
 	
 	/**
@@ -80,7 +183,7 @@ public class CluedoGame {
 			System.out.println("DEBUG: plcharchoice: " + plCharChoice);
 			if(isValidCharName(plCharChoice)) {
 				//Add a player with this character to the array
-				players.add(new Player(availableChars.get(plCharChoice)));
+				players.add(new Player(availableChars.get(plCharChoice), b, i));
 				//Remove this character from the available characters
 				availableChars.remove(plCharChoice);
 				//A player has been successfully added
@@ -94,6 +197,13 @@ public class CluedoGame {
 		makeSolution();
 		System.out.println(String.format("DEBUG: This is the answer to the game: %s", solution.toString()));
 		shuffleNDeal();
+		
+		//Print the board with all the players in their starting positions here
+		for(Player p : players) {
+			b.activeBoard[p.getPosition().y][p.getPosition().x] = p.toChar();
+		}
+		b.printBoard();
+		
 		turnCycle(s);
 	}
 	
@@ -114,7 +224,7 @@ public class CluedoGame {
 			Player player = players.get(iP); //Sets the current player so we only have to .get once
 			 //If the current player is not playing then move to the next player
 			if(!player.isPlaying()) {
-				iP = (iP%numPlayers)+1;
+				iP = (iP+1)%numPlayers;
 				continue;
 			}
 			//Add the options to the turnOptions set that are available to the player..
@@ -138,8 +248,10 @@ public class CluedoGame {
 			while(!validInput) {
 				
 				System.out.println(String.format("DEBUG: PC: %s player# %d", player.toString(), iP));
-				
-				System.out.println(String.format("Player %d, it is your turn! What would you like to do?", iP+1));
+				b.printBoard();
+				System.out.print(String.format("Player %d, it is your turn! ",iP+1));
+				if(playerRoom != null)System.out.print(String.format("You are currently in the %s ", playerRoom.toString()));
+				System.out.println("What would you like to do?");
 				for(int i = 0; i < turnOptions.size()-1; i++) {
 					System.out.print(turnOptions.get(i) + ", ");
 				}
@@ -161,11 +273,11 @@ public class CluedoGame {
 						validInput = true;
 						break;
 					case "EXIT":
-						player.exitRoom();
+						player.exitRoom(s);
 						validInput = true;
 						break;
 					case "ACCUSE":
-						player.accuse();
+						player.accuse(s);
 						validInput = true;
 						break;
 					}
@@ -176,9 +288,10 @@ public class CluedoGame {
 			}
 			validInput = false;
 			
-			iP = (iP%numPlayers)+1; //Increment the current player, always keeping it within the bounds of the array
+			iP = (iP+1)%numPlayers; //Increment the current player, always keeping it within the bounds of the array
 		}
 		System.out.println("DEBUG: No longer playing, doing end of game roundup");
+		
 	}
 	
 	/**
@@ -207,11 +320,37 @@ public class CluedoGame {
 	 * Draws a Card from the weapon, character and room sets to make up the solution to the game
 	 */
 	private void makeSolution() {
-		Weapon w = weaponSet.iterator().next();
-		Room r = roomSet.iterator().next();
-		Character c = characterSet.iterator().next();
-		solution = new Suggestion(w, c , r);
+//		String w = weaponSet.iterator().next().toString();
+//		String r = roomSet.iterator().next().toString();
+//		String c = characterSet.iterator().next().toString();
+		String w = "SPANNER";
+		String r = "STUDY";
+		String c = "COLONEL MUSTARD";
+
+		weaponSet.remove(w);
+		for(Weapon we: weaponSet){
+			System.out.println("DEBUG: "+we );
+		}
+		roomSet.remove(r);
+		for(Room ro: roomSet){
+		System.out.println("DEBUG: "+ro);
+		}	characterSet.remove(c);
+		for(Character cr: characterSet){
+		System.out.println("DEBUG: "+cr);
+		}solution = new Suggestion(w, c , r);
 		
+	}
+	
+	public void gameOver(){
+		int i = 0;
+		for(Player p : players){
+			if(p.isPlaying()){
+				i++;
+			}
+		}
+		if(i <= 1){
+			playing = false;
+		}
 	}
 	
 	
@@ -230,12 +369,12 @@ public class CluedoGame {
 	 * @return number of players in this game
 	 */
 	private int getNumPlayers(Scanner s) {
-		System.out.println("Welcome to cluedo, please enter the number of people who will be playing (2-6):");
+		System.out.println("Welcome to cluedo, please enter the number of people who will be playing (3-6):");
 		// === Check here that the input from the user is actually an integer ===
 		numPlayers = s.nextInt();
 		s.nextLine();// consume the end of the line
 		while(numPlayers > maxPlayers || numPlayers < minPlayers) {
-			System.out.println("That was an invalid number of players, ensure the number of players is between 2 and 6");
+			System.out.println("That was an invalid number of players, ensure the number of players is between 3 and 6");
 			numPlayers = s.nextInt();
 		}
 		System.out.println(String.format("Awesome, there will be %d players this game.", numPlayers));
@@ -247,6 +386,7 @@ public class CluedoGame {
 	 */
 	private void resetGame() {
 		resetCharacters();
+		b.resetBoard();
 		numPlayers = 0;
 		
 		resetDeck();
@@ -266,31 +406,11 @@ public class CluedoGame {
 		for(Character c : charactersArray) {
 			characterSet.add(c);
 		}
-			
+		
 		roomSet = new HashSet<Room>();
-		//Make the rooms that have stairs
-		Room kitchen = new Room("KITCHEN");
-		Room conservatory = new Room("CONSERVATORY");
-		Room study = new Room("STUDY");
-		Room lounge = new Room("LOUNGE");
-		
-		//Set their stairs
-		kitchen.setStairRoom(study);
-		study.setStairRoom(kitchen);
-		conservatory.setStairRoom(lounge);
-		lounge.setStairRoom(conservatory);
-		
-		//Add the rooms to the set containing all the rooms
-		roomSet.add(kitchen);
-		roomSet.add(conservatory);
-		roomSet.add(study);
-		roomSet.add(lounge);
-		
-		roomSet.add(new Room("BALL ROOM"));
-		roomSet.add(new Room("BILLIARD ROOM"));
-		roomSet.add(new Room("LIBRARY"));
-		roomSet.add(new Room("HALL"));
-		roomSet.add(new Room("DINING ROOM"));
+		for(int i = 0; i < roomsArray.length; i++) {
+			roomSet.add(roomsArray[i]);
+		}
 	}
 	
 	/**
@@ -300,12 +420,15 @@ public class CluedoGame {
 		//Reset the Map
 		availableChars = new HashMap<String, Character>();
 		//Populate the map with all the options
-		availableChars.put("MISS SCARLET", charactersArray[0]);
+		for(Character c : charactersArray) {
+			availableChars.put(c.toString(), c);
+		}
+		/*availableChars.put("MISS SCARLET", charactersArray[0]);
 		availableChars.put("COLONEL MUSTARD", charactersArray[1]);
 		availableChars.put("MRS WHITE", charactersArray[2]);
 		availableChars.put("THE REVEREND GREEN", charactersArray[3]);
 		availableChars.put("MRS PEACOCK", charactersArray[4]);
-		availableChars.put("PROFESSOR PLUM", charactersArray[5]);
+		availableChars.put("PROFESSOR PLUM", charactersArray[5]); */
 	}
 	
 	

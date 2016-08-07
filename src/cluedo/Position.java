@@ -2,47 +2,43 @@ package cluedo;
 
 public class Position {
 	
-	private int row;
-	private int col;
+	public int x;
+	public int y;
 	
-	public Position(int row, int col) {
-		this.row = row;
-		this.col = col;
-	}
-	
-	public int getRow(){
-		return row;
-	}
-	
-	public int getColumn(){
-		return col;
-	}
-
-	public void setRow(int row){
-		this.row = row;
-	}
-	
-	public void setColumn(int col){
-		this.col = col;
-	}
-	public boolean equals(Object o){
-		if(o instanceof Position){
-			Position p = (Position) o;
-			return row == p.row && col == p.col;
-		}
-		return false;
+	public Position(int x, int y) {
+		this.x = x;
+		this.y = y;
 	}
 	
 	public String toString(){
-<<<<<<< HEAD
-		return (row + " " + col);
-=======
-		return "X: " + col + " Y: " + row;
->>>>>>> 3758f1d6e895fec6fe8437e96776d7062322eedf
+		return "X: " + x + " Y: " + y;
 	}
-	
-	public int hashCode(){
-		return row ^ col;
+
+
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + x;
+		result = prime * result + y;
+		return result;
 	}
-	
+
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Position other = (Position) obj;
+		if (x != other.x)
+			return false;
+		if (y != other.y)
+			return false;
+		return true;
+	}
 }
