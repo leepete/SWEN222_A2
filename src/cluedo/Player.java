@@ -119,7 +119,7 @@ public class Player {
 	 */
 	private int rollDice() {
 		Random rand = new Random();
-		int roll = rand.nextInt(6) + 1;
+		int roll = rand.nextInt(6) + 12;
 		return roll;
 	}
 
@@ -184,9 +184,9 @@ public class Player {
 		} //else there is only one free mat so poop the player onto that one
 		else {
 			//board move me to the placemat please
-			exitMat = pM.get("A");
+			exitMat = pM.values().iterator().next();
 		}
-		System.out.println(String.format("DB: Exitign from %s into pos %d, %d", room.toString(), exitMat.x, exitMat.y));
+		System.out.println(String.format("Exiting from %s", room.toString(), exitMat.x, exitMat.y));
 		room = null; //No longer in a room
 
 		//Leave the room
