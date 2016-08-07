@@ -65,11 +65,6 @@ public class Board {
 	}
 	
 	public Position movePlayer(Position oldP, Position newP, Player p) {
-		char c = p.toChar();
-		int oldX = oldP.x;
-		int oldY = oldP.y;
-		int newX = newP.x;
-		int newY = newP.y;
 		//Check if we are doing a valid move
 		if(validCorridorMove(newP)) {
 			teleport(p, oldP, newP);
