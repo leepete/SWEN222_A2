@@ -10,7 +10,7 @@ import java.util.Iterator;
 
 public class CluedoGame {
 
-	
+	//test
 	//Array of all the possible inputs from the player during their turn for easy error checking
 	private List<String> turnOptions = new ArrayList<String>();
 	private final int minPlayers = 1; //DEBUGGING +++++++++++++++++++++++++++++++++++++++++++
