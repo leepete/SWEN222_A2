@@ -15,7 +15,6 @@ public class Position {
 	}
 
 
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -42,3 +41,4 @@ public class Position {
 		return true;
 	}
 }
+

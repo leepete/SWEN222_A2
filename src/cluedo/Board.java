@@ -29,7 +29,7 @@ public class Board {
 		   "##===v=++=b    c=++++++++#".toCharArray(),
 		   "#++++x+++=v====v=+++++++##".toCharArray(),
 		   "##++++++++x++++x+++======#".toCharArray(),
-		   "#=====+++++++++++++<a   =#".toCharArray(),
+		   "#=====++++++++++++x<a   =#".toCharArray(),
 		   "#=   ====++=====+++=BILL=#".toCharArray(),
 		   "#= DINE =++= C =+++=   b=#".toCharArray(),
 		   "#=     a>x+= E =+++====v=#".toCharArray(),
@@ -64,12 +64,12 @@ public class Board {
 		}
 	}
 	
-	public Position movePlayer(Position oldP, Position newP, Player p) {
+	public boolean movePlayer(Position oldP, Position newP, Player p) {
 		//Check if we are doing a valid move
 		if(validCorridorMove(newP)) {
 			teleport(p, oldP, newP);
 			printBoard();
-			return newP;
+			return true;
 		} else if(validRoomEntry(oldP, newP)) { //Might be trying to enter a room
 			Room r = CluedoGame.placemats.get(oldP);
 			if(r != null) {
@@ -77,10 +77,10 @@ public class Board {
 				Position space = r.getSpaces()[p.getID()-1];
 				teleport(p, oldP, space);
 				printBoard();
-				return newP;
+				return true;
 			}
-		}
-		return null;
+		} System.out.println("You cannot go there! Try walking on a '+' or 'x' tile instead");
+		return false;
 	}
 	
 	/**
@@ -89,6 +89,7 @@ public class Board {
 	 * @param oldP
 	 * @param newP
 	 */
+
 	public void teleport(Player p, Position oldP, Position newP) {
 		activeBoard[newP.y][newP.x] = p.toChar(); //move the player to the new position
 		activeBoard[oldP.y][oldP.x] = board[oldP.y][oldP.x]; //return the old position back to its original state
@@ -131,13 +132,7 @@ public class Board {
 	}
 	
 	public boolean validRoomEntry(Position oldP, Position newP) {
-		int curX = oldP.x;
-		int curY = oldP.y;
-		int newX = newP.x;
-		int newY = newP.y;
-		if(board[curY][curX] == placemat && arrayContains(doors, activeBoard[newY][newX])) {
-			//Else if we're on a placemat and moving into a door
-			System.out.println("DEBUG: on a placemat and going into a room!");
+		if(board[oldP.y][oldP.x] == placemat && arrayContains(doors, activeBoard[newP.y][newP.x])) {
 			return true;
 		}
 		return false;
@@ -152,10 +147,8 @@ public class Board {
 	public boolean validCorridorMove(Position newP) {
 		int newX = newP.x;
 		int newY = newP.y;
-		System.out.println(String.format("DEBUG: trying to move to %d, %d: \'%c\'",newX, newY, activeBoard[newY][newX]));
 		//If attempting to move off the board, fail
 		if(newX < 0 || newX > BOARD_HEIGHT || newY < 0 || newY > BOARD_WIDTH) {
-			System.out.println("DEBUG: move failed due to attempted move off board");
 			return false;
 		}
 		
