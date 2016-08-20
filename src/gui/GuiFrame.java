@@ -65,6 +65,7 @@ public class GuiFrame extends JFrame implements ActionListener{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //closes
 		setVisible(true); //to see the window
 		buildGUI(); //goes into  constructor
+		gameStart();
 	}
 
 	private void buildGUI(){		// goes into start
@@ -282,7 +283,17 @@ public class GuiFrame extends JFrame implements ActionListener{
 		
 	}
 
+	public void gameStart(){
+		  while (true) {
+	            String result = JOptionPane.showInputDialog(this, "How many players?", "New Game", JOptionPane.QUESTION_MESSAGE);
+	            if (result == null) {
+	        
+	                    System.exit(0);
+	                }
+	                return;
+	            }
 
+	}
 	
 }
 
