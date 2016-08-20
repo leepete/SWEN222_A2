@@ -45,7 +45,7 @@ public class GuiFrame extends JFrame implements ActionListener{
 	private GuiPanel myGamePanel;
 	public JPanel masterPanel;
 
-	JButton accuse, suggest, endTurn, roll, stairs;
+	JButton accuse, suggest, endTurn, roll, stairs, exitRoom;
 	
 	
 	/**IMAGES*/
@@ -111,6 +111,9 @@ public class GuiFrame extends JFrame implements ActionListener{
 		JLabel playerWho = new JLabel("          Player 1 as");
 		playerWho.setFont(new Font("Helvetica", Font.BOLD, 25));
 		
+		exitRoom = new JButton("Exit Room");
+		exitRoom.setFont(new Font("Helvetica", Font.BOLD, 30));
+		
 		stairs = new JButton("Stairs");
 		stairs.setFont(new Font("Helvetica", Font.BOLD, 30));
 		
@@ -118,7 +121,7 @@ public class GuiFrame extends JFrame implements ActionListener{
 		endTurn.setFont(new Font("Helvetica", Font.BOLD, 30));
 		
 		//ImageIcon die = new ImageIcon(getClass().getResource("/die.png"));
-		 roll = new JButton("Roll Dice");
+		roll = new JButton("Roll Dice");
 		roll.setFont(new Font("Helvetica", Font.BOLD, 30));
 
 		gbc.gridx = 0;
@@ -129,10 +132,12 @@ public class GuiFrame extends JFrame implements ActionListener{
 		gbc.gridy = 2;
 		leftPane.add(playerWho, gbc);
 		gbc.gridy = 3;
-		leftPane.add(stairs, gbc);
+		leftPane.add(exitRoom, gbc);
 		gbc.gridy = 4;
-		leftPane.add(endTurn, gbc);
+		leftPane.add(stairs, gbc);
 		gbc.gridy = 5;
+		leftPane.add(endTurn, gbc);
+		gbc.gridy = 6;
 		leftPane.add(roll, gbc);
 		
 		/**Right SIDE*/
@@ -259,7 +264,7 @@ public class GuiFrame extends JFrame implements ActionListener{
 		add(showHand, BorderLayout.SOUTH);
 		
 	
-		//setResizable(true); //resizable window - set false when we get the board working
+		setResizable(false); //resizable window - set false when we get the board working
 	
 		pack(); //resizes panel so things fit, no extra whitespace
 		setLocationRelativeTo(null); //centres frame onscreen  when it runs
