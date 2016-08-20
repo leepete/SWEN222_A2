@@ -254,6 +254,7 @@ public class CluedoGame {
 		//numPlayers = getNumPlayers(s);
 		numPlayers = guiFrame.getNumPlayers();
 		int i = 1;
+		guiFrame.assignPlayerCharacters(numPlayers);
 		while(i <= numPlayers) {
 			Player p;
 			System.out.println(String.format("Player %d, please enter the character you wish to play as:", i));

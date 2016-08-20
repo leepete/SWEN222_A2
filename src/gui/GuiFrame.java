@@ -48,6 +48,8 @@ public class GuiFrame extends JFrame implements ActionListener{
 
 	private GuiPanel myGamePanel;
 	public JPanel masterPanel;
+	
+	private GuiPopups myPopups;
 
 	JButton accuse, suggest, endTurn, roll, stairs, exitRoom;
 	
@@ -60,6 +62,7 @@ public class GuiFrame extends JFrame implements ActionListener{
 	public GuiFrame(){
 		super("Cluedo GameBoard");
 		myGamePanel = new GuiPanel();
+		myPopups = new GuiPopups();
 	}
 
 	public void start(){
@@ -108,23 +111,28 @@ public class GuiFrame extends JFrame implements ActionListener{
 		
 		suggest = new JButton("Suggestion");
 		suggest.setFont(new Font("Helvetica", Font.BOLD, 30));
+		suggest.addActionListener(this);
 		
-		JLabel playerWho = new JLabel("          Player 1 as");
+		JLabel playerWho = new JLabel("Player 1 as");
 		playerWho.setFont(new Font("Helvetica", Font.BOLD, 25));
 		
 		exitRoom = new JButton("Exit Room");
 		exitRoom.setFont(new Font("Helvetica", Font.BOLD, 30));
+		exitRoom.addActionListener(this);
 		
 		stairs = new JButton("Stairs");
 		stairs.setFont(new Font("Helvetica", Font.BOLD, 30));
+		stairs.addActionListener(this);
 		
 		endTurn = new JButton("End Turn");
 		endTurn.setFont(new Font("Helvetica", Font.BOLD, 30));
+		endTurn.addActionListener(this);
 		
 		//ImageIcon die = new ImageIcon(getClass().getResource("/die.png"));
 		roll = new JButton("Roll Dice");
 		roll.setFont(new Font("Helvetica", Font.BOLD, 30));
-
+		roll.addActionListener(this);
+		
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		leftPane.add(accuse, gbc);
@@ -276,13 +284,14 @@ public class GuiFrame extends JFrame implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object button = e.getSource();
+		
 		if(button.equals(accuse)){
 			JOptionPane.showMessageDialog(null, "You have accused");
 			setVisible(true);
 		} else if(button.equals(suggest)) {
 			JOptionPane.showMessageDialog(null, "You have Suggested");
 			setVisible(true);
-		} else if(button.equals(exitRoom)) {
+		} else if(button == exitRoom) {
 			JOptionPane.showMessageDialog(null, "Exiting room");
 			setVisible(true);
 		} else if(button.equals(stairs)) {
@@ -302,25 +311,17 @@ public class GuiFrame extends JFrame implements ActionListener{
 	 * @return
 	 */
 	public int getNumPlayers() {
-		String[] options = {"3", "4", "5", "6"};
-		int rc = JOptionPane.showOptionDialog(null, "How Many Players Are In This Game?", "How many players", 
-					JOptionPane.DEFAULT_OPTION, 0, null, options, "3");
-		int numPlayers = rc+3;
-		
-		return numPlayers;
+		return myPopups.numberOfPlayers();
 	}
 	
 	/**
 	 * Assigns a character to a player
 	 * @return
 	 */
-	/*public Character assignPlayerCharacters() {
-		Character assignedCharacter;
-		String[] availableCharacters = {"Miss Scarlet", "Mrs. White", "Mrs. Peacock", "Colonel Mustard", "The Reverend Green", "Professor Plum"};
-		JComboBox charBox = new JComboBox(availableCharacters);
-		String selectedChar = (String)charBox.getSelectedItem();
+	public void assignPlayerCharacters(int nPlayers) {
+		myPopups.assignCharacters(nPlayers);
 		
-	}*/
+	}
 	
 }
 
