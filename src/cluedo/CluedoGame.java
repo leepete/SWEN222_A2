@@ -5,6 +5,8 @@ import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
 
+import gui.GuiFrame;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -159,6 +161,8 @@ public class CluedoGame {
 			new Position(14,14),
 			new Position(14,15)};
 	
+	public static GuiFrame guiFrame;
+	
 	
 	public CluedoGame() {
 		populateRooms();
@@ -237,6 +241,8 @@ public class CluedoGame {
 	 * resets the board
 	 */
 	public void startGame(Scanner s) {
+		guiFrame = new GuiFrame();
+		guiFrame.start();
 		resetGame();
 		System.out.println("Welcome to Cluedo, in this game you must solve the murder by correctly deducing the CHARACTER the WEAPON and the ROOM");
 		System.out.println("Your player number will be displayed on the board so don't forget it!");
@@ -245,7 +251,8 @@ public class CluedoGame {
 		System.out.println("To enter a room you must walk into the arrow while standing on its placemat. '#' and '=' and other players cannot be walked over so don't try!");
 		System.out.println("Finially, in the corner rooms you will find a letter 'Z' or 'Y', these are secret(ish) stairways leading to the room in the opposite corner");
 		//Get number of players
-		numPlayers = getNumPlayers(s);
+		//numPlayers = getNumPlayers(s);
+		numPlayers = guiFrame.getNumPlayers();
 		int i = 1;
 		while(i <= numPlayers) {
 			Player p;

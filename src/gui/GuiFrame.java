@@ -20,8 +20,11 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import javax.swing.JComboBox;
+import javax.swing.ComboBoxEditor;
 
 import cluedo.Board;
+import cluedo.CluedoGame;
 
 /**
  * The GameBoard is responsible for managing the GUI 
@@ -39,7 +42,7 @@ public class GuiFrame extends JFrame implements ActionListener{
 	//JFrame - organisation tool
 	//JPanel - can draw on it easier/content
 	
-	/**Draws shapes for us, we need 2 copies is for the save changes*/
+	/*Draws shapes for us, we need 2 copies is for the save changes*/
 	
 	private static Board myBoard;
 
@@ -53,20 +56,16 @@ public class GuiFrame extends JFrame implements ActionListener{
 	private ImageIcon img;
 	private JLabel imgLabel;
 	
-	
-
 
 	public GuiFrame(){
 		super("Cluedo GameBoard");
 		myGamePanel = new GuiPanel();
-		start(); 
 	}
 
 	public void start(){
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //closes
 		setVisible(true); //to see the window
-		buildGUI(); //goes into  constructor
-		gameStart();
+		buildGUI(); //goes into constructor
 	}
 
 	private void buildGUI(){		// goes into start
@@ -276,25 +275,52 @@ public class GuiFrame extends JFrame implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource() == accuse){
+		Object button = e.getSource();
+		if(button.equals(accuse)){
 			JOptionPane.showMessageDialog(null, "You have accused");
 			setVisible(true);
-			
-		}
+		} else if(button.equals(suggest)) {
+			JOptionPane.showMessageDialog(null, "You have Suggested");
+			setVisible(true);
+		} else if(button.equals(exitRoom)) {
+			JOptionPane.showMessageDialog(null, "Exiting room");
+			setVisible(true);
+		} else if(button.equals(stairs)) {
+			JOptionPane.showMessageDialog(null, "Using the stairs");
+			setVisible(true);
+		} else if(button.equals(endTurn)) {
+			JOptionPane.showMessageDialog(null, "ending turn");
+			setVisible(true);
+		} else if(button.equals(roll)) {
+			JOptionPane.showMessageDialog(null, "Rolling the dice");
+			setVisible(true);
+		}	
+	}
+
+	/**
+	 * Returns the number of players in this game
+	 * @return
+	 */
+	public int getNumPlayers() {
+		String[] options = {"3", "4", "5", "6"};
+		int rc = JOptionPane.showOptionDialog(null, "How Many Players Are In This Game?", "How many players", 
+					JOptionPane.DEFAULT_OPTION, 0, null, options, "3");
+		int numPlayers = rc+3;
 		
+		return numPlayers;
 	}
-
-	public void gameStart(){
-		  while (true) {
-	            String result = JOptionPane.showInputDialog(this, "How many players?", "New Game", JOptionPane.QUESTION_MESSAGE);
-	            if (result == null) {
-	        
-	                    System.exit(0);
-	                }
-	                return;
-	            }
-
-	}
+	
+	/**
+	 * Assigns a character to a player
+	 * @return
+	 */
+	/*public Character assignPlayerCharacters() {
+		Character assignedCharacter;
+		String[] availableCharacters = {"Miss Scarlet", "Mrs. White", "Mrs. Peacock", "Colonel Mustard", "The Reverend Green", "Professor Plum"};
+		JComboBox charBox = new JComboBox(availableCharacters);
+		String selectedChar = (String)charBox.getSelectedItem();
+		
+	}*/
 	
 }
 
