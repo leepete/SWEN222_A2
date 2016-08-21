@@ -385,6 +385,7 @@ public class Player implements KeyListener{
 	public String toString() {
 		return character.toString();
 	}
+	
 	@Override
 	public void keyPressed(KeyEvent arg0) {
 		// TODO Auto-generated method stub

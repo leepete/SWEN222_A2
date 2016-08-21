@@ -65,8 +65,8 @@ public class BoardPanel extends JPanel implements KeyListener, ActionListener {
 		super.paintComponent(g);
 		drawSquares(g);
 		//Graphics2D g2 = (Graphics2D)g;
-		g.setColor(Color.GREEN);
-		g.fillRect(x, y, 30, 30);
+//		g.setColor(Color.GREEN);
+//		g.fillRect(x, y, 30, 30);
 		//img.paintIcon(this, g, sqSize, sqSize);
 		//time.start();
 		

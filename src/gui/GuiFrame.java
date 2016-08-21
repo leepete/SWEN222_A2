@@ -103,7 +103,7 @@ public class GuiFrame extends JFrame implements ActionListener, KeyListener {
 		buttonPanel = new ButtonPanel(this);
 		checklistPanel = new CheckListPanel(); 
 		boardPanel = new BoardPanel();
-		handPanel = new HandPanel(new GridBagLayout()); //might need to change to a different layout
+		handPanel = new HandPanel(); //might need to change to a different layout
 		
 		boardPanel.addKeyListener(this);
 		/**Adding Menu Bar to frame*/
