@@ -252,7 +252,6 @@ public class CluedoGame {
 		//Assign each player a name and character
 		guiFrame.assignPlayerCharacters(numPlayers);
 		
-		System.out.println("All players successfully allocated");
 		//Make the solution
 		makeSolution();
 		//Deal the hands to the players
@@ -264,9 +263,7 @@ public class CluedoGame {
 		}
 		
 		iP = 0;
-		for(Player play : players) {
-			System.out.println(play.getID() + " " + play.getName());
-		}
+		
 		currentPlayer = players.get(iP);
 		turnOptions.add("ACCUSE");
 		currentPlayer.sameRoom = currentPlayer.inRoom();
@@ -280,7 +277,6 @@ public class CluedoGame {
 	public void createPlayer(String name, String playingAs, int playerID) {
 		Character c = characterNameMap.get(playingAs);
 		
-		System.out.println("Playing as: " + c.toString());
 		Player p = new Player(name, characterNameMap.get(playingAs), b, this, playerID);
 		players.add(p);
 	}
@@ -395,62 +391,6 @@ public class CluedoGame {
 		return refuter;
 	}
 	
-	/**
-	 * Asks the player what they would like to do on their turn
-	 * @param s
-	 */
-	/*public void turnInput(Scanner s, Player p) {
-		turnOptions.clear();
-		
-		
-		
-			
-		
-		//Print hand
-		for(String str : p.getHand()) {
-			System.out.print(str + ", ");
-		}System.out.println();
-		
-		if(playerRoom != null)System.out.print(String.format("You are currently in the %s ", playerRoom.toString()));
-		System.out.println("What would you like to do?");
-		
-		//Print options
-		for(int i = 0; i < turnOptions.size()-1; i++) {
-			System.out.print(turnOptions.get(i) + ", ");
-		}
-		//Print the last option separately so it doesnt have a comma after it and prints the newline
-		System.out.println(turnOptions.get(turnOptions.size()-1));
-		
-
-		
-		String input = s.next().toUpperCase(); //Get the input from the user and make it uppercase
-		s.nextLine(); //Consume the end of the line
-		//If the input was valid, find what the input was
-		if(turnOptions.contains(input)) {
-			switch(input) {
-			case "MOVE":
-				p.move();
-				validInput = true;
-				break;
-			case "STAIRS":
-				p.useStairs();
-				validInput = true;
-				break;
-			case "EXIT":
-				p.exitRoom(s);
-				validInput = true;
-				break;
-			case "ACCUSE":
-				//p.accuse(s);
-				validInput = true;
-				break;
-			}
-			}
-			else { //Else ask again
-				System.out.println(String.format("\'%s\' is an invalid input, please use an option provided.", input));
-			}
-		}
-	}*/
 	
 	
 	/**

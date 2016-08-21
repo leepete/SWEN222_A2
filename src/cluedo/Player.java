@@ -10,6 +10,9 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class Player {
+	/**
+	 * Player class that holds all the information about each player
+	 */
 
 	private Character character;
 	private String name;

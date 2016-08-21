@@ -20,7 +20,7 @@ import cluedo.CluedoGame;
 public class ButtonPanel extends JPanel implements ActionListener{
 	
 	/**
-	 * 
+	 * Holds all the buttons on the left side of the GUI 
 	 */
 	private static final long serialVersionUID = 1L;
 	
@@ -54,30 +54,37 @@ public class ButtonPanel extends JPanel implements ActionListener{
 		
 		/**Left SIDE*/
 		accuse = new JButton("Accuse");
+		accuse.setToolTipText("Accuse because Suggest doesn't work");
 		accuse.setFont(new Font("Helvetica", Font.BOLD, 30));
 		accuse.addActionListener(this);
 		
 		suggest = new JButton("Suggestion");
+		suggest.setToolTipText("Suggestion doesnt work rn");
 		suggest.setFont(new Font("Helvetica", Font.BOLD, 30));
 		suggest.addActionListener(this);
 		
 		playerWho = new JLabel("");
+		playerWho.setToolTipText("Indicates what player's turn");
 		playerWho.setFont(new Font("Helvetica", Font.BOLD, 20));
 		
 		exitRoom = new JButton("Exit Room");
+		exitRoom.setToolTipText("Only when you are in a room");
 		exitRoom.setFont(new Font("Helvetica", Font.BOLD, 30));
 		exitRoom.addActionListener(this);
 		
 		stairs = new JButton("Stairs");
+		stairs.setToolTipText("If a room has stairs, you can fast travel");
 		stairs.setFont(new Font("Helvetica", Font.BOLD, 30));
 		stairs.addActionListener(this);
 		
 		endTurn = new JButton("End Turn");
+		endTurn.setToolTipText("Like the button says");
 		endTurn.setFont(new Font("Helvetica", Font.BOLD, 30));
 		endTurn.addActionListener(this);
 		
 		//ImageIcon die = new ImageIcon(getClass().getResource("../die1.jpg"));
 		roll = new JButton("Roll");
+		roll.setToolTipText("Roll if you are lucky!");
 		roll.setFont(new Font("Helvetica", Font.BOLD, 30));
 		roll.addActionListener(this);
 		

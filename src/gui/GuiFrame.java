@@ -29,7 +29,7 @@ import cluedo.Player;
 
 public class GuiFrame extends JFrame implements ActionListener, KeyListener {
 	/**
-	 * 
+	 * Frame class holds the panels and acts as a medium between the game logic and the GUI
 	 */
 	private static final long serialVersionUID = 1L;
 	
@@ -108,10 +108,17 @@ public class GuiFrame extends JFrame implements ActionListener, KeyListener {
 
 		/** Initialise Panels */
 		buttonPanel = new ButtonPanel(this);
+		buttonPanel.setToolTipText("Buttons");
 		checklistPanel = new CheckListPanel(); 
 
 		boardPanel = new BoardPanel(board);
+
+		checklistPanel.setToolTipText("Your Checklist");
+		
+		boardPanel.setToolTipText("The Board");
+
 		handPanel = new HandPanel();
+		handPanel.setToolTipText("Your Hand");
 		
 		boardPanel.addKeyListener(this);
 		/**Adding Menu Bar to frame*/

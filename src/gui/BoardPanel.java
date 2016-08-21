@@ -3,25 +3,19 @@ package gui;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.image.BufferedImage;
 
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import cluedo.Board;
-import cluedo.CluedoGame;
-import cluedo.Player;
+
 
 public class BoardPanel extends JPanel implements KeyListener {
-
+	/**
+	 * Panel for the graphic board, bugged out and has eaten my players so the game is unplayable in its current state :(
+	 */
 	private static final long serialVersionUID = 1L;
 
 	private final int sqSize = 26;
@@ -111,7 +105,6 @@ public class BoardPanel extends JPanel implements KeyListener {
 				}
 				g.setColor(Color.BLACK);
 				g.drawRect(y*sqSize,x*sqSize ,sqSize, sqSize);
-				
 			}
 		}
 	}
