@@ -89,7 +89,7 @@ public class AccusationPanel extends JPanel implements ActionListener{
 	
 		values[0] = getSelectedButtonText(roomButtons); //room
 		values[1] = getSelectedButtonText(weaponButtons); //weapon
-		values[3] = getSelectedButtonText(characterButtons); //character
+		values[2] = getSelectedButtonText(characterButtons); //character
 		
 		return values;
 	}
@@ -125,11 +125,14 @@ public class AccusationPanel extends JPanel implements ActionListener{
 		initialiseRoomButtons();
 		initialiseWeaponButtons();
 		initialiseCharButtons();
-		
+
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		
+		gbc.gridwidth = 9;
 		add(title, gbc);
+		
+		gbc.gridwidth = 1;
 		gbc.gridy++;
 		
 		//add the rooms to the panel
@@ -217,12 +220,12 @@ public class AccusationPanel extends JPanel implements ActionListener{
 	private void initialiseCharButtons() {
 		characterRadioList = new ArrayList<JRadioButton>();
 		
-		scarletRB = new JRadioButton("Miss Scarlet");
-		mustardRB = new JRadioButton("Colonel Mustard");
-		plumRB = new JRadioButton("Professor Plum");
-		whiteRB = new JRadioButton("Mrs White");
-		peacockRB = new JRadioButton("Mrs Peacock");
-		greenRB = new JRadioButton("The Reverend Green");
+		scarletRB = new JRadioButton("Miss Scarlet", true);
+		mustardRB = new JRadioButton("Colonel Mustard", false);
+		plumRB = new JRadioButton("Professor Plum", false);
+		whiteRB = new JRadioButton("Mrs White", false);
+		peacockRB = new JRadioButton("Mrs Peacock", false);
+		greenRB = new JRadioButton("The Reverend Green", false);
 		
 		characterRadioList.add(scarletRB);
 		characterRadioList.add(mustardRB);

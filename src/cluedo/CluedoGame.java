@@ -163,6 +163,8 @@ public class CluedoGame {
 	
 	public static GuiFrame guiFrame;
 	
+	//The player whose turn it currently is
+	private Player currentPlayer;
 	
 	public CluedoGame() {
 		populateRooms();
@@ -242,15 +244,17 @@ public class CluedoGame {
 	 */
 	public void startGame(Scanner s) {
 		resetGame();
-//		
-		
+
 		//Find out how many players there are
 		numPlayers = guiFrame.getNumPlayers();
+		
 		//Assign each player a name and character
 		guiFrame.assignPlayerCharacters(numPlayers);
 		
 		System.out.println("All players successfully allocated");
+		//Make the solution
 		makeSolution();
+		//Deal the hands to the players
 		shuffleNDeal();
 		
 		//Print the board with all the players in their starting positions here
@@ -274,6 +278,14 @@ public class CluedoGame {
 	}
 	
 	/**
+	 * Returns the player whose turn it currently is
+	 * @return
+	 */
+	public Player getCurrentPlayer() {
+		return currentPlayer;
+	}
+	
+	/**
 	 * Player turn cycle,
 	 * While there are still players in the game and someone hasn't won,
 	 * 	iterate over the players in the game
@@ -287,18 +299,18 @@ public class CluedoGame {
 		//'playing' is a boolean toggled when someone wins the game or when only 1 player remains
 		while(playing) {
 			turnOptions.clear();
-			Player player = players.get(iP);
+			currentPlayer = players.get(iP);
 			 //If the current player is not playing then move to the next player
-			if(!player.isPlaying()) {
+			if(!currentPlayer.isPlaying()) {
 				iP = (iP+1)%numPlayers;
 				continue;
 			}
 			//Beginning of turn
-			player.sameRoom = player.inRoom(); //For ensuring they dont reenter the same room for another guess on the same turn
-			turnInput(s, player);
+			currentPlayer.sameRoom = currentPlayer.inRoom(); //For ensuring they dont reenter the same room for another guess on the same turn
+			turnInput(s, currentPlayer); //TODO REMOVE ME
 			//If the player is in a different room to what they started their turn in they can make a guess
-			if(player.inRoom() != player.sameRoom && player.isPlaying()) {
-				askGuess(s, player);
+			if(currentPlayer.inRoom() != currentPlayer.sameRoom && currentPlayer.isPlaying()) {
+				askGuess(s, currentPlayer);
 				
 			}
 			iP = (iP+1)%numPlayers; //Increment the current player, always keeping it within the bounds of the array
@@ -443,7 +455,7 @@ public class CluedoGame {
 					validInput = true;
 					break;
 				case "ACCUSE":
-					p.accuse(s);
+					//p.accuse(s);
 					validInput = true;
 					break;
 				}

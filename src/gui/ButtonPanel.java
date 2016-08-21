@@ -31,8 +31,6 @@ public class ButtonPanel extends JPanel implements ActionListener{
 	private GuiFrame frame;
 	private GridBagConstraints gbc = new GridBagConstraints(); 
 	
-	Player p;
-	
 	public ButtonPanel(GuiFrame frame){
 		super();
 		this.frame = frame;
@@ -41,7 +39,6 @@ public class ButtonPanel extends JPanel implements ActionListener{
 		setLayout(new GridBagLayout());
 		this.setVisible(true);
 		setButtons();
-		//this.p = player;
 	}
 
 	
@@ -105,7 +102,11 @@ public class ButtonPanel extends JPanel implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		Object button = e.getSource();
 		if(button.equals(accuse)){
-			frame.accuse();
+			String[] accusation = frame.accuse();
+			if(accusation != null) {
+				frame.game.getCurrentPlayer().accuse(accusation);
+			}
+			
 
 		}else if(button.equals(suggest)) {
 			JOptionPane.showMessageDialog(null, "You have Suggested");
@@ -122,7 +123,7 @@ public class ButtonPanel extends JPanel implements ActionListener{
 		} else if(button.equals(roll)) {
 			
 			JOptionPane.showMessageDialog(null, "Rolling the dice");
-			p.move();
+			frame.game.getCurrentPlayer().move();
 			
 		}	
 	

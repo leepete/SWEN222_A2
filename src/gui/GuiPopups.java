@@ -19,7 +19,7 @@ public class GuiPopups implements ActionListener {
 	 * @return
 	 */
 	public String[] makeAccusation() {
-		String[] options = {"Accuse", "Cancle"};
+		String[] options = {"Accuse", "Cancel"};
 		AccusationPanel accusePanel = new AccusationPanel();
 		int rn = JOptionPane.showOptionDialog(null, accusePanel, 
 				"Make An Accusation", JOptionPane.PLAIN_MESSAGE, JOptionPane.PLAIN_MESSAGE, null, options, options[1]);
@@ -27,7 +27,7 @@ public class GuiPopups implements ActionListener {
 		if(rn == 0) {
 			return accusePanel.getValues();
 		}
-		else { //else they cancled and we need to deal with that...
+		else { //else they canceled and we need to deal with that...
 			return null;
 		}
 	}
@@ -50,7 +50,7 @@ public class GuiPopups implements ActionListener {
 	 * @param numPlayers
 	 */
 	public String[] assignCharacters(int id, ArrayList<String> unavailableChars) {
-		String[] options = {"Ok"};
+		String[] options = {"OK"};
 		CharacterAssignmentPanel charAssignPanel = new CharacterAssignmentPanel(id, unavailableChars);
 		JOptionPane.showOptionDialog(null, charAssignPanel, "Assign Character", 
 				JOptionPane.PLAIN_MESSAGE, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);

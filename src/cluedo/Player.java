@@ -304,8 +304,24 @@ public class Player implements KeyListener{
 	}
 
 	/**
-	 * Make a game ending accusation
+	 * 
+	 * @param choice
 	 */
+	public void accuse(String[] choice) {
+		Suggestion suggest = new Suggestion(choice[0],choice[1], choice[2]);
+		System.out.println("suggest: " + suggest.toString());
+		if(!CluedoGame.solution.equals(suggest)) {
+			playing = false;
+			room = game.cellar;
+			Position space = room.getSpaces()[id-1];
+			board.teleport(this, position, space);
+		}
+		game.gameOver(this);
+	}
+	
+	/**
+	 * Make a game ending accusation
+	 
 	public void accuse(Scanner s) {
 		Suggestion suggest = makeSuggestion(s, false);
 		if(CluedoGame.solution.equals(suggest)){
@@ -318,7 +334,7 @@ public class Player implements KeyListener{
 			board.teleport(this, position, space);
 			game.gameOver(this);
 		}
-	}
+	}*/
 
 	/**
 	 * Sets the players hand
