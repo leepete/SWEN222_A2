@@ -244,12 +244,12 @@ public class CluedoGame {
 		guiFrame = new GuiFrame();
 		guiFrame.start();
 		resetGame();
-		System.out.println("Welcome to Cluedo, in this game you must solve the murder by correctly deducing the CHARACTER the WEAPON and the ROOM");
-		System.out.println("Your player number will be displayed on the board so don't forget it!");
-		System.out.println("Any inputs you give are case insensitive but very strict on spelling!");
-		System.out.println("The '+' tiles on the board represent walkable corridoors while the 'x' tiles are placemats which are located outside each door indicated by an arrow");
-		System.out.println("To enter a room you must walk into the arrow while standing on its placemat. '#' and '=' and other players cannot be walked over so don't try!");
-		System.out.println("Finially, in the corner rooms you will find a letter 'Z' or 'Y', these are secret(ish) stairways leading to the room in the opposite corner");
+//		System.out.println("Welcome to Cluedo, in this game you must solve the murder by correctly deducing the CHARACTER the WEAPON and the ROOM");
+//		System.out.println("Your player number will be displayed on the board so don't forget it!");
+//		System.out.println("Any inputs you give are case insensitive but very strict on spelling!");
+//		System.out.println("The '+' tiles on the board represent walkable corridoors while the 'x' tiles are placemats which are located outside each door indicated by an arrow");
+//		System.out.println("To enter a room you must walk into the arrow while standing on its placemat. '#' and '=' and other players cannot be walked over so don't try!");
+//		System.out.println("Finially, in the corner rooms you will find a letter 'Z' or 'Y', these are secret(ish) stairways leading to the room in the opposite corner");
 		//Get number of players
 		//numPlayers = getNumPlayers(s);
 		numPlayers = guiFrame.getNumPlayers();
@@ -257,10 +257,10 @@ public class CluedoGame {
 		guiFrame.assignPlayerCharacters(numPlayers);
 		while(i <= numPlayers) {
 			Player p;
-			System.out.println(String.format("Player %d, please enter the character you wish to play as:", i));
-			for(Character c : availableChars.values()) {
-				System.out.println(c.toString());
-			}
+//			System.out.println(String.format("Player %d, please enter the character you wish to play as:", i));
+//			for(Character c : availableChars.values()) {
+//				System.out.println(c.toString());
+//			}
 			String plCharChoice = s.nextLine().toUpperCase();
 			if(isValidCharName(plCharChoice)) {
 				//Add a player with this character to the array

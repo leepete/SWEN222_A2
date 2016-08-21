@@ -56,12 +56,12 @@ public class Board {
 	}
 	
 	public void printBoard() {
-		for(int x = 0; x < BOARD_HEIGHT; x++) {
-			for(int y = 0; y < BOARD_WIDTH; y++) {
-				System.out.print(activeBoard[x][y]);
-			}
-			System.out.println();
-		}
+//		for(int x = 0; x < BOARD_HEIGHT; x++) {
+//			for(int y = 0; y < BOARD_WIDTH; y++) {
+//				System.out.print(activeBoard[x][y]);
+//			}
+//			System.out.println();
+//		}
 	}
 	
 	public boolean movePlayer(Position oldP, Position newP, Player p) {

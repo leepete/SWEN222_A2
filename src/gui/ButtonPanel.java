@@ -3,6 +3,7 @@ package gui;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
@@ -27,11 +28,11 @@ public class ButtonPanel extends JPanel implements ActionListener{
 	private JLabel playerWho; //this updates which players turn it is
 	private GridBagConstraints gbc = new GridBagConstraints(); 
 
-	public ButtonPanel(LayoutManager layout){
+	public ButtonPanel(){
 		super();
 		this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
 		this.setMinimumSize(new Dimension(WIDTH, HEIGHT));
-		setLayout(layout);
+		setLayout(new GridBagLayout());
 		this.setVisible(true);
 		setButtons();
 	}
@@ -84,17 +85,17 @@ public class ButtonPanel extends JPanel implements ActionListener{
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		add(accuse, gbc);
-		gbc.gridy = 1;
+		gbc.gridy++;
 		add(suggest, gbc);
-		gbc.gridy = 2;
+		gbc.gridy++;
 		add(playerWho, gbc);
-		gbc.gridy = 3;
+		gbc.gridy++;
 		add(exitRoom, gbc);
-		gbc.gridy = 4;
+		gbc.gridy++;
 		add(stairs, gbc);
-		gbc.gridy = 5;
+		gbc.gridy++;
 		add(endTurn, gbc);
-		gbc.gridy = 6;
+		gbc.gridy++;
 		add(roll, gbc);
 		
 	

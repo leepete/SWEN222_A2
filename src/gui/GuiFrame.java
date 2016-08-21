@@ -7,9 +7,7 @@ import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.BoxLayout;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import cluedo.Board;
@@ -18,7 +16,7 @@ import cluedo.Board;
  * The GameBoard is responsible for managing the GUI 
  */
 
-public class GuiFrame extends JFrame implements ActionListener{
+public class GuiFrame extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
 
 	private static Board myBoard;
@@ -64,7 +62,7 @@ public class GuiFrame extends JFrame implements ActionListener{
 		
 
 		/** Initialise Panels */
-		buttonPanel = new ButtonPanel(new GridBagLayout());
+		buttonPanel = new ButtonPanel();
 		checklistPanel = new CheckListPanel(new GridBagLayout()); 
 		boardPanel = new BoardPanel();
 		handPanel = new HandPanel(new GridBagLayout()); //might need to change to a different layout
@@ -106,6 +104,7 @@ public class GuiFrame extends JFrame implements ActionListener{
 		myPopups.assignCharacters(nPlayers);
 		
 	}
+
 	
 }
 
