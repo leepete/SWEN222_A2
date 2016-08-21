@@ -21,9 +21,15 @@ public class GuiPopups implements ActionListener {
 	public String[] makeAccusation() {
 		String[] options = {"Accuse", "Cancle"};
 		AccusationPanel accusePanel = new AccusationPanel();
-		JOptionPane.showOptionDialog(null, accusePanel, 
+		int rn = JOptionPane.showOptionDialog(null, accusePanel, 
 				"Make An Accusation", JOptionPane.PLAIN_MESSAGE, JOptionPane.PLAIN_MESSAGE, null, options, options[1]);
-		return accusePanel.getValues();
+		//If they pressed accuse
+		if(rn == 0) {
+			return accusePanel.getValues();
+		}
+		else { //else they cancled and we need to deal with that...
+			return null;
+		}
 	}
 	
 	/**
