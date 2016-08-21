@@ -329,4 +329,5 @@ public class Player {
 	public String toString() {
 		return character.toString();
 	}
+
 }

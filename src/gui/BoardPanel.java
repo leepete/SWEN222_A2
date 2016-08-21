@@ -43,6 +43,7 @@ public class BoardPanel extends JPanel implements KeyListener {
 	protected void paintComponent(Graphics g){
 		super.paintComponent(g);
 		drawSquares(g);
+
 	}
 
 	/**
