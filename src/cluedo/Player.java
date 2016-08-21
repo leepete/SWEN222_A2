@@ -1,16 +1,14 @@
 package cluedo;
 
-import java.util.Random;
-import java.util.Scanner;
-import java.util.Set;
+import java.awt.event.KeyAdapter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
+import java.util.Scanner;
 
-public class Player {
+public class Player extends KeyAdapter{
 
 	private Character character;
 	private boolean playing = true;

@@ -3,8 +3,8 @@ package gui;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -27,18 +27,18 @@ public class ButtonPanel extends JPanel implements ActionListener{
 	private JLabel playerWho; //this updates which players turn it is
 	private GridBagConstraints gbc = new GridBagConstraints(); 
 
-	public ButtonPanel(LayoutManager layout){
+	public ButtonPanel(){
 		super();
 		this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
 		this.setMinimumSize(new Dimension(WIDTH, HEIGHT));
-		setLayout(layout);
+		setLayout(new GridBagLayout());
 		this.setVisible(true);
 		setButtons();
 	}
 
 	
 	public void setButtons(){
-		/**Panels will now have access to GridBagConstraints*/
+		/**Panel will now have access to GridBagConstraints*/
 		gbc.anchor = GridBagConstraints.WEST; //ALIGNS THE CHECKBOXES
 		gbc.fill = GridBagConstraints.BOTH; //aligns buttons perfect - the lengths are even
 		gbc.insets = new Insets(10,15,15,15);
@@ -47,54 +47,47 @@ public class ButtonPanel extends JPanel implements ActionListener{
 		
 		/**Left SIDE*/
 		accuse = new JButton("Accuse");
-		//accuse.setPreferredSize(new Dimension(250, 90));
 		accuse.setFont(new Font("Helvetica", Font.BOLD, 30));
 		accuse.addActionListener(this);
 		
 		suggest = new JButton("Suggestion");
-		//suggest.setPreferredSize(new Dimension(250, 90));
 		suggest.setFont(new Font("Helvetica", Font.BOLD, 30));
 		suggest.addActionListener(this);
 		
 		playerWho = new JLabel("          Player 1 as");
-		//playerWho.setPreferredSize(new Dimension(250, 100));
 		playerWho.setFont(new Font("Helvetica", Font.BOLD, 25));
 		
 		exitRoom = new JButton("Exit Room");
-		//exitRoom.setPreferredSize(new Dimension(250, 90));
 		exitRoom.setFont(new Font("Helvetica", Font.BOLD, 30));
 		exitRoom.addActionListener(this);
 		
 		stairs = new JButton("Stairs");
-		//.setPreferredSize(new Dimension(250, 90));
 		stairs.setFont(new Font("Helvetica", Font.BOLD, 30));
 		stairs.addActionListener(this);
 		
 		endTurn = new JButton("End Turn");
-		//endTurn.setPreferredSize(new Dimension(250, 90));
 		endTurn.setFont(new Font("Helvetica", Font.BOLD, 30));
 		endTurn.addActionListener(this);
 		
 		//ImageIcon die = new ImageIcon(getClass().getResource("/die.png"));
 		roll = new JButton("Roll Dice");
-		//roll.setPreferredSize(new Dimension(250, 90));
 		roll.setFont(new Font("Helvetica", Font.BOLD, 30));
 		roll.addActionListener(this);
 		
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		add(accuse, gbc);
-		gbc.gridy = 1;
+		gbc.gridy++;
 		add(suggest, gbc);
-		gbc.gridy = 2;
+		gbc.gridy++;
 		add(playerWho, gbc);
-		gbc.gridy = 3;
+		gbc.gridy++;
 		add(exitRoom, gbc);
-		gbc.gridy = 4;
+		gbc.gridy++;
 		add(stairs, gbc);
-		gbc.gridy = 5;
+		gbc.gridy++;
 		add(endTurn, gbc);
-		gbc.gridy = 6;
+		gbc.gridy++;
 		add(roll, gbc);
 		
 	
@@ -102,7 +95,6 @@ public class ButtonPanel extends JPanel implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
 		Object button = e.getSource();
 		if(button.equals(accuse)){
 			JOptionPane.showMessageDialog(null, "You have accused");

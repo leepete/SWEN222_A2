@@ -3,6 +3,7 @@ package gui;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.LayoutManager;
 
@@ -29,11 +30,11 @@ public class CheckListPanel extends JPanel {
 	private static final int WIDTH = 290;
 	private static final int HEIGHT = 620;
 
-	public CheckListPanel(LayoutManager layout){
+	public CheckListPanel(){
 		super();
 		setPreferredSize(new Dimension(WIDTH, HEIGHT));
 		setMinimumSize(new Dimension(WIDTH, HEIGHT));
-		setLayout(layout);
+		setLayout(new GridBagLayout());
 		setVisible(true);
 		check = new JLabel("CheckList");
 		check.setFont(new Font("Helvetica", Font.BOLD, 20));
