@@ -24,8 +24,6 @@ public class CharacterAssignmentPanel extends JPanel implements ActionListener{
 	 */
 	private static final long serialVersionUID = 1L;
 
-	//	private static final int WIDTH = 290;
-	//	private static final int HEIGHT = 620;
 
 	private JRadioButton scarlet, mustard, plum, white, peacock, green;
 	private Map<String, JRadioButton> characterRadioMap;
@@ -33,24 +31,19 @@ public class CharacterAssignmentPanel extends JPanel implements ActionListener{
 	private ButtonGroup characterButtons;
 	private JLabel playerWho; //this updates which players turn it is
 	private JTextField playerNameTF;
-	private int playerID;
 	private GridBagConstraints gbc;
 
 
-	public CharacterAssignmentPanel(int playerID, ArrayList<String> unavailableChars){
+	public CharacterAssignmentPanel(ArrayList<String> unavailableChars){
 		super();
 		
 		this.unavailableChars = unavailableChars;
-		this.playerID = playerID;
 		gbc = new GridBagConstraints();
 		characterRadioMap = new HashMap<String, JRadioButton>();
 		playerNameTF = new JTextField(20);
 		characterButtons = new ButtonGroup();
-		playerWho = new JLabel(String.format("Player %d, Please enter a name and choose your character", playerID));
+		playerWho = new JLabel(String.format("Please enter a name and choose your character"));
 		
-
-		//this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
-		//this.setMinimumSize(new Dimension(WIDTH, HEIGHT));
 		setLayout(new GridBagLayout());
 		
 		setContents();
@@ -59,12 +52,7 @@ public class CharacterAssignmentPanel extends JPanel implements ActionListener{
 
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		Object button = e.getSource();
-
-
-	}
+	public void actionPerformed(ActionEvent e) {}
 	
 	/**
 	 * Returns the name and character that the player chose
@@ -77,7 +65,7 @@ public class CharacterAssignmentPanel extends JPanel implements ActionListener{
 		String characterName = getSelectedButtonText();
 		
 		//If the user doesn't enter a name, they will be given the name of their character
-		if(playerName == "") {
+		if(playerName.equals("")) {
 			playerName = characterName;
 		}
 		

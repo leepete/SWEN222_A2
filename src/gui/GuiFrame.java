@@ -3,7 +3,6 @@ package gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,6 +11,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -163,6 +163,13 @@ public class GuiFrame extends JFrame implements ActionListener, KeyListener {
 		about.addActionListener(this);			
 	}
 
+	/**
+	 * Updates the button options available to the player
+	 * @param options
+	 */
+	public void updateOptions(List<String> options) {
+		buttonPanel.enableOptions(options);
+	}
 	
 
 	@Override
@@ -211,15 +218,11 @@ public class GuiFrame extends JFrame implements ActionListener, KeyListener {
 		int i = 1;
 		ArrayList<String> unavailableCharacters = new ArrayList<String>();
 		while(i <= nPlayers) {
-			String[] values = myPopups.assignCharacters(i, unavailableCharacters);
+			String[] values = myPopups.assignCharacters(unavailableCharacters);
 			game.createPlayer(values[0], values[1], i);
 			unavailableCharacters.add(values[1]);
 			i++;
 		}
-	}
-	
-	public boolean playerMovement() {
-		return true;
 	}
 	
 	public String[] accuse() {
@@ -229,18 +232,26 @@ public class GuiFrame extends JFrame implements ActionListener, KeyListener {
 	public String[] suggest() {
 		return myPopups.makeSuggestion();
 	}
+	
+	/**
+	 * Sends the end of turn back to the board
+	 */
+	public void endTurn() {
+		game.endTurn();
+	}
+
 
 	@Override
 	public void keyPressed(KeyEvent e) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-//		if(CluedoGame.currentPlayer.remainingMoves() <= 0) {
-//			return;
-//		}
+		//Can't move without moves available
+		if(CluedoGame.currentPlayer.remainingMoves() <= 0) {
+			return;
+		}
 		int code = e.getKeyCode();
 		if(code == KeyEvent.VK_RIGHT || code == KeyEvent.VK_D){
 			CluedoGame.currentPlayer.move(Player.Direction.RIGHT);

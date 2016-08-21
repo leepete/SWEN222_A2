@@ -14,18 +14,19 @@ import java.util.Iterator;
 
 public class CluedoGame {
 
-	//test
+	
 	//Array of all the possible inputs from the player during their turn for easy error checking
 	private List<String> turnOptions = new ArrayList<String>();
 	private final int minPlayers = 3;
 	private final int maxPlayers = 6;
+	private int iP = 0;
 
 	private static final int numRooms = 9;
 	
 	//List of the players in the game
 	public List<Player> players = new ArrayList<Player>();
 	//Number of players in the game
-	public int numPlayers;
+	public int numPlayers = 0;
 	//Mapping character to their name
 	public Map<String, Character> characterNameMap = new HashMap<String, Character>();
 	
@@ -37,7 +38,6 @@ public class CluedoGame {
 	
 	//The answer to ~~life the universe and everything~~ the game of cluedo
 	public static Suggestion solution;
-	public boolean playing = true;
 	public Board b;
 	
 	//Array holding all the players 
@@ -169,8 +169,7 @@ public class CluedoGame {
 	public CluedoGame() {
 		populateRooms();
 		this.b = new Board();
-		Scanner s = new Scanner(System.in);
-		startGame(s);
+		startGame();
 	}
 	
 	/**
@@ -242,7 +241,7 @@ public class CluedoGame {
 	 * deals the hands
 	 * resets the board
 	 */
-	public void startGame(Scanner s) {
+	public void startGame() {
 		resetGame();
 
 		//Find out how many players there are
@@ -262,7 +261,14 @@ public class CluedoGame {
 			b.activeBoard[p.getPosition().y][p.getPosition().x] = p.toChar();
 		}
 		
-		turnCycle(s);
+		iP = 0;
+		for(Player play : players) {
+			System.out.println(play.getID() + " " + play.getName());
+		}
+		currentPlayer = players.get(iP);
+		turnOptions.add("ACCUSE");
+		currentPlayer.sameRoom = currentPlayer.inRoom();
+		startTurn();
 	}
 	
 	/**
@@ -277,59 +283,62 @@ public class CluedoGame {
 		players.add(p);
 	}
 	
-	/**
-	 * Player turn cycle,
-	 * While there are still players in the game and someone hasn't won,
-	 * 	iterate over the players in the game
-	 * 	 print: the player who's turn it is, their hand, and what room they're in (if applic)
-	 *   print: Options available to the player; Roll dice/use stairs/make accusation
-	 *    delegate to other methods for each of the options above
-	 */
-	public void turnCycle(Scanner s) {
-		
-		int iP = 0; //index of the current player from the players array list
-		//'playing' is a boolean toggled when someone wins the game or when only 1 player remains
-		while(playing) {
-			turnOptions.clear();
-			currentPlayer = players.get(iP);
-			 //If the current player is not playing then move to the next player
-			if(!currentPlayer.isPlaying()) {
-				iP = (iP+1)%numPlayers;
-				continue;
-			}
-			//Beginning of turn
-			currentPlayer.sameRoom = currentPlayer.inRoom(); //For ensuring they dont reenter the same room for another guess on the same turn
-			//turnInput(s, currentPlayer); //TODO REMOVE ME
-			//If the player is in a different room to what they started their turn in they can make a guess
-			if(currentPlayer.inRoom() != currentPlayer.sameRoom && currentPlayer.isPlaying()) {
-				askGuess(s, currentPlayer);
-				
-			}
-			iP = (iP+1)%numPlayers; //Increment the current player, always keeping it within the bounds of the array
-		}
+	
+	public void startTurn() {
+		System.out.println(currentPlayer.getName());
+		findOptions();
+		b.printBoard();
 	}
 	
-	public void askGuess(Scanner s, Player p) {
-		boolean validInput = false;
-		
-		while(!validInput) {
-			
-			System.out.println(String.format("You are in the %s, would you like to make a suggestion? 'YES' 'NO'", p.inRoom()));
-			String input = s.next().toUpperCase();
-			s.nextLine();
-			switch(input) {
-			case "YES":
-				//p.guess(s);
-				validInput = true;
-				break;
-			case "NO":
-				validInput = true;
-				break;
-			default:
-				System.out.println("Invalid input, please try again");
-			}
-		}
+	public void endTurn() {
+		turnOptions.clear();
+		iP = (iP+1)%numPlayers;
+		currentPlayer = players.get(iP);
+		turnOptions.add("ACCUSE");
+		//Sameroom is the room you start the turn in, for ensuring you cant  
+		currentPlayer.sameRoom = currentPlayer.inRoom();
+		startTurn();
 	}
+	
+	/**
+	 * Finds out what options are available to the player
+	 */
+	private void findOptions() {
+		if(!currentPlayer.isPlaying()) {
+			turnOptions.clear();
+			turnOptions.add("END TURN");
+			return;
+		}
+		
+		Room playerRoom = currentPlayer.inRoom();
+		//If player is in a room
+		if(playerRoom != null) {
+			//And there are stairs
+			if(playerRoom.getStairRoom() != null) {
+				//Make using the stairs an option
+				turnOptions.add("STAIRS");
+			}
+			//Make exiting the room and option
+			turnOptions.add("EXIT ROOM"); //NOTE will ask the player what door they wish to exit out of if there is more than one door
+		}
+		else { //Moving is only an option if the player is not in a room
+			turnOptions.add("ROLL");
+
+		}
+		guiFrame.updateOptions(turnOptions);
+	}
+	
+	public void enterRoom() {
+		if(currentPlayer.inRoom() != currentPlayer.sameRoom) {
+			//Now in a valid suggestion room
+			turnOptions.add("SUGGESTION");
+		} else {
+			turnOptions.clear();
+			turnOptions.add("END TURN");
+		}
+		guiFrame.updateOptions(turnOptions);
+	}
+
 	
 	/**
 	 * Returns true if the suggestion presented was refuted by a player
@@ -390,67 +399,50 @@ public class CluedoGame {
 	 */
 	/*public void turnInput(Scanner s, Player p) {
 		turnOptions.clear();
-		boolean validInput = false;
-		Room playerRoom = p.inRoom();
-		if(playerRoom != null) {
-			if(playerRoom.getStairRoom() != null) {
-				//Make using the stairs an option
-				turnOptions.add("STAIRS");
-			}
-			//Make exiting the room and option
-			turnOptions.add("EXIT"); //NOTE will ask the player what door they wish to exit out of if there is more than one door
-		}
-		else { //Moving is only an option if the player is not in a room
-			turnOptions.add("MOVE");
-		}
-		//Make making an accusation an option
-		turnOptions.add("ACCUSE");
 		
-		//Loop until the player gives a valid input
-		while(!validInput) {
-		//	b.printBoard();
+		
+		
 			
-			//Prompts
-			System.out.print(String.format("Player %d, it is your turn! Hand: ",p.getID()));
-			//Print hand
-			for(String str : p.getHand()) {
-				System.out.print(str + ", ");
-			}System.out.println();
-			
-			if(playerRoom != null)System.out.print(String.format("You are currently in the %s ", playerRoom.toString()));
-			System.out.println("What would you like to do?");
-			
-			//Print options
-			for(int i = 0; i < turnOptions.size()-1; i++) {
-				System.out.print(turnOptions.get(i) + ", ");
-			}
-			//Print the last option separately so it doesnt have a comma after it and prints the newline
-			System.out.println(turnOptions.get(turnOptions.size()-1));
-			
+		
+		//Print hand
+		for(String str : p.getHand()) {
+			System.out.print(str + ", ");
+		}System.out.println();
+		
+		if(playerRoom != null)System.out.print(String.format("You are currently in the %s ", playerRoom.toString()));
+		System.out.println("What would you like to do?");
+		
+		//Print options
+		for(int i = 0; i < turnOptions.size()-1; i++) {
+			System.out.print(turnOptions.get(i) + ", ");
+		}
+		//Print the last option separately so it doesnt have a comma after it and prints the newline
+		System.out.println(turnOptions.get(turnOptions.size()-1));
+		
 
-			
-			String input = s.next().toUpperCase(); //Get the input from the user and make it uppercase
-			s.nextLine(); //Consume the end of the line
-			//If the input was valid, find what the input was
-			if(turnOptions.contains(input)) {
-				switch(input) {
-				case "MOVE":
-					p.move();
-					validInput = true;
-					break;
-				case "STAIRS":
-					p.useStairs();
-					validInput = true;
-					break;
-				case "EXIT":
-					p.exitRoom(s);
-					validInput = true;
-					break;
-				case "ACCUSE":
-					//p.accuse(s);
-					validInput = true;
-					break;
-				}
+		
+		String input = s.next().toUpperCase(); //Get the input from the user and make it uppercase
+		s.nextLine(); //Consume the end of the line
+		//If the input was valid, find what the input was
+		if(turnOptions.contains(input)) {
+			switch(input) {
+			case "MOVE":
+				p.move();
+				validInput = true;
+				break;
+			case "STAIRS":
+				p.useStairs();
+				validInput = true;
+				break;
+			case "EXIT":
+				p.exitRoom(s);
+				validInput = true;
+				break;
+			case "ACCUSE":
+				//p.accuse(s);
+				validInput = true;
+				break;
+			}
 			}
 			else { //Else ask again
 				System.out.println(String.format("\'%s\' is an invalid input, please use an option provided.", input));
@@ -515,7 +507,6 @@ public class CluedoGame {
 			}
 		}
 		if(i <= 1){
-			playing = false;
 			for(Player p : players) {
 				if(p.isPlaying()) {
 					System.out.println(String.format("CONGRATULATIONS! Player %d as %s, has won the game by default...", p.getID(), p.toString()));
@@ -529,13 +520,14 @@ public class CluedoGame {
 	 * Resets all the fields for a new game
 	 */
 	public void resetGame() {
-		guiFrame = new GuiFrame(this);
-		guiFrame.start();
+		
 		resetCharacters();
 		b.resetBoard();
 		numPlayers = 0;
-		playing = true;
 		resetDeck();
+		guiFrame = new GuiFrame(this);
+		guiFrame.start();
+		
 	}
 	
 	/**

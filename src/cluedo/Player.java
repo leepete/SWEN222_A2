@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Scanner;
 
-public class Player implements KeyListener{
+public class Player {
 
 	private Character character;
 	private String name;
@@ -72,7 +72,14 @@ public class Player implements KeyListener{
 	 */
 	public Position getPosition() {
 		return position;
-	}	
+	}
+	
+	/**
+	 * Ends the players turn
+	 */
+	public void endTurn() {
+		remainingSteps = 0;	
+	}
 	
 	/**
 	 * Sets the position of the player
@@ -107,9 +114,6 @@ public class Player implements KeyListener{
 					if(goRight())
 						remainingSteps--;	
 					break;
-//				case "STOP":
-//					remainingSteps = 0;
-//					break;
 				default: {
 					System.out.println("Invalid move input please try again");
 				}
@@ -138,7 +142,7 @@ public class Player implements KeyListener{
 		
 		Position space = room.getSpaces()[id-1];
 		board.teleport(this, position, space);
-		//board.printBoard();
+		
 		System.out.println(String.format("Used stairs from %s, and is now in %s", oldRoom, room));
 		//Make suggestion
 	}
@@ -153,8 +157,9 @@ public class Player implements KeyListener{
 		}
 		System.out.println("Entering room: " + entRoom.toString());
 		this.room = entRoom;
-		remainingSteps = 0;//Stop moving when we enter a room
-		//Make suggestion
+		endTurn();//Stop moving when we enter a room
+		game.enterRoom();
+		
 	}
 
 	/**
@@ -197,7 +202,8 @@ public class Player implements KeyListener{
 		//Leave the room
 		board.teleport(this, position, exitMat);
 		position = exitMat;
-		//game.turnInput(s, this);
+		
+		game.startTurn();
 	}
 	
 	/**
@@ -322,20 +328,5 @@ public class Player implements KeyListener{
 	 */
 	public String toString() {
 		return character.toString();
-	}
-	@Override
-	public void keyPressed(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void keyReleased(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void keyTyped(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-		
 	}
 }

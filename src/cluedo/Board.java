@@ -10,7 +10,7 @@ import java.util.List;
 public class Board {
 
 	public static final int BOARD_WIDTH = 26;
-	public static final int BOARD_HEIGHT = 26;
+	public static final int BOARD_HEIGHT = 27;
 
 	private char corridor = '+';
 	private char boundary = '#';
@@ -21,7 +21,7 @@ public class Board {
 
 
 	private final char[][] board = {   
-			
+			"##########################".toCharArray(),
 			"##########+####+##########".toCharArray(),
 			"#=====Y#+++====+++#======#".toCharArray(),
 			"#=    =++===  ===++=CONS=#".toCharArray(),
@@ -54,29 +54,25 @@ public class Board {
 
 	public Board(){
 		resetBoard(); // sets the active board to the actual board
-		//printBoard();	
 	}
-	
-
-//	public void printBoard() {
-//		for(int x = 0; x < BOARD_HEIGHT; x++) {
-//			for(int y = 0; y < BOARD_WIDTH; y++) {
-//				System.out.print(activeBoard[x][y]);
-//			}
-//			System.out.println();
-//		}
-//	}
 	
 	public char[][] getBoard(){
 		return activeBoard;
 	}
 	
+	public void printBoard() {
+		for(int x = 0; x < BOARD_HEIGHT; x++) {
+			for(int y = 0; y < BOARD_WIDTH; y++) {
+				System.out.print(activeBoard[x][y]);
+			}
+			System.out.println();
+		}
+	}
 
 	public boolean movePlayer(Position oldP, Position newP, Player p) {
 		//Check if we are doing a valid move
 		if(validCorridorMove(newP)) {
 			teleport(p, oldP, newP);
-		//	printBoard();
 			return true;
 		} else if(validRoomEntry(oldP, newP)) { //Might be trying to enter a room
 			Room r = CluedoGame.placemats.get(oldP);
@@ -84,10 +80,9 @@ public class Board {
 				p.enterRoom(r);
 				Position space = r.getSpaces()[p.getID()-1];
 				teleport(p, oldP, space);
-				//printBoard();
 				return true;
 			}
-		} System.out.println("You cannot go there! Try walking on a '+' or 'x' tile instead");
+		}
 		return false;
 	}
 
@@ -159,7 +154,6 @@ public class Board {
 		if(newX < 0 || newX > BOARD_HEIGHT || newY < 0 || newY > BOARD_WIDTH) {
 			return false;
 		}
-
 		return walkable(newP);
 	}
 
@@ -170,14 +164,4 @@ public class Board {
 			}
 		}
 	}
-
-
-	public void draw(Graphics g, int row, int col){
-		g.setColor(new Color(255, 76, 77));
-		g.fillRect(col, row, 24, 24);
-		g.setColor(Color.lightGray);
-		g.drawRect(col, row, 24, 24);
-	}
-
-
 }

@@ -26,7 +26,7 @@ public class BoardPanel extends JPanel implements KeyListener {
 
 	private final int sqSize = 26;
 	private final int BOARD_WIDTH = 26; 
-	private final int BOARD_HEIGHT = 26; 
+	private final int BOARD_HEIGHT = 27; 
 	Board board;
 
 	public BoardPanel(Board board){
@@ -37,18 +37,12 @@ public class BoardPanel extends JPanel implements KeyListener {
 		this.setMinimumSize(new Dimension(WIDTH, HEIGHT));
 		this.setVisible(true);
 
-		/**Key Implementation*/;
-		
-		
-
 	}
 
 	@Override
 	protected void paintComponent(Graphics g){
 		super.paintComponent(g);
-		
 		drawSquares(g);
-		
 	}
 
 	/**
@@ -93,13 +87,10 @@ public class BoardPanel extends JPanel implements KeyListener {
 					g.setColor(Color.GRAY);
 					g.drawRect(y*sqSize,x*sqSize ,sqSize, sqSize);
 					g.fillRect(y*sqSize,x*sqSize ,sqSize, sqSize);
-				}if(guiBoard[x][y] == p1) {
+				}if(guiBoard[x][y] == p1 || guiBoard[x][y] == p2 || guiBoard[x][y] == p3 || guiBoard[x][y] == p4 || guiBoard[x][y] == p5 || guiBoard[x][y] == p6) {
 					g.setColor(Color.pink);
-					g.drawLine(y*sqSize, x*sqSize, sqSize, sqSize);
-					
-//					g2.setColor(Color.BLACK);
-//					g2.drawRect(y*sqSize,x*sqSize ,sqSize, sqSize);
-//					g2.fillRect(y*sqSize,x*sqSize ,sqSize, sqSize);
+					g.fillOval(y*sqSize, x*sqSize, sqSize, sqSize);
+
 				}if(guiBoard[x][y] == stairY) {
 					g.setColor(Color.CYAN);
 					g.drawRect(y*sqSize,x*sqSize ,sqSize, sqSize);
