@@ -105,10 +105,13 @@ public class GuiFrame extends JFrame implements ActionListener, KeyListener {
 
 		/** Initialise Panels */
 		buttonPanel = new ButtonPanel(this);
+		buttonPanel.setToolTipText("Buttons");
 		checklistPanel = new CheckListPanel(); 
-
+		checklistPanel.setToolTipText("Your Checklist");
 		boardPanel = new BoardPanel(game.b);
+		boardPanel.setToolTipText("The Board");
 		handPanel = new HandPanel();
+		handPanel.setToolTipText("Your Hand");
 		
 		boardPanel.addKeyListener(this);
 		/**Adding Menu Bar to frame*/

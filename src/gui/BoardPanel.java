@@ -111,7 +111,6 @@ public class BoardPanel extends JPanel implements KeyListener {
 				}
 				g.setColor(Color.BLACK);
 				g.drawRect(y*sqSize,x*sqSize ,sqSize, sqSize);
-				
 			}
 		}
 	}

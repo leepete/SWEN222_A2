@@ -20,7 +20,7 @@ public class HandPanel extends JPanel {
 	private static final int HEIGHT = 150;
 
 	BufferedImage image;
-	JLabel l1,l2,l3,l4,l5;
+	JLabel l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,l16,l17,l18;
 	GridBagConstraints gbc = new GridBagConstraints();
 	
 
@@ -79,8 +79,49 @@ public class HandPanel extends JPanel {
 		gbc.gridx++;
 		gbc.gridy=0;
 		add(l5, gbc);
-//		l6 = new JLabel("lab");
-//		add(l6);
+		
+		ImageIcon g5 = new ImageIcon(getClass().getClassLoader().getResource("diningroom.png"));
+		l6 = new JLabel(g5);
+		gbc.gridx++;
+		gbc.gridy=0;
+		add(l6, gbc);
+		
+		ImageIcon g6 = new ImageIcon(getClass().getClassLoader().getResource("library.png"));
+		l7 = new JLabel(g6);
+		gbc.gridx++;
+		gbc.gridy=0;
+		add(l7, gbc);
+		
+		ImageIcon g7 = new ImageIcon(getClass().getClassLoader().getResource("lounge.png"));
+		l8 = new JLabel(g7);
+		gbc.gridx++;
+		gbc.gridy=0;
+		add(l8, gbc);
+		
+		ImageIcon g8 = new ImageIcon(getClass().getClassLoader().getResource("Rope.png"));
+		l9 = new JLabel(g8);
+		gbc.gridx++;
+		gbc.gridy=0;
+		add(l9, gbc);
+		
+//		ImageIcon g9 = new ImageIcon(getClass().getClassLoader().getResource("Spanner.png"));
+//		l10 = new JLabel(g9);
+//		gbc.gridx++;
+//		gbc.gridy=0;
+//		add(l10, gbc);
+		
+//		ImageIcon g10 = new ImageIcon(getClass().getClassLoader().getResource("study.png"));
+//		l11 = new JLabel(g10);
+//		gbc.gridx++;
+//		gbc.gridy=0;
+//		add(l11, gbc);
+////		
+//		ImageIcon g11 = new ImageIcon(getClass().getClassLoader().getResource("Mrs_White.png"));
+//		l12 = new JLabel(g11);
+//		gbc.gridx++;
+//		gbc.gridy=0;
+//		add(l12, gbc);
+
 	}
 
 
