@@ -54,17 +54,18 @@ public class Board {
 
 	public Board(){
 		resetBoard(); // sets the active board to the actual board
-		printBoard();	
+		//printBoard();	
 	}
 	
 
-	public void printBoard() {
-		for(int x = 0; x < BOARD_HEIGHT; x++) {
-			for(int y = 0; y < BOARD_WIDTH; y++) {
-				System.out.print(activeBoard[x][y]);
-			}
-		}
-	}
+//	public void printBoard() {
+//		for(int x = 0; x < BOARD_HEIGHT; x++) {
+//			for(int y = 0; y < BOARD_WIDTH; y++) {
+//				System.out.print(activeBoard[x][y]);
+//			}
+//			System.out.println();
+//		}
+//	}
 	
 	public char[][] getBoard(){
 		return activeBoard;
@@ -75,7 +76,7 @@ public class Board {
 		//Check if we are doing a valid move
 		if(validCorridorMove(newP)) {
 			teleport(p, oldP, newP);
-			printBoard();
+		//	printBoard();
 			return true;
 		} else if(validRoomEntry(oldP, newP)) { //Might be trying to enter a room
 			Room r = CluedoGame.placemats.get(oldP);
@@ -83,7 +84,7 @@ public class Board {
 				p.enterRoom(r);
 				Position space = r.getSpaces()[p.getID()-1];
 				teleport(p, oldP, space);
-				printBoard();
+				//printBoard();
 				return true;
 			}
 		} System.out.println("You cannot go there! Try walking on a '+' or 'x' tile instead");

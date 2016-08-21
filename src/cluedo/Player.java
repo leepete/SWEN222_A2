@@ -135,7 +135,7 @@ public class Player implements KeyListener{
 		
 		Position space = room.getSpaces()[id-1];
 		board.teleport(this, position, space);
-		board.printBoard();
+		//board.printBoard();
 		System.out.println(String.format("Used stairs from %s, and is now in %s", oldRoom, room));
 		//Make suggestion
 	}

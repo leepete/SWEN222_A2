@@ -429,7 +429,7 @@ public class CluedoGame {
 		
 		//Loop until the player gives a valid input
 		while(!validInput) {
-			b.printBoard();
+		//	b.printBoard();
 			
 			//Prompts
 			System.out.print(String.format("Player %d, it is your turn! Hand: ",p.getID()));

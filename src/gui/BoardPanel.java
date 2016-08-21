@@ -54,48 +54,8 @@ public class BoardPanel extends JPanel implements KeyListener, ActionListener {
 		setFocusTraversalKeysEnabled(false);
 		requestFocusInWindow();
 		revalidate();
-		//movement();
+
 	}
-
-	
-	//	public void importImage(){		
-	//		imgLabel = new JLabel(img);
-	//		//add(imgLabel,gbc);
-	//		add(imgLabel);
-	//	}
-
-//	public void movement(){
-//		rect = new Rectangle(400,400,sqSize, sqSize);
-//		addKeyListener(new KeyListener(){
-//
-//			@Override
-//			public void keyPressed(KeyEvent e) {
-//				int code = e.getKeyCode();
-//				if(code == KeyEvent.VK_RIGHT || code == KeyEvent.VK_KP_RIGHT){
-//					rect.setLocation(rect.x + 2, rect.y);
-//				}else if(code == KeyEvent.VK_LEFT || code == KeyEvent.VK_KP_LEFT){
-//					rect.setLocation(rect.x - 2, rect.y);
-//				}else if(code == KeyEvent.VK_UP || code == KeyEvent.VK_KP_UP){
-//					rect.setLocation(rect.x, rect.y-2);
-//				}else if(code == KeyEvent.VK_DOWN || code == KeyEvent.VK_KP_DOWN){
-//					rect.setLocation(rect.x , rect.y+2);
-//				}
-//				repaint();
-//			}
-//
-//			@Override
-//			public void keyReleased(KeyEvent e) {
-//				// TODO Auto-generated method stub
-//
-//			}
-//
-//			@Override
-//			public void keyTyped(KeyEvent e) {
-//				// TODO Auto-generated method stub
-//
-//			}
-//		});
-//	}
 
 
 	public void paintComponent(Graphics g){
@@ -117,23 +77,13 @@ public class BoardPanel extends JPanel implements KeyListener, ActionListener {
 		Board b = new Board();
 		
 		char[][] board = b.getBoard();
-		String s = "#+=x^<>v123456";
-		
-		char boundary = s.charAt(0);
-		char corridor = s.charAt(1);
-		char wall = s.charAt(2);
-		char placemat = s.charAt(3);
-		char door1 = s.charAt(4);
-		char door2 = s.charAt(5);
-		char door3 = s.charAt(6);
-		char door4 = s.charAt(7);
-		char player1 = s.charAt(8);
-		char player2 = s.charAt(9);
-		char player3 = s.charAt(10);
-		char player4 = s.charAt(11);
-		char player5 = s.charAt(12);
-		char player6 = s.charAt(13);
-
+		char corridor = '+';
+		char boundary = '#';
+		char wall = '=';
+		char placemat = 'x';
+		char[] doors = {'^', '<', '>', 'v'};
+		char[] players = {'1', '2', '3', '4', '5', '6'};
+				
 		for(int x = 0; x < BOARD_HEIGHT; x++) {
 			for	(int y = 0; y < BOARD_WIDTH; y++) {
 				if(board[x][y] == (boundary)){
@@ -152,8 +102,7 @@ public class BoardPanel extends JPanel implements KeyListener, ActionListener {
 					g2.setColor(Color.GRAY);
 					g2.drawRect(x*sqSize,y*sqSize ,sqSize, sqSize);
 					g2.fillRect(x*sqSize,y*sqSize ,sqSize, sqSize);
-				}else if(board[x][y] == door1 || board[x][y] == door2 ||
-						board[x][y] == door3 || board[x][y] == door4){
+				}if(arrayContains(doors, board[x][y])){
 //					g2.setColor(Color.MAGENTA);
 //					g2.drawRect(x*sqSize,y*sqSize ,sqSize, sqSize);
 //					g2.fillRect(x*sqSize,y*sqSize ,sqSize, sqSize);
@@ -164,9 +113,7 @@ public class BoardPanel extends JPanel implements KeyListener, ActionListener {
 					g2.fillRect(x*sqSize,y*sqSize,sqSize-10,sqSize/2-10);
 					g2.setColor(new Color(255,255,0));
 					g2.fillOval((x*sqSize),y*sqSize,10,10);
-				}else if(board[x][y] == player1 || board[x][y] == player2 ||
-						board[x][y] == player3 || board[x][y] == player4
-						|| board[x][y] == player5 || board[x][y] == player6){
+				}if(arrayContains(players, board[x][y])){
 					g2.setColor(Color.CYAN);
 					g2.drawRect(x*sqSize,y*sqSize ,sqSize, sqSize);
 					g2.fillRect(x*sqSize,y*sqSize ,sqSize, sqSize);
@@ -176,6 +123,15 @@ public class BoardPanel extends JPanel implements KeyListener, ActionListener {
 				//squares[i][j].draw(g2);
 				repaint();
 			}}
+	}
+	
+	private boolean arrayContains(char[] array, char c) {
+		for(int i = 0; i < array.length; i++) {
+			if(array[i] == c) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 
