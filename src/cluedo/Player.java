@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Scanner;
 
-public class Player implements KeyListener{
+public class Player {
 
 	private Character character;
 	private String name;
@@ -24,7 +24,7 @@ public class Player implements KeyListener{
 	private CluedoGame game;
 	private List<String> hand = new ArrayList<String>();
 
-	
+	public static enum Direction {UP, DOWN, LEFT, RIGHT};
 	
 	public Player(String name, Character character, Board board, CluedoGame game, int id) {
 		this.name = name;
@@ -41,7 +41,11 @@ public class Player implements KeyListener{
 	public Room inRoom() {
 		return room;
 	}
-
+	
+	public int remainingMoves() {
+		return remainingSteps;
+	}
+	
 	/**
 	 * Returns the players hand
 	 * @return
@@ -68,7 +72,14 @@ public class Player implements KeyListener{
 	 */
 	public Position getPosition() {
 		return position;
-	}	
+	}
+	
+	/**
+	 * Ends the players turn
+	 */
+	public void endTurn() {
+		remainingSteps = 0;	
+	}
 	
 	/**
 	 * Sets the position of the player
@@ -84,50 +95,41 @@ public class Player implements KeyListener{
 	 * Takes an input key from the user and attempts to move in that direction
 	 * @return
 	 */
-	public void move() {
-		remainingSteps = rollDice();
+	public boolean move(Direction dir) {
 
-		while(remainingSteps > 0){
-			System.out.println(String.format("Moves remaining: %d. Input a direction: 'W' 'A' 'S' 'D' or 'STOP'", remainingSteps));
-			System.out.println(position.toString());
-			//String key = s.next().toUpperCase(); //Take the first string from the user
-			//s.nextLine();//End the line		
-			
-//			switch(){
-//				case "W":
-//					if(goUp())
-//						remainingSteps--;
-//					break;
-//				case "A":
-//					if(goLeft())
-//						remainingSteps--;
-//					break;
-//				case "S":
-//					if(goDown())
-//						remainingSteps--;
-//					break;
-//				case "D":
-//					if(goRight())
-//						remainingSteps--;	
-//					break;
-//				case "STOP":
-//					remainingSteps = 0;
-//					break;
-//				default: {
-//					System.out.println("Invalid move input please try again");
-//				}
-	}		
+			switch(dir){
+				case UP:
+					if(goUp())
+						remainingSteps--;
+					break;
+				case LEFT:
+					if(goLeft())
+						remainingSteps--;
+					break;
+				case DOWN:
+					if(goDown())
+						remainingSteps--;
+					break;
+				case RIGHT:
+					if(goRight())
+						remainingSteps--;	
+					break;
+				default: {
+					System.out.println("Invalid move input please try again");
+				}
+			}
+		
+		return false;		
 	}
 	
 		
 	/**
-	 * Returns a random(ish) number between 1 and 6 to represent the players dice roll
+	 * generates a random(ish) number between 1 and 6 to represent the players dice roll
 	 * @return
 	 */
-	public int rollDice() {
+	public void rollDice() {
 		Random rand = new Random();
-		int roll = rand.nextInt(6) + 1;
-		return roll;
+		remainingSteps = rand.nextInt(6) + 1;
 	}
 
 	/**
@@ -140,7 +142,7 @@ public class Player implements KeyListener{
 		
 		Position space = room.getSpaces()[id-1];
 		board.teleport(this, position, space);
-		//board.printBoard();
+		
 		System.out.println(String.format("Used stairs from %s, and is now in %s", oldRoom, room));
 		//Make suggestion
 	}
@@ -155,8 +157,9 @@ public class Player implements KeyListener{
 		}
 		System.out.println("Entering room: " + entRoom.toString());
 		this.room = entRoom;
-		remainingSteps = 0;//Stop moving when we enter a room
-		//Make suggestion
+		endTurn();//Stop moving when we enter a room
+		game.enterRoom();
+		
 	}
 
 	/**
@@ -199,7 +202,8 @@ public class Player implements KeyListener{
 		//Leave the room
 		board.teleport(this, position, exitMat);
 		position = exitMat;
-		game.turnInput(s, this);
+		
+		game.startTurn();
 	}
 	
 	/**
@@ -226,98 +230,38 @@ public class Player implements KeyListener{
 		}
 		return mat;
 	}
-	
+
 	/**
-	 * Makes a guess at the solution without risking end of game.
-	 * Other players (whether or not they are still playing) refute your guess.
-	 * @param s
-	 * @param guess
-	 * @return
+	 * Takes a String array, containing a room weapon and character.
+	 * Converts this into a Suggestion object, and compares this with the solution
+	 * @param choice
 	 */
-	public Suggestion makeSuggestion(Scanner s, boolean guess) {
-		boolean valid = false;
-
-		String input;
-		Character c = null;
-		Weapon w= null;
-		Room r= null;
-		
-		//Players cannot guess for a room other than the one they are in
-		if(guess) {
-			r = room;
+	public void accuse(String[] choice) {
+		Suggestion suggest = new Suggestion(choice[0],choice[1], choice[2]);
+		System.out.println("suggest: " + suggest.toString());
+		if(!CluedoGame.solution.equals(suggest)) {
+			playing = false;
+			room = CluedoGame.cellar;
+			Position space = room.getSpaces()[id-1];
+			board.teleport(this, position, space);
 		}
-		else {
-			while(!valid){
-				System.out.println("Please enter a room:");
-				input = s.nextLine().toUpperCase();
-				r = new Room(input);
-				if(Arrays.asList(CluedoGame.roomsArray).contains(r)){
-					valid = true;
-				} else{
-					System.out.println("Invalid Room!");
-				}
-			}
-			valid = false;
-		}
-		
-
-		while(!valid){
-			System.out.println("Please enter a weapon:");
-			input = s.nextLine().toUpperCase();
-			w = new Weapon(input);
-			if(Arrays.asList(CluedoGame.weaponsArray).contains(w)){
-				valid = true;
-			} else{
-				System.out.println("Invalid Weapon, please try again");
-			}
-		}
-		valid = false;
-
-		while(!valid){
-			System.out.println("Please enter a character:");
-			input = s.nextLine().toUpperCase();
-			c = new Character(input);
-			if(Arrays.asList(CluedoGame.charactersArray).contains(c)){
-				valid = true;
-			} else{
-				System.out.println("Invalid Character, please try again");
-			}
-		}
-		valid = false;
-
-		return new Suggestion(r.toString(),w.toString(), c.toString());
+		game.gameOver(this);
 	}
 	
 	/**
-	 * Make a guess with the provided suggestion
+	 * Takes a String array, containing a room weapon and character.
+	 * Converts this into a Suggestion object ==========================================
+	 * @param choice
 	 */
-	public void guess(Scanner s) {
-		Suggestion suggest = makeSuggestion(s, true);
-		 //Iterates over the other players, if they have one of the suggestion items in their hand they choose which to show this player and the guess is over
-		String[] refuter = game.refuteGuess(s, suggest, this);
+	public void suggest(String[] choice) {
+		Suggestion suggest = new Suggestion(choice[0],choice[1], choice[2]);
+		System.out.println("suggest: " + suggest.toString());
+		String[] refuter = game.refuteGuess(suggest, this);
 		if(refuter[0] == null) {
 			System.out.println("No one was able to refute your guess! Could be time to solve the case?");
 			return;
 		}
 		System.out.println(String.format("Player %d refutes your guess by reveiling %s from their hand.", Integer.parseInt(refuter[0]), refuter[1]));
-		
-	}
-
-	/**
-	 * Make a game ending accusation
-	 */
-	public void accuse(Scanner s) {
-		Suggestion suggest = makeSuggestion(s, false);
-		if(CluedoGame.solution.equals(suggest)){
-			game.gameOver(this);
-		} else{
-			//check if the game is over because there is only one player remaining
-			playing = false;
-			room = game.cellar;
-			Position space = room.getSpaces()[id-1];
-			board.teleport(this, position, space);
-			game.gameOver(this);
-		}
 	}
 
 	/**
@@ -385,6 +329,7 @@ public class Player implements KeyListener{
 	public String toString() {
 		return character.toString();
 	}
+<<<<<<< HEAD
 	
 	@Override
 	public void keyPressed(KeyEvent arg0) {
@@ -401,4 +346,6 @@ public class Player implements KeyListener{
 		// TODO Auto-generated method stub
 		
 	}
+=======
+>>>>>>> 57af85c9b0c7621ceaec9a5fa43417adf6a09d46
 }

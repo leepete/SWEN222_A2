@@ -39,6 +39,17 @@ public class Suggestion {
 		return character;
 	}
 	
+	/**
+	 * Returns true if the suggestion contains the (String) card passed in
+	 * @return
+	 */
+	public boolean contains(String card) {
+		if(weapon.equals(card) || room.equals(card) || character.equals(card)) {
+			return true;
+		}
+		return false;
+	}
+	
 	public String toString() {
 		return String.format("R: %s W: %s C: %s", room.toString(), weapon.toString(), character.toString() );
 	}

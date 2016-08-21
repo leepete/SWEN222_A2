@@ -18,6 +18,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
+import cluedo.CluedoGame;
+
 public class AccusationPanel extends JPanel implements ActionListener{
 
 	/**
@@ -48,10 +50,13 @@ public class AccusationPanel extends JPanel implements ActionListener{
 	
 	private int playerID;
 	private GridBagConstraints gbc;
+	
+	//Boolean flag, true if this is a guess, false if its an accusation
+	private boolean guess;
 
-
-	public AccusationPanel(){
+	public AccusationPanel(boolean guess){
 		super();
+		this.guess = guess;
 		
 		gbc = new GridBagConstraints();
 		
@@ -89,7 +94,7 @@ public class AccusationPanel extends JPanel implements ActionListener{
 	
 		values[0] = getSelectedButtonText(roomButtons); //room
 		values[1] = getSelectedButtonText(weaponButtons); //weapon
-		values[3] = getSelectedButtonText(characterButtons); //character
+		values[2] = getSelectedButtonText(characterButtons); //character
 		
 		return values;
 	}
@@ -125,11 +130,14 @@ public class AccusationPanel extends JPanel implements ActionListener{
 		initialiseRoomButtons();
 		initialiseWeaponButtons();
 		initialiseCharButtons();
-		
+
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		
+		gbc.gridwidth = 9;
 		add(title, gbc);
+		
+		gbc.gridwidth = 1;
 		gbc.gridy++;
 		
 		//add the rooms to the panel
@@ -155,6 +163,22 @@ public class AccusationPanel extends JPanel implements ActionListener{
 		}
 		gbc.gridy++;
 		
+		//If it is a guess then the room must be the one the player is in currently
+		if(guess) {
+			//Select the current room
+			JRadioButton currentRoom = roomRadioMap.get(CluedoGame.currentPlayer.inRoom().toString());
+			currentRoom.setSelected(true);
+			
+			//Grey out all other rooms
+			for(JRadioButton rb : roomRadioList) {
+				if(!rb.equals(currentRoom)) {
+					rb.setEnabled(false);
+				}
+			}
+		} else { //Else enable the first one by default
+			kitchenRB.setSelected(true);
+		}
+		
 	}
 	
 	/**
@@ -163,15 +187,15 @@ public class AccusationPanel extends JPanel implements ActionListener{
 	private void initialiseRoomButtons() {
 		roomRadioList = new ArrayList<JRadioButton>();
 		
-		kitchenRB = new JRadioButton("KITCHEN", true);
-		ballRoomRB = new JRadioButton("BALL ROOM", false);
-		conservatoryRB = new JRadioButton("CONSERVATORY", false);
-		billiardRoomRB = new JRadioButton("BILLIARD ROOM", false);
-		libraryRB = new JRadioButton("LIBRARY", false);
-		studyRB = new JRadioButton("STUDY", false);
-		hallRB = new JRadioButton("HALL", false);
-		loungeRB = new JRadioButton("LOUNGE", false);
-		diningRoomRB = new JRadioButton("DINING ROOM", false);
+		kitchenRB = new JRadioButton("KITCHEN");
+		ballRoomRB = new JRadioButton("BALL ROOM");
+		conservatoryRB = new JRadioButton("CONSERVATORY");
+		billiardRoomRB = new JRadioButton("BILLIARD ROOM");
+		libraryRB = new JRadioButton("LIBRARY");
+		studyRB = new JRadioButton("STUDY");
+		hallRB = new JRadioButton("HALL");
+		loungeRB = new JRadioButton("LOUNGE");
+		diningRoomRB = new JRadioButton("DINING ROOM");
 		
 		roomRadioList.add(kitchenRB);
 		roomRadioList.add(ballRoomRB);
@@ -217,12 +241,12 @@ public class AccusationPanel extends JPanel implements ActionListener{
 	private void initialiseCharButtons() {
 		characterRadioList = new ArrayList<JRadioButton>();
 		
-		scarletRB = new JRadioButton("Miss Scarlet");
-		mustardRB = new JRadioButton("Colonel Mustard");
-		plumRB = new JRadioButton("Professor Plum");
-		whiteRB = new JRadioButton("Mrs White");
-		peacockRB = new JRadioButton("Mrs Peacock");
-		greenRB = new JRadioButton("The Reverend Green");
+		scarletRB = new JRadioButton("Miss Scarlet", true);
+		mustardRB = new JRadioButton("Colonel Mustard", false);
+		plumRB = new JRadioButton("Professor Plum", false);
+		whiteRB = new JRadioButton("Mrs White", false);
+		peacockRB = new JRadioButton("Mrs Peacock", false);
+		greenRB = new JRadioButton("The Reverend Green", false);
 		
 		characterRadioList.add(scarletRB);
 		characterRadioList.add(mustardRB);

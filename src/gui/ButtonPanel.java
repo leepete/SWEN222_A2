@@ -7,14 +7,15 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import cluedo.Player;
+import cluedo.CluedoGame;
 
 public class ButtonPanel extends JPanel implements ActionListener{
 	
@@ -30,8 +31,7 @@ public class ButtonPanel extends JPanel implements ActionListener{
 	private JLabel playerWho; //this updates which players turn it is
 	private GuiFrame frame;
 	private GridBagConstraints gbc = new GridBagConstraints(); 
-	
-	Player p;
+	private List<JButton> buttonList;
 	
 	public ButtonPanel(GuiFrame frame){
 		super();
@@ -61,8 +61,8 @@ public class ButtonPanel extends JPanel implements ActionListener{
 		suggest.setFont(new Font("Helvetica", Font.BOLD, 30));
 		suggest.addActionListener(this);
 		
-		playerWho = new JLabel("ITS SOMEONES TURN");
-		playerWho.setFont(new Font("Helvetica", Font.BOLD, 25));
+		playerWho = new JLabel("");
+		playerWho.setFont(new Font("Helvetica", Font.BOLD, 20));
 		
 		exitRoom = new JButton("Exit Room");
 		exitRoom.setFont(new Font("Helvetica", Font.BOLD, 30));
@@ -76,8 +76,8 @@ public class ButtonPanel extends JPanel implements ActionListener{
 		endTurn.setFont(new Font("Helvetica", Font.BOLD, 30));
 		endTurn.addActionListener(this);
 		
-		ImageIcon die = new ImageIcon(getClass().getResource("../die1.jpg"));
-		roll = new JButton(die);
+		//ImageIcon die = new ImageIcon(getClass().getResource("../die1.jpg"));
+		roll = new JButton("Roll");
 		roll.setFont(new Font("Helvetica", Font.BOLD, 30));
 		roll.addActionListener(this);
 		
@@ -97,34 +97,62 @@ public class ButtonPanel extends JPanel implements ActionListener{
 		gbc.gridy++;
 		add(roll, gbc);
 		
+		buttonList = new ArrayList<JButton>();
+		buttonList.add(accuse);
+		buttonList.add(suggest);
+		buttonList.add(exitRoom);
+		buttonList.add(stairs);
+		buttonList.add(endTurn);
+		buttonList.add(roll);
+		
+
+	}
 	
+	
+	/**
+	 * Enables options to the player, ie, they can only move if they are outside of a room
+	 */
+	public void enableOptions(List<String> options) {
+		playerWho.setText(CluedoGame.currentPlayer.getName() + "\nit is your move");
+		for(JButton btn : buttonList) {
+			if(options.contains(btn.getText().toUpperCase())) {
+				btn.setEnabled(true);
+			} else {
+				btn.setEnabled(false);
+			}
+		}
+		
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object button = e.getSource();
 		if(button.equals(accuse)){
-			frame.accuse();
-
-		}else if(button.equals(suggest)) {
-			JOptionPane.showMessageDialog(null, "You have Suggested");
-			
-		} else if(button.equals(exitRoom)) {
-			JOptionPane.showMessageDialog(null, "Exiting room");
-			
-		} else if(button.equals(stairs)) {
-			JOptionPane.showMessageDialog(null, "Using the stairs");
-			
-		} else if(button.equals(endTurn)) {
-			JOptionPane.showMessageDialog(null, "ending turn");
-			
-		} else if(button.equals(roll)) {
-			
-			JOptionPane.showMessageDialog(null, "Rolling the dice");
-			p.move();
-			
-		}	
-	
-		
+			String[] accusation = frame.accuse();
+			if(accusation != null) {
+				CluedoGame.currentPlayer.accuse(accusation);
+			}	
+		}
+		else {
+			accuse.setEnabled(false);
+			if(button.equals(suggest)) {
+				String[] suggestion = frame.suggest();
+				if(suggestion != null) {
+					CluedoGame.currentPlayer.suggest(suggestion);
+				}
+				
+			} else if(button.equals(exitRoom)) {
+				JOptionPane.showMessageDialog(null, "Exiting room");
+				
+			} else if(button.equals(stairs)) {
+				CluedoGame.currentPlayer.useStairs();
+				
+			} else if(button.equals(endTurn)) {
+				frame.endTurn();
+				
+			} else if(button.equals(roll)) {
+				CluedoGame.currentPlayer.rollDice();
+			}
+		}
 	}
 }
