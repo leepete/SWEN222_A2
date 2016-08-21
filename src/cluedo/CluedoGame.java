@@ -285,9 +285,8 @@ public class CluedoGame {
 	
 	
 	public void startTurn() {
-		System.out.println(currentPlayer.getName());
+		guiFrame.showHand();
 		findOptions();
-		b.printBoard();
 	}
 	
 	public void endTurn() {
@@ -525,7 +524,7 @@ public class CluedoGame {
 		b.resetBoard();
 		numPlayers = 0;
 		resetDeck();
-		guiFrame = new GuiFrame(this);
+		guiFrame = new GuiFrame(this, b);
 		guiFrame.start();
 		
 	}

@@ -130,6 +130,7 @@ public class Player {
 	public void rollDice() {
 		Random rand = new Random();
 		remainingSteps = rand.nextInt(6) + 1;
+		System.out.println(remainingSteps);
 	}
 
 	/**

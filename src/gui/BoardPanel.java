@@ -88,7 +88,7 @@ public class BoardPanel extends JPanel implements KeyListener {
 					g.setColor(Color.GRAY);
 					g.drawRect(y*sqSize,x*sqSize ,sqSize, sqSize);
 					g.fillRect(y*sqSize,x*sqSize ,sqSize, sqSize);
-				}if(guiBoard[x][y] == p1 || guiBoard[x][y] == p2 || guiBoard[x][y] == p3 || guiBoard[x][y] == p4 || guiBoard[x][y] == p5 || guiBoard[x][y] == p6) {
+				}if(guiBoard[x][y] == '1' || guiBoard[x][y] == p2 || guiBoard[x][y] == p3 || guiBoard[x][y] == p4 || guiBoard[x][y] == p5 || guiBoard[x][y] == p6) {
 					g.setColor(Color.pink);
 					g.fillOval(y*sqSize, x*sqSize, sqSize, sqSize);
 

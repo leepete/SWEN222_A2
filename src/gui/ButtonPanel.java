@@ -113,7 +113,7 @@ public class ButtonPanel extends JPanel implements ActionListener{
 	 * Enables options to the player, ie, they can only move if they are outside of a room
 	 */
 	public void enableOptions(List<String> options) {
-		playerWho.setText(CluedoGame.currentPlayer.getName() + "it is your move");
+		playerWho.setText(String.format("%s's turn", CluedoGame.currentPlayer.getName()));
 		for(JButton btn : buttonList) {
 			if(options.contains(btn.getText().toUpperCase())) {
 				btn.setEnabled(true);

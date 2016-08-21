@@ -3,7 +3,6 @@ package gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -20,6 +19,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import cluedo.Board;
 import cluedo.CluedoGame;
 import cluedo.Player;
 
@@ -54,15 +54,15 @@ public class GuiFrame extends JFrame implements ActionListener, KeyListener {
 	
 	//Game Object
 	CluedoGame game;
-	
+	Board board;
 	/**
 	 * Constructor for the GUI
 	 */
-	public GuiFrame(CluedoGame game){
+	public GuiFrame(CluedoGame game, Board board){
 		super("Cluedo GameBoard");
 
 		myPopups = new GuiPopups();
-		
+		this.board = board;
 		this.game = game;
 		
 	}
@@ -107,7 +107,7 @@ public class GuiFrame extends JFrame implements ActionListener, KeyListener {
 		buttonPanel = new ButtonPanel(this);
 		checklistPanel = new CheckListPanel(); 
 
-		boardPanel = new BoardPanel(game.b);
+		boardPanel = new BoardPanel(board);
 		handPanel = new HandPanel();
 		
 		boardPanel.addKeyListener(this);
@@ -241,6 +241,10 @@ public class GuiFrame extends JFrame implements ActionListener, KeyListener {
 		game.endTurn();
 	}
 	
+	public void showHand() {
+		handPanel.setLabels();
+	}
+	
 	/**
 	 * Show the popup to say someone has won the game
 	 * @param winDefault
@@ -268,7 +272,6 @@ public class GuiFrame extends JFrame implements ActionListener, KeyListener {
 		int code = e.getKeyCode();
 		if(code == KeyEvent.VK_RIGHT || code == KeyEvent.VK_D){
 			CluedoGame.currentPlayer.move(Player.Direction.RIGHT);
-			
 		}
 		else if(code == KeyEvent.VK_LEFT || code == KeyEvent.VK_A) {
 			CluedoGame.currentPlayer.move(Player.Direction.LEFT);

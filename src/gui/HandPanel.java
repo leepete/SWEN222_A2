@@ -8,10 +8,14 @@ import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import cluedo.CluedoGame;
+import cluedo.Player;
 
 public class HandPanel extends JPanel {
 
@@ -21,20 +25,21 @@ public class HandPanel extends JPanel {
 
 	BufferedImage image;
 	JLabel l1,l2,l3,l4,l5;
+	ArrayList<JLabel> cardList;
 	GridBagConstraints gbc = new GridBagConstraints();
 	
 
 
 	public HandPanel(){
 		super();
+		cardList = new ArrayList<JLabel>();
 		setPreferredSize(new Dimension(WIDTH,HEIGHT));
 		setAlignmentX(LEFT_ALIGNMENT);
 		setVisible(true);
-		setLabels();
+		
 		setOpaque(false);
 		setLayout(new GridBagLayout());
-//		l.setIcon(new ImageIcon("die1.jpg"));
-//		add(l);
+
  
 	
 		 validate();
@@ -45,42 +50,26 @@ public class HandPanel extends JPanel {
 		//setBackground(Color.RED);
 		super.paintComponent(g);
 		g.drawImage(image, 0, 0, null);
-	
-		//repaint();
+
 	}
 	
 	public void setLabels(){
-		ImageIcon g = new ImageIcon(getClass().getClassLoader().getResource("billiardroom.png"));
-		l1 = new JLabel(g);
+		
 		gbc.gridx = 0;
-		gbc.gridy= 0;
-		add(l1, gbc);
+		gbc.gridy = 0;
 		
-		ImageIcon g1 = new ImageIcon(getClass().getClassLoader().getResource("Candlestick.png"));
-		l2 = new JLabel(g1);
-		gbc.gridx++;
-		gbc.gridy=0;
-		add(l2, gbc);
-		
-		ImageIcon g2 = new ImageIcon(getClass().getClassLoader().getResource("Colonel Mustard.png"));
-		l3 = new JLabel(g2);
-		gbc.gridx++;
-		gbc.gridy=0;
-		add(l3, gbc);
-		
-		ImageIcon g3 = new ImageIcon(getClass().getClassLoader().getResource("dagger.png"));
-		l4 = new JLabel(g3);
-		gbc.gridx++;
-		gbc.gridy=0;
-		add(l4, gbc);
-		
-		ImageIcon g4 = new ImageIcon(getClass().getClassLoader().getResource("MissScarlet.png"));
-		l5 = new JLabel(g4);
-		gbc.gridx++;
-		gbc.gridy=0;
-		add(l5, gbc);
-//		l6 = new JLabel("lab");
-//		add(l6);
+		for(String s : CluedoGame.currentPlayer.getHand()) {
+			try {
+				cardList.add(new JLabel(new ImageIcon(getClass().getClassLoader().getResource((String)(s + ".png")) ) ) );
+			} catch(NullPointerException npe) {
+				System.out.println("Caught me a null pointer :O?!");
+			}
+		}
+		for(JLabel label : cardList) {
+			add(label, gbc);
+			gbc.gridx++;
+		}
+		cardList.clear();
 	}
 
 
