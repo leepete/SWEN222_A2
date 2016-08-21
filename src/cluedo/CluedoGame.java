@@ -13,7 +13,9 @@ import java.util.HashSet;
 import java.util.Iterator;
 
 public class CluedoGame {
-
+	/**
+	 * Main class holding the majority of the games logic
+	 */
 	
 	//Array of all the possible inputs from the player during their turn for easy error checking
 	private List<String> turnOptions = new ArrayList<String>();

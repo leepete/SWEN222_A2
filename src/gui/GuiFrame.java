@@ -28,6 +28,9 @@ import cluedo.Player;
  */
 
 public class GuiFrame extends JFrame implements ActionListener, KeyListener {
+	/**
+	 * 
+	 */
 	private static final long serialVersionUID = 1L;
 	
 	//Master Panel hold all the other panels
