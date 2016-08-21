@@ -90,7 +90,7 @@ public class CluedoGame {
 			new Position(18, 21)};
 	
 	//Arrays holding the positions of where the player characters will be shown while they are in the rooms
-	private final Position[] kitchenSpaces = {
+	public final static Position[] kitchenSpaces = {
 			new Position(2,3),
 			new Position(3,3),
 			new Position(4,3),

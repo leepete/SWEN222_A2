@@ -2,6 +2,8 @@ package cluedo;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +18,6 @@ public class Board {
 	private char placemat = 'x';
 	private char[] doors = {'^', '<', '>', 'v'};
 	private char[] players = {'1', '2', '3', '4', '5', '6'};
-
 
 
 	private final char[][] board = {   
@@ -52,18 +53,23 @@ public class Board {
 	public char[][] activeBoard = new char[BOARD_HEIGHT][BOARD_WIDTH];
 
 	public Board(){
-		resetBoard();
+		resetBoard(); // sets the active board to the actual board
 		printBoard();	
 	}
+	
 
 	public void printBoard() {
-//		for(int x = 0; x < BOARD_HEIGHT; x++) {
-//			for(int y = 0; y < BOARD_WIDTH; y++) {
-//				System.out.print(activeBoard[x][y]);
-//			}
-//			System.out.println();
-//		}
+		for(int x = 0; x < BOARD_HEIGHT; x++) {
+			for(int y = 0; y < BOARD_WIDTH; y++) {
+				System.out.print(activeBoard[x][y]);
+			}
+		}
 	}
+	
+	public char[][] getBoard(){
+		return activeBoard;
+	}
+	
 
 	public boolean movePlayer(Position oldP, Position newP, Player p) {
 		//Check if we are doing a valid move
