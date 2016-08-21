@@ -241,8 +241,6 @@ public class CluedoGame {
 	 * resets the board
 	 */
 	public void startGame(Scanner s) {
-//		guiFrame = new GuiFrame(this);
-//		guiFrame.start();
 		resetGame();
 		System.out.println("Welcome to Cluedo, in this game you must solve the murder by correctly deducing the CHARACTER the WEAPON and the ROOM");
 		System.out.println("Your player number will be displayed on the board so don't forget it!");
@@ -445,7 +443,7 @@ public class CluedoGame {
 			if(turnOptions.contains(input)) {
 				switch(input) {
 				case "MOVE":
-					p.move(s);
+					p.move();
 					validInput = true;
 					break;
 				case "STAIRS":

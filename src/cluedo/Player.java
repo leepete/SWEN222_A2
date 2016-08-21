@@ -1,6 +1,7 @@
 package cluedo;
 
-import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -8,7 +9,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Scanner;
 
-public class Player extends KeyAdapter{
+public class Player implements KeyListener{
 
 	private Character character;
 	private boolean playing = true;
@@ -20,8 +21,9 @@ public class Player extends KeyAdapter{
 	public Room sameRoom;
 
 	private CluedoGame game;
-	//private Map<String, Position> placeMap;
 	private List<String> hand = new ArrayList<String>();
+
+	
 	
 	public Player(Character character, Board board, CluedoGame game, int id) {
 		this.character = character;
@@ -75,47 +77,47 @@ public class Player extends KeyAdapter{
 	 * Takes an input key from the user and attempts to move in that direction
 	 * @return
 	 */
-	public void move(Scanner s) {
+	public void move() {
 		remainingSteps = rollDice();
 
 		while(remainingSteps > 0){
 			System.out.println(String.format("Moves remaining: %d. Input a direction: 'W' 'A' 'S' 'D' or 'STOP'", remainingSteps));
 			System.out.println(position.toString());
-			String key = s.next().toUpperCase(); //Take the first string from the user
-			s.nextLine();//End the line
-			switch(key){
-				case "W":
-					if(goUp())
-						remainingSteps--;
-					break;
-				case "A":
-					if(goLeft())
-						remainingSteps--;
-					break;
-				case "S":
-					if(goDown())
-						remainingSteps--;
-					break;
-				case "D":
-					if(goRight())
-						remainingSteps--;	
-					break;
-				case "STOP":
-					remainingSteps = 0;
-					break;
-				default: {
-					System.out.println("Invalid move input please try again");
-				}
-			}
-		}
-		
+			//String key = s.next().toUpperCase(); //Take the first string from the user
+			//s.nextLine();//End the line		
+			
+//			switch(){
+//				case "W":
+//					if(goUp())
+//						remainingSteps--;
+//					break;
+//				case "A":
+//					if(goLeft())
+//						remainingSteps--;
+//					break;
+//				case "S":
+//					if(goDown())
+//						remainingSteps--;
+//					break;
+//				case "D":
+//					if(goRight())
+//						remainingSteps--;	
+//					break;
+//				case "STOP":
+//					remainingSteps = 0;
+//					break;
+//				default: {
+//					System.out.println("Invalid move input please try again");
+//				}
+	}		
 	}
-
+	
+		
 	/**
 	 * Returns a random(ish) number between 1 and 6 to represent the players dice roll
 	 * @return
 	 */
-	private int rollDice() {
+	public int rollDice() {
 		Random rand = new Random();
 		int roll = rand.nextInt(6) + 1;
 		return roll;
@@ -375,5 +377,20 @@ public class Player extends KeyAdapter{
 	 */
 	public String toString() {
 		return character.toString();
+	}
+	@Override
+	public void keyPressed(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void keyReleased(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void keyTyped(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 }

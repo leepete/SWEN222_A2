@@ -44,7 +44,9 @@ public class CheckListPanel extends JPanel {
 		gbc.fill = GridBagConstraints.BOTH; //aligns buttons perfect - the lengths are even
 		gbc.insets = new Insets(1 ,1, 1,1);
 		gbc.weightx = 0; ///button size
-		gbc.weighty = 0.1;	
+		gbc.weighty = 0.1;
+		gbc.gridx = 0;
+		gbc.gridy = 0;
 		
 		addRooms();
 		addCharacters();
@@ -65,35 +67,27 @@ public class CheckListPanel extends JPanel {
 		conservatory = new JCheckBox("Conservatory");
 		lounge = new JCheckBox("Lounge");
 		kitchen = new JCheckBox("Kitchen");
-		
-//		gbc.anchor = GridBagConstraints.WEST; //ALIGNS THE CHECKBOXES
-//		gbc.fill = GridBagConstraints.BOTH; //aligns buttons perfect - the lengths are even
-//		gbc.insets = new Insets(15,15,15,15);
-//		gbc.weightx = 1; ///button size
-//		gbc.weighty = 1;	
-		
-		gbc.gridx = 0;
-		gbc.gridy = 0;
+
 		add(check,gbc);
-		gbc.gridy = 1;
+		gbc.gridy++;
 		add(rooms,gbc);
-		gbc.gridy = 2;
+		gbc.gridy++;
 		add(billRoom, gbc);
-		gbc.gridy = 3;
+		gbc.gridy++;
 		add(dineRoom, gbc);
-		gbc.gridy = 4;
+		gbc.gridy++;
 		add(hall, gbc);
-		gbc.gridy = 5;
+		gbc.gridy++;
 		add(ballRoom, gbc);
-		gbc.gridy = 6;
+		gbc.gridy++;
 		add(library, gbc);
-		gbc.gridy = 7;
+		gbc.gridy++;
 		add(study, gbc);
-		gbc.gridy = 8;
+		gbc.gridy++;
 		add(conservatory, gbc);
-		gbc.gridy = 9;
+		gbc.gridy++;
 		add(lounge, gbc);
-		gbc.gridy = 10;
+		gbc.gridy++;
 		add(kitchen, gbc);
 	}
 
@@ -108,25 +102,19 @@ public class CheckListPanel extends JPanel {
 		scarlett = new JCheckBox("Miss Scarlett");
 		plum = new JCheckBox("Professor Plum");
 		
-//		gbc.anchor = GridBagConstraints.WEST; //ALIGNS THE CHECKBOXES
-//		gbc.fill = GridBagConstraints.BOTH; //aligns buttons perfect - the lengths are even
-//		gbc.insets = new Insets(15,15,15,15);
-//		gbc.weightx = 1; ///button size
-//		gbc.weighty = 1;	
-		
-		gbc.gridy = 11;
+		gbc.gridy++;
 		add(chars, gbc);
-		gbc.gridy = 12;
+		gbc.gridy++;
 		add(white, gbc);
-		gbc.gridy = 13;
+		gbc.gridy++;
 		add(peacock, gbc);
-		gbc.gridy = 14;
+		gbc.gridy++;
 		add(mustard, gbc);
-		gbc.gridy = 15;
+		gbc.gridy++;
 		add(reverend, gbc);
-		gbc.gridy = 16;
+		gbc.gridy++;
 		add(scarlett, gbc);
-		gbc.gridy = 17;
+		gbc.gridy++;
 		add(plum, gbc);
 	}
 
@@ -141,25 +129,19 @@ public class CheckListPanel extends JPanel {
 		leadpipe = new JCheckBox("Lead Pipe");
 		dagger = new JCheckBox("Dagger");
 		
-//		gbc.anchor = GridBagConstraints.WEST; //ALIGNS THE CHECKBOXES
-//		gbc.fill = GridBagConstraints.BOTH; //aligns buttons perfect - the lengths are even
-//		gbc.insets = new Insets(15,15,15,15);
-//		gbc.weightx = 1; ///button size
-//		gbc.weighty = 1;	
-		
-		gbc.gridy = 19;
+		gbc.gridy++;
 		add(weapons,gbc);
-		gbc.gridy = 20;
+		gbc.gridy++;
 		add(spanner, gbc);
-		gbc.gridy = 21;
+		gbc.gridy++;
 		add(rope, gbc);
-		gbc.gridy = 22;
+		gbc.gridy++;
 		add(candle, gbc);
-		gbc.gridy = 23;
+		gbc.gridy++;
 		add(revolver, gbc);
-		gbc.gridy =24;
+		gbc.gridy++;
 		add(leadpipe, gbc);
-		gbc.gridy = 25;
+		gbc.gridy++;
 		add(dagger, gbc);
 	}
 }

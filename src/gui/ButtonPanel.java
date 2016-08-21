@@ -8,10 +8,13 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+
+import cluedo.Player;
 
 public class ButtonPanel extends JPanel implements ActionListener{
 	
@@ -26,6 +29,8 @@ public class ButtonPanel extends JPanel implements ActionListener{
 	private JButton accuse, suggest, endTurn, roll, stairs, exitRoom;
 	private JLabel playerWho; //this updates which players turn it is
 	private GridBagConstraints gbc = new GridBagConstraints(); 
+	
+	Player p;
 
 	public ButtonPanel(){
 		super();
@@ -34,6 +39,7 @@ public class ButtonPanel extends JPanel implements ActionListener{
 		setLayout(new GridBagLayout());
 		this.setVisible(true);
 		setButtons();
+		//this.p = player;
 	}
 
 	
@@ -69,8 +75,8 @@ public class ButtonPanel extends JPanel implements ActionListener{
 		endTurn.setFont(new Font("Helvetica", Font.BOLD, 30));
 		endTurn.addActionListener(this);
 		
-		//ImageIcon die = new ImageIcon(getClass().getResource("/die.png"));
-		roll = new JButton("Roll Dice");
+		ImageIcon die = new ImageIcon(getClass().getResource("../die1.jpg"));
+		roll = new JButton(die);
 		roll.setFont(new Font("Helvetica", Font.BOLD, 30));
 		roll.addActionListener(this);
 		
@@ -112,7 +118,9 @@ public class ButtonPanel extends JPanel implements ActionListener{
 			JOptionPane.showMessageDialog(null, "ending turn");
 			
 		} else if(button.equals(roll)) {
+			
 			JOptionPane.showMessageDialog(null, "Rolling the dice");
+			p.move();
 			
 		}	
 	
