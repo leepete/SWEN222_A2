@@ -20,9 +20,27 @@ public class GuiPopups implements ActionListener {
 	 */
 	public String[] makeAccusation() {
 		String[] options = {"Accuse", "Cancel"};
-		AccusationPanel accusePanel = new AccusationPanel();
+		AccusationPanel accusePanel = new AccusationPanel(false);
 		int rn = JOptionPane.showOptionDialog(null, accusePanel, 
 				"Make An Accusation", JOptionPane.PLAIN_MESSAGE, JOptionPane.PLAIN_MESSAGE, null, options, options[1]);
+		//If they pressed accuse
+		if(rn == 0) {
+			return accusePanel.getValues();
+		}
+		else { //else they canceled and we need to deal with that...
+			return null;
+		}
+	}
+	
+	/**
+	 * Makes a suggestion and returns the names of the room, weapon and character they chose
+	 * @return
+	 */
+	public String[] makeSuggestion() {
+		String[] options = {"Suggest", "Cancel"};
+		AccusationPanel accusePanel = new AccusationPanel(true);
+		int rn = JOptionPane.showOptionDialog(null, accusePanel, 
+				"Make A Suggestion", JOptionPane.PLAIN_MESSAGE, JOptionPane.PLAIN_MESSAGE, null, options, options[1]);
 		//If they pressed accuse
 		if(rn == 0) {
 			return accusePanel.getValues();

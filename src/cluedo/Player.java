@@ -226,85 +226,10 @@ public class Player implements KeyListener{
 		}
 		return mat;
 	}
-	
-	/**
-	 * Makes a guess at the solution without risking end of game.
-	 * Other players (whether or not they are still playing) refute your guess.
-	 * @param s
-	 * @param guess
-	 * @return
-	 */
-	public Suggestion makeSuggestion(Scanner s, boolean guess) {
-		boolean valid = false;
-
-		String input;
-		Character c = null;
-		Weapon w= null;
-		Room r= null;
-		
-		//Players cannot guess for a room other than the one they are in
-		if(guess) {
-			r = room;
-		}
-		else {
-			while(!valid){
-				System.out.println("Please enter a room:");
-				input = s.nextLine().toUpperCase();
-				r = new Room(input);
-				if(Arrays.asList(CluedoGame.roomsArray).contains(r)){
-					valid = true;
-				} else{
-					System.out.println("Invalid Room!");
-				}
-			}
-			valid = false;
-		}
-		
-
-		while(!valid){
-			System.out.println("Please enter a weapon:");
-			input = s.nextLine().toUpperCase();
-			w = new Weapon(input);
-			if(Arrays.asList(CluedoGame.weaponsArray).contains(w)){
-				valid = true;
-			} else{
-				System.out.println("Invalid Weapon, please try again");
-			}
-		}
-		valid = false;
-
-		while(!valid){
-			System.out.println("Please enter a character:");
-			input = s.nextLine().toUpperCase();
-			c = new Character(input);
-			if(Arrays.asList(CluedoGame.charactersArray).contains(c)){
-				valid = true;
-			} else{
-				System.out.println("Invalid Character, please try again");
-			}
-		}
-		valid = false;
-
-		return new Suggestion(r.toString(),w.toString(), c.toString());
-	}
-	
-	/**
-	 * Make a guess with the provided suggestion
-	 */
-	public void guess(Scanner s) {
-		Suggestion suggest = makeSuggestion(s, true);
-		 //Iterates over the other players, if they have one of the suggestion items in their hand they choose which to show this player and the guess is over
-		String[] refuter = game.refuteGuess(s, suggest, this);
-		if(refuter[0] == null) {
-			System.out.println("No one was able to refute your guess! Could be time to solve the case?");
-			return;
-		}
-		System.out.println(String.format("Player %d refutes your guess by reveiling %s from their hand.", Integer.parseInt(refuter[0]), refuter[1]));
-		
-	}
 
 	/**
-	 * 
+	 * Takes a String array, containing a room weapon and character.
+	 * Converts this into a Suggestion object, and compares this with the solution
 	 * @param choice
 	 */
 	public void accuse(String[] choice) {
@@ -312,7 +237,7 @@ public class Player implements KeyListener{
 		System.out.println("suggest: " + suggest.toString());
 		if(!CluedoGame.solution.equals(suggest)) {
 			playing = false;
-			room = game.cellar;
+			room = CluedoGame.cellar;
 			Position space = room.getSpaces()[id-1];
 			board.teleport(this, position, space);
 		}
@@ -320,21 +245,20 @@ public class Player implements KeyListener{
 	}
 	
 	/**
-	 * Make a game ending accusation
-	 
-	public void accuse(Scanner s) {
-		Suggestion suggest = makeSuggestion(s, false);
-		if(CluedoGame.solution.equals(suggest)){
-			game.gameOver(this);
-		} else{
-			//check if the game is over because there is only one player remaining
-			playing = false;
-			room = game.cellar;
-			Position space = room.getSpaces()[id-1];
-			board.teleport(this, position, space);
-			game.gameOver(this);
+	 * Takes a String array, containing a room weapon and character.
+	 * Converts this into a Suggestion object ==========================================
+	 * @param choice
+	 */
+	public void suggest(String[] choice) {
+		Suggestion suggest = new Suggestion(choice[0],choice[1], choice[2]);
+		System.out.println("suggest: " + suggest.toString());
+		String[] refuter = game.refuteGuess(suggest, this);
+		if(refuter[0] == null) {
+			System.out.println("No one was able to refute your guess! Could be time to solve the case?");
+			return;
 		}
-	}*/
+		System.out.println(String.format("Player %d refutes your guess by reveiling %s from their hand.", Integer.parseInt(refuter[0]), refuter[1]));
+	}
 
 	/**
 	 * Sets the players hand

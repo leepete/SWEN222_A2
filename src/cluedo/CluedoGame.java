@@ -164,7 +164,7 @@ public class CluedoGame {
 	public static GuiFrame guiFrame;
 	
 	//The player whose turn it currently is
-	private Player currentPlayer;
+	public static Player currentPlayer;
 	
 	public CluedoGame() {
 		populateRooms();
@@ -278,14 +278,6 @@ public class CluedoGame {
 	}
 	
 	/**
-	 * Returns the player whose turn it currently is
-	 * @return
-	 */
-	public Player getCurrentPlayer() {
-		return currentPlayer;
-	}
-	
-	/**
 	 * Player turn cycle,
 	 * While there are still players in the game and someone hasn't won,
 	 * 	iterate over the players in the game
@@ -327,7 +319,7 @@ public class CluedoGame {
 			s.nextLine();
 			switch(input) {
 			case "YES":
-				p.guess(s);
+				//p.guess(s);
 				validInput = true;
 				break;
 			case "NO":
@@ -347,7 +339,7 @@ public class CluedoGame {
 	 * @param suggest
 	 * @return
 	 */
-	public String[] refuteGuess(Scanner s, Suggestion suggest, Player guesser) {
+	public String[] refuteGuess(Suggestion suggest, Player guesser) {
 		boolean valid = false;
 		String input, weapon, room, character;
 		String[] refuter = new String[2];
@@ -377,7 +369,7 @@ public class CluedoGame {
 					for(String o : options) {
 						System.out.print(String.format("\'%s\' ", o));
 					}
-					input = s.nextLine().toUpperCase();
+					input = "";
 					//If options contains input its valid
 					if(options.contains(input)) {
 						valid = true;

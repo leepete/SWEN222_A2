@@ -14,6 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import cluedo.CluedoGame;
 import cluedo.Player;
 
 public class ButtonPanel extends JPanel implements ActionListener{
@@ -104,12 +105,15 @@ public class ButtonPanel extends JPanel implements ActionListener{
 		if(button.equals(accuse)){
 			String[] accusation = frame.accuse();
 			if(accusation != null) {
-				frame.game.getCurrentPlayer().accuse(accusation);
+				CluedoGame.currentPlayer.accuse(accusation);
 			}
 			
 
 		}else if(button.equals(suggest)) {
-			JOptionPane.showMessageDialog(null, "You have Suggested");
+			String[] suggestion = frame.suggest();
+			if(suggestion != null) {
+				CluedoGame.currentPlayer.suggest(suggestion);
+			}
 			
 		} else if(button.equals(exitRoom)) {
 			JOptionPane.showMessageDialog(null, "Exiting room");
@@ -123,7 +127,7 @@ public class ButtonPanel extends JPanel implements ActionListener{
 		} else if(button.equals(roll)) {
 			
 			JOptionPane.showMessageDialog(null, "Rolling the dice");
-			frame.game.getCurrentPlayer().move();
+			CluedoGame.currentPlayer.move();
 			
 		}	
 	

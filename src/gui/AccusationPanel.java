@@ -18,6 +18,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
+import cluedo.CluedoGame;
+
 public class AccusationPanel extends JPanel implements ActionListener{
 
 	/**
@@ -48,10 +50,13 @@ public class AccusationPanel extends JPanel implements ActionListener{
 	
 	private int playerID;
 	private GridBagConstraints gbc;
+	
+	//Boolean flag, true if this is a guess, false if its an accusation
+	private boolean guess;
 
-
-	public AccusationPanel(){
+	public AccusationPanel(boolean guess){
 		super();
+		this.guess = guess;
 		
 		gbc = new GridBagConstraints();
 		
@@ -158,6 +163,22 @@ public class AccusationPanel extends JPanel implements ActionListener{
 		}
 		gbc.gridy++;
 		
+		//If it is a guess then the room must be the one the player is in currently
+		if(guess) {
+			//Select the current room
+			JRadioButton currentRoom = roomRadioMap.get(CluedoGame.currentPlayer.inRoom().toString());
+			currentRoom.setSelected(true);
+			
+			//Grey out all other rooms
+			for(JRadioButton rb : roomRadioList) {
+				if(!rb.equals(currentRoom)) {
+					rb.setEnabled(false);
+				}
+			}
+		} else { //Else enable the first one by default
+			kitchenRB.setSelected(true);
+		}
+		
 	}
 	
 	/**
@@ -166,15 +187,15 @@ public class AccusationPanel extends JPanel implements ActionListener{
 	private void initialiseRoomButtons() {
 		roomRadioList = new ArrayList<JRadioButton>();
 		
-		kitchenRB = new JRadioButton("KITCHEN", true);
-		ballRoomRB = new JRadioButton("BALL ROOM", false);
-		conservatoryRB = new JRadioButton("CONSERVATORY", false);
-		billiardRoomRB = new JRadioButton("BILLIARD ROOM", false);
-		libraryRB = new JRadioButton("LIBRARY", false);
-		studyRB = new JRadioButton("STUDY", false);
-		hallRB = new JRadioButton("HALL", false);
-		loungeRB = new JRadioButton("LOUNGE", false);
-		diningRoomRB = new JRadioButton("DINING ROOM", false);
+		kitchenRB = new JRadioButton("KITCHEN");
+		ballRoomRB = new JRadioButton("BALL ROOM");
+		conservatoryRB = new JRadioButton("CONSERVATORY");
+		billiardRoomRB = new JRadioButton("BILLIARD ROOM");
+		libraryRB = new JRadioButton("LIBRARY");
+		studyRB = new JRadioButton("STUDY");
+		hallRB = new JRadioButton("HALL");
+		loungeRB = new JRadioButton("LOUNGE");
+		diningRoomRB = new JRadioButton("DINING ROOM");
 		
 		roomRadioList.add(kitchenRB);
 		roomRadioList.add(ballRoomRB);

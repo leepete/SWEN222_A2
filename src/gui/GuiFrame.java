@@ -213,7 +213,10 @@ public class GuiFrame extends JFrame implements ActionListener {
 	public String[] accuse() {
 		return myPopups.makeAccusation();
 	}
-
+	
+	public String[] suggest() {
+		return myPopups.makeSuggestion();
+	}
 	
 }
 
