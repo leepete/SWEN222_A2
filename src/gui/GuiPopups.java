@@ -31,11 +31,17 @@ public class GuiPopups implements ActionListener {
 		return rc+3; //3 is the minimum number of players
 	}
 	
+	/**
+	 * Loop through each player in the game,
+	 * asks what their name is
+	 * and what character they are playing as 
+	 * @param numPlayers
+	 */
 	public void assignCharacters(int numPlayers) {
 		ArrayList<String> unavailableChars = new ArrayList<String>();
 		String[] options = {"Ok"};
-		unavailableChars.add("COLONEL MUSTARD");
 		unavailableChars.add("MISS SCARLET");
+		unavailableChars.add("PROFESSOR PLUM");
 		charAssignPanel = new CharacterAssignmentPanel(1, unavailableChars);
 		JOptionPane.showOptionDialog(null, charAssignPanel, "Assign Character", JOptionPane.PLAIN_MESSAGE, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
 		

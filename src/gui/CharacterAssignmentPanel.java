@@ -76,15 +76,15 @@ public class CharacterAssignmentPanel extends JPanel implements ActionListener{
 		String playerName = playerNameTF.getText();
 		String characterName = getSelectedButtonText();
 		
-		if(playerName != "" && characterName != null) {
-			values[0] = playerName;
-			values[1] = characterName;
-			
-			return values;
+		//If the user doesn't enter a name, they will be given the name of their character
+		if(playerName == "") {
+			playerName = characterName;
 		}
-		//We want the player to be stuck on this screen if they don't enter anything
-		return null;
 		
+		values[0] = playerName;
+		values[1] = characterName;
+		
+		return values;
 	}
 	
 	/**
@@ -100,7 +100,7 @@ public class CharacterAssignmentPanel extends JPanel implements ActionListener{
             AbstractButton button = buttons.nextElement();
 
             if (button.isSelected()) {
-                return button.getText().toUpperCase();
+                return button.getText();
             }
         }
         
@@ -131,6 +131,8 @@ public class CharacterAssignmentPanel extends JPanel implements ActionListener{
 		characterButtons.add(green);
 		//Grey out the unavailable ones
 		greyOutRadio();
+		//Selecte a default character
+		selectFirstAvailableChar();
 		
 		gbc.gridx = 0;
 		gbc.gridy = 0;
@@ -155,6 +157,20 @@ public class CharacterAssignmentPanel extends JPanel implements ActionListener{
 		add(green, gbc);
 		
 		
+	}
+	
+	/**
+	 * Selects the first available character from the radio buttons as a default (ensures something is always selected)
+	 */
+	private void selectFirstAvailableChar() {
+		for (Enumeration<AbstractButton> buttons = characterButtons.getElements(); buttons.hasMoreElements();) {
+            AbstractButton button = buttons.nextElement();
+
+            if (button.isEnabled()) {
+                button.setSelected(true);
+                return;
+            }
+        }
 	}
 
 	/**
