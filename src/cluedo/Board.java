@@ -10,7 +10,7 @@ import java.util.List;
 public class Board {
 
 	public static final int BOARD_WIDTH = 26;
-	public static final int BOARD_HEIGHT = 27;
+	public static final int BOARD_HEIGHT = 26;
 
 	private char corridor = '+';
 	private char boundary = '#';
@@ -21,7 +21,7 @@ public class Board {
 
 
 	private final char[][] board = {   
-			"##########################".toCharArray(),
+			
 			"##########+####+##########".toCharArray(),
 			"#=====Y#+++====+++#======#".toCharArray(),
 			"#=    =++===  ===++=CONS=#".toCharArray(),
@@ -44,7 +44,7 @@ public class Board {
 			"#Z=====^++= ab =+++++++++#".toCharArray(),
 			"#=     =++=   c>x+x+++++##".toCharArray(),
 			"#=LOUNG=++=HALL=++^=====Y#".toCharArray(),
-			"#=     =++=    =++= STY =#".toCharArray(),
+			"#=     =++=    =++= STU =#".toCharArray(),
 			"#=    ==++=    =++==    =#".toCharArray(),
 			"#======#+#======#+#======#".toCharArray(),
 			"##########################".toCharArray()

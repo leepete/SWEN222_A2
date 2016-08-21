@@ -41,7 +41,6 @@ public class ButtonPanel extends JPanel implements ActionListener{
 		setLayout(new GridBagLayout());
 		this.setVisible(true);
 		setButtons();
-		//this.p = player;
 	}
 
 	
