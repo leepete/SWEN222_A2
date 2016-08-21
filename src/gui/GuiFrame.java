@@ -101,7 +101,12 @@ public class GuiFrame extends JFrame implements ActionListener {
 	 * @return
 	 */
 	public void assignPlayerCharacters(int nPlayers) {
-		myPopups.assignCharacters(nPlayers);
+		int i = 1;
+		
+		while(i <= nPlayers) {
+			myPopups.assignCharacters(i);
+		}
+		
 		
 	}
 

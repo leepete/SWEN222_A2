@@ -252,11 +252,14 @@ public class CluedoGame {
 //		System.out.println("Finially, in the corner rooms you will find a letter 'Z' or 'Y', these are secret(ish) stairways leading to the room in the opposite corner");
 		//Get number of players
 		//numPlayers = getNumPlayers(s);
+		
+		//Find out how many players there are
 		numPlayers = guiFrame.getNumPlayers();
-		int i = 1;
+		//Assign each player a name and character
 		guiFrame.assignPlayerCharacters(numPlayers);
-		while(i <= numPlayers) {
-			Player p;
+		
+		
+		/*	Player p;
 //			System.out.println(String.format("Player %d, please enter the character you wish to play as:", i));
 //			for(Character c : availableChars.values()) {
 //				System.out.println(c.toString());
@@ -274,7 +277,7 @@ public class CluedoGame {
 			} else {
 				System.out.println("That was an invalid player, please enter again");
 			}
-		}
+		}*/
 		
 		System.out.println("All players successfully allocated");
 		makeSolution();
@@ -286,6 +289,15 @@ public class CluedoGame {
 		}
 		
 		turnCycle(s);
+	}
+	
+	/**
+	 * Creates a player and adds it to the players in the game
+	 * called from the GUI classes
+	 */
+	public void createPlayer(String name, String playingAs, int playerID) {
+		Player p = new Player(name, availableChars.get(playingAs), b, this, playerID);
+		players.add(p);
 	}
 	
 	/**

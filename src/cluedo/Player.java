@@ -13,6 +13,7 @@ import java.util.Map;
 public class Player {
 
 	private Character character;
+	private String name;
 	private boolean playing = true;
 	private Room room = null;
 	private int id;
@@ -25,7 +26,8 @@ public class Player {
 	//private Map<String, Position> placeMap;
 	private List<String> hand = new ArrayList<String>();
 	
-	public Player(Character character, Board board, CluedoGame game, int id) {
+	public Player(String name, Character character, Board board, CluedoGame game, int id) {
+		this.name = name;
 		this.character = character;
 		this.id = id;
 		this.board = board;
