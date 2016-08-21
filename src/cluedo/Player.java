@@ -57,6 +57,11 @@ public class Player implements KeyListener{
 	public int getID() {
 		return id;
 	}
+	
+	public String getName() {
+		return name;
+	}
+	
 	/**
 	 * Returns the players position on the board
 	 * @return

@@ -27,7 +27,7 @@ public class CluedoGame {
 	//Number of players in the game
 	public int numPlayers;
 	//Mapping character to their name
-	public Map<String, Character> availableChars = new HashMap<String, Character>();
+	public Map<String, Character> characterNameMap = new HashMap<String, Character>();
 	
 	//Sets to emulate the deck of cards
 	public Set<Card> cardSet = new HashSet<Card>();
@@ -255,21 +255,26 @@ public class CluedoGame {
 		numPlayers = guiFrame.getNumPlayers();
 		//Assign each player a name and character
 		guiFrame.assignPlayerCharacters(numPlayers);
+		System.out.println("ALL MEH PLAYERS");
+		for(Player p : players) {
+			
+			System.out.println(p.toString());
+		}
 		
-		
+		System.out.println("NA morte plaers");
 		/*	Player p;
 //			System.out.println(String.format("Player %d, please enter the character you wish to play as:", i));
-//			for(Character c : availableChars.values()) {
+//			for(Character c : characterNameMap.values()) {
 //				System.out.println(c.toString());
 //			}
 			String plCharChoice = s.nextLine().toUpperCase();
 			if(isValidCharName(plCharChoice)) {
 				//Add a player with this character to the array
-				p = new Player(availableChars.get(plCharChoice), b, this, i);
+				p = new Player(characterNameMap.get(plCharChoice), b, this, i);
 				players.add(p);
 				System.out.println(String.format("Player %d will be playing as: %s", p.getID(), plCharChoice));
 				//Remove this character from the available characters
-				availableChars.remove(plCharChoice);
+				characterNameMap.remove(plCharChoice);
 				//A player has been successfully added
 				i++;
 			} else {
@@ -294,7 +299,10 @@ public class CluedoGame {
 	 * called from the GUI classes
 	 */
 	public void createPlayer(String name, String playingAs, int playerID) {
-		Player p = new Player(name, availableChars.get(playingAs), b, this, playerID);
+		Character c = characterNameMap.get(playingAs);
+		
+		System.out.println("Playing as: " + c.toString());
+		Player p = new Player(name, characterNameMap.get(playingAs), b, this, playerID);
 		players.add(p);
 	}
 	
@@ -493,10 +501,10 @@ public class CluedoGame {
 		//While there are cards in the set, keep dealing them to the players
 		int i = 0;
 		Iterator<Card> cardSetItr = cardSet.iterator();
-		/*while(cardSetItr.hasNext()) {
+		while(cardSetItr.hasNext()) {
 			players.get(i % players.size()).addCard(cardSetItr.next().toString());
 			i++;
-		}*/
+		}
 	}
 	
 	/**
@@ -549,34 +557,6 @@ public class CluedoGame {
 	}
 	
 	/**
-	 * Returns true if the passed string is a valid name of a character
-	 * @param name
-	 * @return
-	 */
-	private boolean isValidCharName(String name) {
-		return availableChars.keySet().contains(name);
-	}
-	
-	/**
-	 * Gets the number of players in the game from the user and ensures that it is between 2 and 6
-	 * @param s
-	 * @return number of players in this game
-	 */
-	private int getNumPlayers(Scanner s) {
-		System.out.println("Please enter the number of people who will be playing (3-6):");
-		// === Check here that the input from the user is actually an integer ===
-		int num = s.nextInt();
-		s.nextLine();// consume the end of the line
-
-		while(num > maxPlayers || num < minPlayers) {
-			System.out.println("That was an invalid number of players, ensure the number of players is between 3 and 6");
-			num = s.nextInt();
-		}
-		System.out.println(String.format("Awesome, there will be %d players this game.", num));
-		return num;
-	}
-	
-	/**
 	 * Resets all the fields for a new game
 	 */
 	public void resetGame() {
@@ -587,7 +567,6 @@ public class CluedoGame {
 		numPlayers = 0;
 		playing = true;
 		resetDeck();
-		
 	}
 	
 	/**
@@ -616,10 +595,10 @@ public class CluedoGame {
 	 */
 	private void resetCharacters() {
 		//Reset the Map
-		availableChars = new HashMap<String, Character>();
+		characterNameMap = new HashMap<String, Character>();
 		//Populate the map with all the options
 		for(Character c : charactersArray) {
-			availableChars.put(c.toString(), c);
+			characterNameMap.put(c.toString(), c);
 		}
 	}
 	

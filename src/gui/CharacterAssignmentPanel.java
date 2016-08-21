@@ -82,7 +82,7 @@ public class CharacterAssignmentPanel extends JPanel implements ActionListener{
 		}
 		
 		values[0] = playerName;
-		values[1] = characterName;
+		values[1] = characterName.toUpperCase();
 		
 		return values;
 	}

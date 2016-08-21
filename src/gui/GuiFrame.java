@@ -8,17 +8,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 
 import javax.swing.JFrame;
-
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-
 import javax.swing.JPanel;
 
-import cluedo.Board;
 import cluedo.CluedoGame;
 
 /**
@@ -51,7 +49,7 @@ public class GuiFrame extends JFrame implements ActionListener {
 	private JMenuItem about;
 	
 	//Game Object
-	CluedoGame g;
+	CluedoGame game;
 	
 	/**
 	 * Constructor for the GUI
@@ -61,7 +59,7 @@ public class GuiFrame extends JFrame implements ActionListener {
 
 		myPopups = new GuiPopups();
 
-		this.g = game;
+		this.game = game;
 
 	}
 
@@ -173,7 +171,7 @@ public class GuiFrame extends JFrame implements ActionListener {
 					 JOptionPane.YES_NO_OPTION);
 			if(reply == JOptionPane.YES_OPTION){
 				this.dispose(); //closes the current app
-				g.resetGame(); //creates a new APP
+				game.resetGame(); //creates a new APP
 				repaint();
 			}
 		} else if(push.equals(exitGame)){
@@ -188,7 +186,7 @@ public class GuiFrame extends JFrame implements ActionListener {
 			JOptionPane.showMessageDialog(null, s, "About",
 					JOptionPane.INFORMATION_MESSAGE);
 		} else if(push.equals(about)){
-			String s = "Cluedo re-created by Darren Hobern & Peter Lee\n for SWEN222 Assignment";
+			String s = "Cluedo re-created by Darren Hobern & Peter Lee\n for SWEN222 Assignment 2, 2016";
 			JOptionPane.showMessageDialog(null, s, "About",
 					JOptionPane.INFORMATION_MESSAGE);
 		}
@@ -201,9 +199,11 @@ public class GuiFrame extends JFrame implements ActionListener {
 	 */
 	public void assignPlayerCharacters(int nPlayers) {
 		int i = 1;
-		
+		ArrayList<String> unavailableCharacters = new ArrayList<String>();
 		while(i <= nPlayers) {
-			myPopups.assignCharacters(i);
+			String[] values = myPopups.assignCharacters(i, unavailableCharacters);
+			game.createPlayer(values[0], values[1], i);
+			unavailableCharacters.add(values[1]);
 			i++;
 		}
 		

@@ -37,14 +37,10 @@ public class GuiPopups implements ActionListener {
 	 * and what character they are playing as 
 	 * @param numPlayers
 	 */
-	public void assignCharacters(int numPlayers) {
-		ArrayList<String> unavailableChars = new ArrayList<String>();
+	public String[] assignCharacters(int id, ArrayList<String> unavailableChars) {
 		String[] options = {"Ok"};
-		unavailableChars.add("MISS SCARLET");
-		unavailableChars.add("PROFESSOR PLUM");
-		charAssignPanel = new CharacterAssignmentPanel(1, unavailableChars);
+		charAssignPanel = new CharacterAssignmentPanel(id, unavailableChars);
 		JOptionPane.showOptionDialog(null, charAssignPanel, "Assign Character", JOptionPane.PLAIN_MESSAGE, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
-		String[] values = charAssignPanel.getValues();
-		System.out.println("TEST: " + values[0] + " CHAR: " + values[1]);
+		return charAssignPanel.getValues();
 	}	
 }
