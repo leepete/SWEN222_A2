@@ -44,7 +44,5 @@ public class GuiPopups implements ActionListener {
 		unavailableChars.add("PROFESSOR PLUM");
 		charAssignPanel = new CharacterAssignmentPanel(1, unavailableChars);
 		JOptionPane.showOptionDialog(null, charAssignPanel, "Assign Character", JOptionPane.PLAIN_MESSAGE, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
-		
-		
 	}	
 }
