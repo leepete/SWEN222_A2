@@ -255,32 +255,6 @@ public class CluedoGame {
 		numPlayers = guiFrame.getNumPlayers();
 		//Assign each player a name and character
 		guiFrame.assignPlayerCharacters(numPlayers);
-		System.out.println("ALL MEH PLAYERS");
-		for(Player p : players) {
-			
-			System.out.println(p.toString());
-		}
-		
-		System.out.println("NA morte plaers");
-		/*	Player p;
-//			System.out.println(String.format("Player %d, please enter the character you wish to play as:", i));
-//			for(Character c : characterNameMap.values()) {
-//				System.out.println(c.toString());
-//			}
-			String plCharChoice = s.nextLine().toUpperCase();
-			if(isValidCharName(plCharChoice)) {
-				//Add a player with this character to the array
-				p = new Player(characterNameMap.get(plCharChoice), b, this, i);
-				players.add(p);
-				System.out.println(String.format("Player %d will be playing as: %s", p.getID(), plCharChoice));
-				//Remove this character from the available characters
-				characterNameMap.remove(plCharChoice);
-				//A player has been successfully added
-				i++;
-			} else {
-				System.out.println("That was an invalid player, please enter again");
-			}
-		}*/
 		
 		System.out.println("All players successfully allocated");
 		makeSolution();

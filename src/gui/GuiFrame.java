@@ -98,7 +98,7 @@ public class GuiFrame extends JFrame implements ActionListener {
 		
 
 		/** Initialise Panels */
-		buttonPanel = new ButtonPanel();
+		buttonPanel = new ButtonPanel(this);
 
 		checklistPanel = new CheckListPanel(); 
 		boardPanel = new BoardPanel();
@@ -155,13 +155,7 @@ public class GuiFrame extends JFrame implements ActionListener {
 		about.addActionListener(this);			
 	}
 
-	/**
-	 * Returns the number of players in this game
-	 * @return
-	 */
-	public int getNumPlayers() {
-		return myPopups.numberOfPlayers();
-	}
+	
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -194,6 +188,14 @@ public class GuiFrame extends JFrame implements ActionListener {
 	}
 	
 	/**
+	 * Returns the number of players in this game
+	 * @return
+	 */
+	public int getNumPlayers() {
+		return myPopups.numberOfPlayers();
+	}
+	
+	/**
 	 * Assigns a character to a player
 	 * @return
 	 */
@@ -206,8 +208,10 @@ public class GuiFrame extends JFrame implements ActionListener {
 			unavailableCharacters.add(values[1]);
 			i++;
 		}
-		
-		
+	}
+	
+	public void accuse() {
+		myPopups.makeAccusation();
 	}
 
 	

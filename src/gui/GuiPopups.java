@@ -6,18 +6,24 @@ import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
+import cluedo.Suggestion;
+
 public class GuiPopups implements ActionListener {
-	
-	CharacterAssignmentPanel charAssignPanel;
-	public GuiPopups() {
-		
-		
-	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		
+	public void actionPerformed(ActionEvent e) {}
+	
+	
+	/**
+	 * Makes an accusation and returns the names of the room, weapon and character they chose
+	 * @return
+	 */
+	public String[] makeAccusation() {
+		String[] options = {"Accuse", "Cancle"};
+		AccusationPanel accusePanel = new AccusationPanel();
+		JOptionPane.showOptionDialog(null, accusePanel, 
+				"Make An Accusation", JOptionPane.PLAIN_MESSAGE, JOptionPane.PLAIN_MESSAGE, null, options, options[1]);
+		return accusePanel.getValues();
 	}
 	
 	/**
@@ -39,8 +45,9 @@ public class GuiPopups implements ActionListener {
 	 */
 	public String[] assignCharacters(int id, ArrayList<String> unavailableChars) {
 		String[] options = {"Ok"};
-		charAssignPanel = new CharacterAssignmentPanel(id, unavailableChars);
-		JOptionPane.showOptionDialog(null, charAssignPanel, "Assign Character", JOptionPane.PLAIN_MESSAGE, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
+		CharacterAssignmentPanel charAssignPanel = new CharacterAssignmentPanel(id, unavailableChars);
+		JOptionPane.showOptionDialog(null, charAssignPanel, "Assign Character", 
+				JOptionPane.PLAIN_MESSAGE, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
 		return charAssignPanel.getValues();
 	}	
 }

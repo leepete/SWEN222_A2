@@ -28,12 +28,14 @@ public class ButtonPanel extends JPanel implements ActionListener{
 	
 	private JButton accuse, suggest, endTurn, roll, stairs, exitRoom;
 	private JLabel playerWho; //this updates which players turn it is
+	private GuiFrame frame;
 	private GridBagConstraints gbc = new GridBagConstraints(); 
 	
 	Player p;
-
-	public ButtonPanel(){
+	
+	public ButtonPanel(GuiFrame frame){
 		super();
+		this.frame = frame;
 		this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
 		this.setMinimumSize(new Dimension(WIDTH, HEIGHT));
 		setLayout(new GridBagLayout());
@@ -60,7 +62,7 @@ public class ButtonPanel extends JPanel implements ActionListener{
 		suggest.setFont(new Font("Helvetica", Font.BOLD, 30));
 		suggest.addActionListener(this);
 		
-		playerWho = new JLabel("          Player 1 as");
+		playerWho = new JLabel("ITS SOMEONES TURN");
 		playerWho.setFont(new Font("Helvetica", Font.BOLD, 25));
 		
 		exitRoom = new JButton("Exit Room");
@@ -103,7 +105,7 @@ public class ButtonPanel extends JPanel implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		Object button = e.getSource();
 		if(button.equals(accuse)){
-			JOptionPane.showMessageDialog(null, "You have accused");
+			frame.accuse();
 
 		}else if(button.equals(suggest)) {
 			JOptionPane.showMessageDialog(null, "You have Suggested");
