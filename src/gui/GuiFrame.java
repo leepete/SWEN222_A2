@@ -3,6 +3,7 @@ package gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -20,6 +21,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import cluedo.CluedoGame;
+import cluedo.Player;
 
 /**
  * The GameBoard is responsible for managing the GUI 
@@ -60,7 +62,7 @@ public class GuiFrame extends JFrame implements ActionListener, KeyListener {
 		super("Cluedo GameBoard");
 
 		myPopups = new GuiPopups();
-
+		
 		this.game = game;
 		
 	}
@@ -80,7 +82,9 @@ public class GuiFrame extends JFrame implements ActionListener, KeyListener {
 		        }
 		    }
 		});
-		
+		setFocusable(true);
+		addKeyListener(this);
+		setFocusTraversalKeysEnabled(false);
 		setVisible(true); //to see the window
 		buildGUI();
 		
@@ -92,7 +96,7 @@ public class GuiFrame extends JFrame implements ActionListener, KeyListener {
 	private void buildGUI(){
 		//Main panel to put other panels in it
 		masterPanel = new JPanel();
-		masterPanel.setLayout(new BorderLayout()); //Borderlayout is the magic!!! wahooo
+		masterPanel.setLayout(new BorderLayout());
 		
 		/** Setting Frame Size + Layout */
 		setLayout(new BorderLayout());
@@ -102,8 +106,8 @@ public class GuiFrame extends JFrame implements ActionListener, KeyListener {
 		/** Initialise Panels */
 		buttonPanel = new ButtonPanel(this);
 		checklistPanel = new CheckListPanel(); 
-		boardPanel = new BoardPanel();
-		handPanel = new HandPanel(new GridBagLayout()); //might need to change to a different layout
+		boardPanel = new BoardPanel(game.b);
+		handPanel = new HandPanel(new GridBagLayout());
 		
 		boardPanel.addKeyListener(this);
 		/**Adding Menu Bar to frame*/
@@ -123,6 +127,7 @@ public class GuiFrame extends JFrame implements ActionListener, KeyListener {
 		setVisible(true); //shows JFrame
 		repaint();
 	}
+	
 	
 	/**
 	 * Setting the menu bar
@@ -213,6 +218,10 @@ public class GuiFrame extends JFrame implements ActionListener, KeyListener {
 		}
 	}
 	
+	public boolean playerMovement() {
+		return true;
+	}
+	
 	public String[] accuse() {
 		return myPopups.makeAccusation();
 	}
@@ -229,8 +238,27 @@ public class GuiFrame extends JFrame implements ActionListener, KeyListener {
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
+//		if(CluedoGame.currentPlayer.remainingMoves() <= 0) {
+//			return;
+//		}
+		int code = e.getKeyCode();
+		if(code == KeyEvent.VK_RIGHT || code == KeyEvent.VK_D){
+			CluedoGame.currentPlayer.move(Player.Direction.RIGHT);
+			
+		}
+		else if(code == KeyEvent.VK_LEFT || code == KeyEvent.VK_A) {
+			CluedoGame.currentPlayer.move(Player.Direction.LEFT);
+			
+		}
+		else if(code == KeyEvent.VK_UP || code == KeyEvent.VK_W) {
+			CluedoGame.currentPlayer.move(Player.Direction.UP);
+			
+		}
+		else if(code == KeyEvent.VK_DOWN || code == KeyEvent.VK_S) {
+			CluedoGame.currentPlayer.move(Player.Direction.DOWN);
+			
+		}
+		boardPanel.repaint();
 	}
 
 	@Override

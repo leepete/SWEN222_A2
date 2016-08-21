@@ -24,7 +24,7 @@ public class Player implements KeyListener{
 	private CluedoGame game;
 	private List<String> hand = new ArrayList<String>();
 
-	
+	public static enum Direction {UP, DOWN, LEFT, RIGHT};
 	
 	public Player(String name, Character character, Board board, CluedoGame game, int id) {
 		this.name = name;
@@ -41,7 +41,11 @@ public class Player implements KeyListener{
 	public Room inRoom() {
 		return room;
 	}
-
+	
+	public int remainingMoves() {
+		return remainingSteps;
+	}
+	
 	/**
 	 * Returns the players hand
 	 * @return
@@ -84,50 +88,44 @@ public class Player implements KeyListener{
 	 * Takes an input key from the user and attempts to move in that direction
 	 * @return
 	 */
-	public void move() {
-		remainingSteps = rollDice();
+	public boolean move(Direction dir) {
 
-		while(remainingSteps > 0){
-			System.out.println(String.format("Moves remaining: %d. Input a direction: 'W' 'A' 'S' 'D' or 'STOP'", remainingSteps));
-			System.out.println(position.toString());
-			//String key = s.next().toUpperCase(); //Take the first string from the user
-			//s.nextLine();//End the line		
-			
-//			switch(){
-//				case "W":
-//					if(goUp())
-//						remainingSteps--;
-//					break;
-//				case "A":
-//					if(goLeft())
-//						remainingSteps--;
-//					break;
-//				case "S":
-//					if(goDown())
-//						remainingSteps--;
-//					break;
-//				case "D":
-//					if(goRight())
-//						remainingSteps--;	
-//					break;
+			switch(dir){
+				case UP:
+					if(goUp())
+						remainingSteps--;
+					break;
+				case LEFT:
+					if(goLeft())
+						remainingSteps--;
+					break;
+				case DOWN:
+					if(goDown())
+						remainingSteps--;
+					break;
+				case RIGHT:
+					if(goRight())
+						remainingSteps--;	
+					break;
 //				case "STOP":
 //					remainingSteps = 0;
 //					break;
-//				default: {
-//					System.out.println("Invalid move input please try again");
-//				}
-	}		
+				default: {
+					System.out.println("Invalid move input please try again");
+				}
+			}
+		
+		return false;		
 	}
 	
 		
 	/**
-	 * Returns a random(ish) number between 1 and 6 to represent the players dice roll
+	 * generates a random(ish) number between 1 and 6 to represent the players dice roll
 	 * @return
 	 */
-	public int rollDice() {
+	public void rollDice() {
 		Random rand = new Random();
-		int roll = rand.nextInt(6) + 1;
-		return roll;
+		remainingSteps = rand.nextInt(6) + 1;
 	}
 
 	/**
@@ -199,7 +197,7 @@ public class Player implements KeyListener{
 		//Leave the room
 		board.teleport(this, position, exitMat);
 		position = exitMat;
-		game.turnInput(s, this);
+		//game.turnInput(s, this);
 	}
 	
 	/**

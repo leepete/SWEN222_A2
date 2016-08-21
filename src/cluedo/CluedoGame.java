@@ -299,7 +299,7 @@ public class CluedoGame {
 			}
 			//Beginning of turn
 			currentPlayer.sameRoom = currentPlayer.inRoom(); //For ensuring they dont reenter the same room for another guess on the same turn
-			turnInput(s, currentPlayer); //TODO REMOVE ME
+			//turnInput(s, currentPlayer); //TODO REMOVE ME
 			//If the player is in a different room to what they started their turn in they can make a guess
 			if(currentPlayer.inRoom() != currentPlayer.sameRoom && currentPlayer.isPlaying()) {
 				askGuess(s, currentPlayer);
@@ -388,7 +388,7 @@ public class CluedoGame {
 	 * Asks the player what they would like to do on their turn
 	 * @param s
 	 */
-	public void turnInput(Scanner s, Player p) {
+	/*public void turnInput(Scanner s, Player p) {
 		turnOptions.clear();
 		boolean validInput = false;
 		Room playerRoom = p.inRoom();
@@ -456,7 +456,7 @@ public class CluedoGame {
 				System.out.println(String.format("\'%s\' is an invalid input, please use an option provided.", input));
 			}
 		}
-	}
+	}*/
 	
 	
 	/**

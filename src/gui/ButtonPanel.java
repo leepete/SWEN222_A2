@@ -75,8 +75,8 @@ public class ButtonPanel extends JPanel implements ActionListener{
 		endTurn.setFont(new Font("Helvetica", Font.BOLD, 30));
 		endTurn.addActionListener(this);
 		
-		ImageIcon die = new ImageIcon(getClass().getResource("../die1.jpg"));
-		roll = new JButton(die);
+		//ImageIcon die = new ImageIcon(getClass().getResource("../die1.jpg"));
+		roll = new JButton("Roll");
 		roll.setFont(new Font("Helvetica", Font.BOLD, 30));
 		roll.addActionListener(this);
 		
@@ -125,9 +125,9 @@ public class ButtonPanel extends JPanel implements ActionListener{
 			JOptionPane.showMessageDialog(null, "ending turn");
 			
 		} else if(button.equals(roll)) {
+			CluedoGame.currentPlayer.rollDice();
+			System.out.println("rolled da bones mon");
 			
-			JOptionPane.showMessageDialog(null, "Rolling the dice");
-			CluedoGame.currentPlayer.move();
 			
 		}	
 	
