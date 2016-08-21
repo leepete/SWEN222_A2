@@ -329,23 +329,5 @@ public class Player {
 	public String toString() {
 		return character.toString();
 	}
-<<<<<<< HEAD
-	
-	@Override
-	public void keyPressed(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void keyReleased(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void keyTyped(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-=======
->>>>>>> 57af85c9b0c7621ceaec9a5fa43417adf6a09d46
+
 }
