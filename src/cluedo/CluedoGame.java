@@ -325,6 +325,7 @@ public class CluedoGame {
 			turnOptions.add("ROLL");
 
 		}
+		turnOptions.add("END TURN");
 		guiFrame.updateOptions(turnOptions);
 	}
 	
@@ -496,11 +497,10 @@ public class CluedoGame {
 		int i = 0;
 		//If the player is playing they won
 		if(player.isPlaying()) {
-			System.out.println(String.format("CONGRATULATIONS! Player %d as %s has won the game!", player.getID(), player.toString()));
-			System.out.println("The Solution was: " + solution.toString());
+			guiFrame.winner(false);
 			return;
 		}
-		System.out.println(String.format("Sorry player %d, your accusation was incorrect", player.getID()));
+		guiFrame.loser();
 		for(Player p : players){
 			if(p.isPlaying()){
 				i++;
@@ -509,7 +509,7 @@ public class CluedoGame {
 		if(i <= 1){
 			for(Player p : players) {
 				if(p.isPlaying()) {
-					System.out.println(String.format("CONGRATULATIONS! Player %d as %s, has won the game by default...", p.getID(), p.toString()));
+					guiFrame.winner(true);
 					break;
 				}
 			}	

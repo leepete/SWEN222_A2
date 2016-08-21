@@ -50,12 +50,17 @@ public class Board {
 			"##########################".toCharArray()
 	};
 
-	public char[][] activeBoard = new char[BOARD_HEIGHT][BOARD_WIDTH];
+	public char[][] activeBoard;
 
 	public Board(){
+		activeBoard = new char[BOARD_HEIGHT][BOARD_WIDTH];
 		resetBoard(); // sets the active board to the actual board
 	}
 	
+	/**
+	 * Returns the active board
+	 * @return
+	 */
 	public char[][] getBoard(){
 		return activeBoard;
 	}

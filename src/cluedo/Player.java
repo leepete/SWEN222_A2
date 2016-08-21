@@ -250,7 +250,7 @@ public class Player {
 	
 	/**
 	 * Takes a String array, containing a room weapon and character.
-	 * Converts this into a Suggestion object ==========================================
+	 * Converts this into a Suggestion object and puts it up for refutal
 	 * @param choice
 	 */
 	public void suggest(String[] choice) {

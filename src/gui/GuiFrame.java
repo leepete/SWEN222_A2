@@ -239,6 +239,18 @@ public class GuiFrame extends JFrame implements ActionListener, KeyListener {
 	public void endTurn() {
 		game.endTurn();
 	}
+	
+	/**
+	 * Show the popup to say someone has won the game
+	 * @param winDefault
+	 */
+	public void winner(boolean winDefault) {
+		myPopups.winGame(winDefault);
+	}
+	
+	public void loser() {
+		myPopups.loseGame();
+	}
 
 
 	@Override

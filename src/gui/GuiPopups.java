@@ -6,6 +6,9 @@ import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
+import com.sun.xml.internal.ws.api.streaming.XMLStreamReaderFactory.Default;
+
+import cluedo.CluedoGame;
 import cluedo.Suggestion;
 
 public class GuiPopups implements ActionListener {
@@ -73,5 +76,28 @@ public class GuiPopups implements ActionListener {
 		JOptionPane.showOptionDialog(null, charAssignPanel, "Assign Character", 
 				JOptionPane.PLAIN_MESSAGE, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
 		return charAssignPanel.getValues();
-	}	
+	}
+	
+	/**
+	 * Popup showing that the game is over and a player has won
+	 */
+	public void winGame(boolean winDefault) {
+		String[] options = {"WOO"};
+		if(winDefault) {
+			JOptionPane.showOptionDialog(null, String.format("CONGRATULATIONS! %s as %s, has won the game by default...", 
+					CluedoGame.currentPlayer.getName(), CluedoGame.currentPlayer.toString()), 
+					"CONGRATULATIONS", JOptionPane.PLAIN_MESSAGE, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
+			return;
+		}
+		JOptionPane.showOptionDialog(null, String.format("CONGRATULATIONS! Player %s as %s has won the game!", 
+				CluedoGame.currentPlayer.getName(), CluedoGame.currentPlayer.toString()), 
+				"CONGRATULATIONS", JOptionPane.PLAIN_MESSAGE, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
+	}
+	
+	public void loseGame() {
+		String[] options = {"Aww"};
+		JOptionPane.showOptionDialog(null, String.format("SORRY! Player %s as %s has lost the game!", 
+				CluedoGame.currentPlayer.getName(), CluedoGame.currentPlayer.toString()), 
+				"Bummer", JOptionPane.PLAIN_MESSAGE, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
+	}
 }
