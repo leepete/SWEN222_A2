@@ -2,6 +2,8 @@ package cluedo;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +18,6 @@ public class Board {
 	private char placemat = 'x';
 	private char[] doors = {'^', '<', '>', 'v'};
 	private char[] players = {'1', '2', '3', '4', '5', '6'};
-
 
 
 	private final char[][] board = {   
@@ -52,24 +53,30 @@ public class Board {
 	public char[][] activeBoard = new char[BOARD_HEIGHT][BOARD_WIDTH];
 
 	public Board(){
-		resetBoard();
-		printBoard();	
+		resetBoard(); // sets the active board to the actual board
+		//printBoard();	
 	}
+	
 
-	public void printBoard() {
+//	public void printBoard() {
 //		for(int x = 0; x < BOARD_HEIGHT; x++) {
 //			for(int y = 0; y < BOARD_WIDTH; y++) {
 //				System.out.print(activeBoard[x][y]);
 //			}
 //			System.out.println();
 //		}
+//	}
+	
+	public char[][] getBoard(){
+		return activeBoard;
 	}
+	
 
 	public boolean movePlayer(Position oldP, Position newP, Player p) {
 		//Check if we are doing a valid move
 		if(validCorridorMove(newP)) {
 			teleport(p, oldP, newP);
-			printBoard();
+		//	printBoard();
 			return true;
 		} else if(validRoomEntry(oldP, newP)) { //Might be trying to enter a room
 			Room r = CluedoGame.placemats.get(oldP);
@@ -77,7 +84,7 @@ public class Board {
 				p.enterRoom(r);
 				Position space = r.getSpaces()[p.getID()-1];
 				teleport(p, oldP, space);
-				printBoard();
+				//printBoard();
 				return true;
 			}
 		} System.out.println("You cannot go there! Try walking on a '+' or 'x' tile instead");

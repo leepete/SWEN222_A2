@@ -27,7 +27,7 @@ public class CheckListPanel extends JPanel {
 	
 	private GridBagConstraints gbc = new GridBagConstraints(); // helps organise and space in a grid system
 
-	private static final int WIDTH = 290;
+	private static final int WIDTH = 280;
 	private static final int HEIGHT = 620;
 
 	public CheckListPanel(){
